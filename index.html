@@ -131,7 +131,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .cw-drop-item{flex:0 0 clamp(240px,30vw,380px);scroll-snap-align:start}
 .drop-item{text-decoration:none;color:inherit;display:block}
 .drop-item .stage{aspect-ratio:1;display:grid;place-items:center;position:relative;background:radial-gradient(closest-side,rgba(233,230,223,.09),transparent)}
-.drop-item img{width:78%;position:relative;filter:drop-shadow(0 30px 34px rgba(0,0,0,.55));transition:transform .9s cubic-bezier(.2,.7,.1,1)}
+.drop-item img{width:72%;height:72%;object-fit:contain;position:absolute;inset:0;margin:auto;filter:drop-shadow(0 30px 34px rgba(0,0,0,.55));transition:transform .9s cubic-bezier(.2,.7,.1,1)}
 .drop-item:hover img,.drop-item:focus-visible img{transform:rotate(-8deg) scale(1.06)}
 .meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:16px;border-top:1px solid currentColor;padding-top:12px;font-size:.85rem}
 .drop .meta{border-color:rgba(207,208,207,.25)}
@@ -154,7 +154,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:52px 30px}
 .card{display:block;text-decoration:none;color:inherit}
 .card .stage{aspect-ratio:4/5;background:var(--paper-2);display:grid;place-items:center;overflow:hidden;position:relative}
-.card .stage>img{width:70%;filter:drop-shadow(0 22px 22px rgba(40,34,26,.2));transition:transform 1s cubic-bezier(.2,.7,.1,1)}
+.card .stage>img{width:66%;height:66%;object-fit:contain;position:absolute;inset:0;margin:auto;filter:drop-shadow(0 22px 22px rgba(40,34,26,.2));transition:transform 1s cubic-bezier(.2,.7,.1,1)}
 .card:hover .stage>img,.card:focus-visible .stage>img{transform:scale(1.08) rotate(5deg)}
 .card .new{position:absolute;top:14px;right:14px;font-size:.7rem;display:flex;align-items:center;gap:6px;letter-spacing:.1em}
 .card .new img{width:6px}
@@ -272,7 +272,7 @@ dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
 .crumbs a{text-decoration:none}.crumbs a:hover{text-decoration:underline}
 .pdp-top{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,80px);align-items:start}
 .pdp-stage{position:sticky;top:90px;aspect-ratio:1;background:var(--paper-2);display:grid;place-items:center;overflow:hidden;perspective:900px}
-.pdp-stage img{width:68%;filter:drop-shadow(0 34px 34px rgba(40,34,26,.24));transition:transform .6s cubic-bezier(.2,.7,.1,1)}
+.pdp-stage img{width:66%;height:66%;object-fit:contain;position:absolute;inset:0;margin:auto;filter:drop-shadow(0 34px 34px rgba(40,34,26,.24));transition:transform .6s cubic-bezier(.2,.7,.1,1)}
 .pdp-stage .jp-big{position:absolute;bottom:4%;left:5%;font-size:clamp(4rem,10vw,8rem);opacity:.08;line-height:1}
 .pdp-stage .tag{position:absolute;top:18px;right:18px;font-size:.75rem;display:flex;gap:6px;align-items:center}
 .pdp-stage .tag img{width:6px;filter:none}
@@ -588,8 +588,6 @@ html.ov-open{overflow:hidden}
       <li style="--i:6"><a href="#sizing"><span class="t">מידות</span><span class="en" lang="en">sizing</span></a></li>
     </ul>
     <div class="m-side">
-      <h3>כל התכשיטים <span lang="en" class="sp">pieces</span></h3>
-      <ul class="m-pieces" id="mPieces"></ul>
       <h3>מידע ומדיניות <span lang="en" class="sp">info</span></h3>
       <ul class="m-info">
         <li><a href="#reserve">תנאי השריון</a></li><li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#care">שמירה וניקוי של כסף</a></li>
@@ -953,7 +951,7 @@ tick(); setInterval(tick, 20000);
 
 /* ---------- three-line menu ---------- */
 const menu = $('#menu'), burger = $('#burger');
-$('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span>${p.he} <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
+if($('#mPieces')) $('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span>${p.he} <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
 function openMenu(){
   menu.hidden = false; root.classList.add('menu-open'); root.style.overflow = 'hidden';
   burger.setAttribute('aria-expanded','true'); burger.setAttribute('aria-label','סגירת התפריט');
