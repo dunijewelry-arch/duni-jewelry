@@ -328,6 +328,10 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .doc ul{padding-inline-start:1.2em}
 .ph{background:rgba(196,160,80,.22);padding:0 .3em;border-radius:3px;white-space:nowrap}
 :root.hc .ph{background:#ffe680}
+.doc p b{font-weight:500}
+.doc .about-open{font-size:1.45rem;line-height:1.5;margin-top:0}
+.doc .about-sign{margin-top:2em;font-size:1.1rem;line-height:1.7}
+.doc .about-sign img{width:8px;display:inline-block;vertical-align:middle;margin:0 4px}
 .doc .back{display:inline-flex;margin-top:40px;white-space:nowrap}
 
 /* bag drawer */
@@ -408,6 +412,18 @@ html.ov-open{overflow:hidden}
 .social.on-dark a{color:var(--silver);border-color:rgba(207,208,207,.4)}
 .social.on-dark a:hover,.social.on-dark a:focus-visible{background:var(--silver);color:var(--ink)}
 .social-txt{font-size:.78rem;opacity:.7;margin:12px 0 0;line-height:1.7}
+
+/* gallery */
+.gallery{border-top:1px solid var(--line);padding-block:clamp(70px,9vw,120px);padding-left:var(--gut);padding-right:var(--gut-r);max-width:1440px;margin:0 auto}
+.gallery .sec-head{margin-bottom:18px}
+.gal-intro{max-width:52ch;margin:0;color:var(--ink-2);line-height:1.7}
+.gallery .cats{margin:26px 0 34px}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:24px}
+.gal-grid figure{margin:0}
+.gal-grid .ph-img{aspect-ratio:4/5;background:var(--paper-2);position:relative;overflow:hidden}
+.gal-grid .ph-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gal-grid figcaption{font-size:.85rem;margin-top:8px;color:var(--ink-2)}
+.gal-empty{grid-column:1/-1;border:1px dashed var(--line);padding:42px 20px;text-align:center;color:var(--ink-2);line-height:1.7}
 
 /* accessibility */
 .a11y-btn{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:75;width:3.1rem;height:3.1rem;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
@@ -582,6 +598,7 @@ html.ov-open{overflow:hidden}
     <li><a href="#vision" data-sec="vision"><b>03</b>חזון</a></li>
     <li><a href="#sizing" data-sec="sizing"><b>04</b>מידות</a></li>
     <li><a href="#custom" data-sec="custom"><b>05</b>אישי</a></li>
+    <li><a href="#gallery" data-sec="gallery"><b>06</b>גלריה</a></li>
   </ul>
 </nav>
 
@@ -593,7 +610,7 @@ html.ov-open{overflow:hidden}
       <li style="--i:2"><a href="#her"><span class="t">נשים</span><span class="en" lang="en">her</span></a><div class="m-sub"><a href="#her">הכל</a><a href="#her-rings">טבעות</a><a href="#her-necks">שרשראות</a><a href="#her-wrists">צמידים</a><a href="#her-ears">עגילים</a></div></li>
       <li style="--i:3"><a href="#him"><span class="t">גברים</span><span class="en" lang="en">him</span></a><div class="m-sub"><a href="#him">הכל</a><a href="#him-rings">טבעות</a><a href="#him-necks">שרשראות</a><a href="#him-wrists">צמידים</a><a href="#him-ears">עגילים</a></div></li>
       <li style="--i:4"><a href="#vision"><span class="t">החזון</span><span class="en" lang="en">vision</span></a></li>
-      <li style="--i:5"><a href="#custom"><span class="t">בהזמנה אישית</span><span class="en" lang="en">one of one</span></a></li>
+      <li style="--i:5"><a href="#custom"><span class="t">בהזמנה אישית</span><span class="en" lang="en">one of one</span></a><div class="m-sub"><a href="#custom">איך זה עובד</a><a href="#gallery">גלריה</a></div></li>
       <li style="--i:6"><a href="#sizing"><span class="t">מידות</span><span class="en" lang="en">sizing</span></a></li>
     </ul>
     <div class="m-side">
@@ -643,7 +660,7 @@ html.ov-open{overflow:hidden}
     <div class="cd" id="cd" role="timer" aria-live="off">
       <div><b id="cdD">--</b><span>ימים</span></div><div><b id="cdH">--</b><span>שעות</span></div><div><b id="cdM">--</b><span>דקות</span></div><div><b id="cdS">--</b><span>שניות</span></div>
     </div>
-    <p class="how">כל תכשיט נעשה ביד בכמות מוגבלת. אפשר כבר עכשיו לשריין, בלי לשלם. כשהמכירה נפתחת נשלח לך בוואטסאפ קישור אישי לרכישה, והשריון שמור לך עד 18:00 באותו יום. כשתכשיט כבר שוריין במלואו, אפשר להיכנס לרשימת ההמתנה. <a href="#reserve">תנאי השריון</a></p>
+    <p class="how">אני מכינה כל תכשיט ביד, ולכן מכל אחד יש רק כמה. אפשר כבר עכשיו לשריין, בלי לשלם. כשהמכירה נפתחת אשלח לך בוואטסאפ קישור אישי לרכישה, והשריון שמור לך עד 18:00 באותו יום. כשתכשיט כבר שוריין במלואו, אפשר להיכנס לרשימת ההמתנה. <a href="#reserve">תנאי השריון</a></p>
     <a class="btn" href="#for">לשריין מהקולקציה <img src="assets/star.png" alt=""></a>
   </section>
 
@@ -651,8 +668,8 @@ html.ov-open{overflow:hidden}
     <div>
       <p class="jp" lang="ja" aria-hidden="true">情熱</p>
       <h2 class="sr" id="manH">איך נולד כל תכשיט</h2>
-      <p>כל תכשיט מתחיל כחוט כסף ישר. הוא מכופף, מרוקע בפטיש ומלוטש ביד, על שולחן עבודה אחד קטן. לכן אין שני תכשיטים שיוצאים זהים.</p>
-      <p>קצוות לא אחידים, סימני פטיש, צורות שמזכירות חלוקי נחל ומים. זו כל הנקודה.</p>
+      <p>כל תכשיט מתחיל אצלי בראש, לפעמים ממשהו שראיתי ולפעמים מתחושה. משם הוא עובר לשולחן בסטודיו ומקבל צורה לאט, ביד. לכן אין שני תכשיטים שיוצאים זהים.</p>
+      <p>לא מושלם, לא מהמדף, ועם הרבה ממני בפנים. זו כל הנקודה.</p>
       <p class="jp-note">情熱 <span lang="en">jōnetsu</span> · ג׳ונֶצוּ</p>
     </div>
   </section>
@@ -688,24 +705,24 @@ html.ov-open{overflow:hidden}
         <div class="bot"><h3>לגברים</h3><div class="names" lang="en">yoru · tsuchi · kusari · ishi · musubi</div><span class="go">לקולקציה לגברים ←</span></div>
       </button>
     </div>
-    <p class="note">החלוקה היא רק נקודת התחלה. כל התכשיטים של Duni מתאימים לכל מי שאוהב אותם.</p>
+    <p class="note">החלוקה היא רק נקודת התחלה. תכשיט מתאים למי שהוא מדבר אליו.</p>
   </section>
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 03</span><span class="t">החזון<span class="sp" lang="en">vision</span></span><a href="#vision" tabindex="-1">לקרוא</a></div>
   <section class="vision" id="vision" aria-labelledby="visionH">
     <div>
       <h2 id="visionH"><small lang="en">reality, by hand · החזון</small>החזון</h2>
-      <p class="lead">Duni רוצה להחזיר לתכשיט את מה שהתעשייה איבדה בדרך: את היד, את הזמן ואת האופי. להביא לעולם משהו שונה בעיצוב ובאמנות, תכשיט שמרגיש כמו יצירה ולא כמו מוצר.</p>
+      <p class="lead">אני רוצה להחזיר לתכשיט את מה שהלך לאיבוד בדרך: את היד, את הזמן ואת האופי. ליצור משהו שונה, תכשיט שמרגיש כמו יצירה ולא כמו מוצר.</p>
       <p class="en" lang="en">Duni exists to bring something different into design and art: jewelry that feels like a piece of work, not a product. Small things carry big energy.</p>
     </div>
     <div>
       <div class="threads-h"><span lang="en">core threads</span><span>חמישה עקרונות</span></div>
       <ul class="threads">
-        <li><div class="k" lang="ja">手作り<small lang="en">tezukuri</small></div><div><strong>עבודת יד</strong><p>כל תכשיט נעשה ביד מההתחלה ועד הסוף. בלי פס ייצור ובלי תבניות.</p></div></li>
-        <li><div class="k" lang="ja">侘寂<small lang="en">wabi-sabi</small></div><div><strong>היופי שבחוסר שלמות</strong><p>קו עקום, סימן פטיש, צורה לא סימטרית. לא מתקנים אותם, הם מה שהופך תכשיט לחי.</p></div></li>
-        <li><div class="k" lang="ja">ゆっくり<small lang="en">yukkuri</small></div><div><strong>לאט</strong><p>עובדים לאט ובכמויות קטנות. עדיף תכשיט אחד שנשאר שנים על פני עשרה שנזרקים.</p></div></li>
-        <li><div class="k" lang="ja">一点物<small lang="en">ippinmono</small></div><div><strong>אחד ויחיד</strong><p>אין שני תכשיטים זהים. מה שעונדים הוא שלך בלבד.</p></div></li>
-        <li><div class="k" lang="ja">情熱<small lang="en">jōnetsu</small></div><div><strong>תשוקה</strong><p>Duni נולד מאהבה לאמנות ולעיצוב, וזה מה שמניע כל תכשיט.</p></div></li>
+        <li><div class="k" lang="ja">手作り<small lang="en">tezukuri</small></div><div><strong>עבודת יד</strong><p>כל תכשיט מתוכנן ונגמר אצלי בסטודיו, ובכל אחד יש מגע אישי שלי. בלי פס ייצור.</p></div></li>
+        <li><div class="k" lang="ja">侘寂<small lang="en">wabi-sabi</small></div><div><strong>היופי שבחוסר שלמות</strong><p>קו לא ישר, צורה לא סימטרית. אני לא מתקנת אותם, הם מה שהופך תכשיט לחי.</p></div></li>
+        <li><div class="k" lang="ja">ゆっくり<small lang="en">yukkuri</small></div><div><strong>לאט</strong><p>אני עובדת לאט ובכמויות קטנות. עדיף תכשיט אחד שנשאר איתך שנים, על פני עשרה שנזרקים.</p></div></li>
+        <li><div class="k" lang="ja">一点物<small lang="en">ippinmono</small></div><div><strong>אחד ויחיד</strong><p>מהרבה תכשיטים יש רק כמה, ומעיצוב אישי יש רק אחד. מה שעונדים הוא שלך.</p></div></li>
+        <li><div class="k" lang="ja">情熱<small lang="en">jōnetsu</small></div><div><strong>תשוקה</strong><p>Duni נולד מאהבה לאמנות ולעיצוב, וזה מה שמניע אותי בכל תכשיט.</p></div></li>
       </ul>
     </div>
   </section>
@@ -714,7 +731,7 @@ html.ov-open{overflow:hidden}
   <section class="sizing" id="sizing" aria-labelledby="sizingH">
     <div>
       <h2 id="sizingH"><small lang="en">ring sizing · iso 8653</small>איך מודדים אצבע</h2>
-      <div class="std">אנחנו עובדים לפי <b>השיטה האירופית</b> (תקן ISO 8653): <b>המידה היא היקף פנים הטבעת במילימטרים.</b> מידה 52 היא טבעת שההיקף הפנימי שלה 52 מ״מ.</div>
+      <div class="std">אני עובדת לפי <b>השיטה האירופית</b> (תקן ISO 8653): <b>המידה היא היקף פנים הטבעת במילימטרים.</b> מידה 52 היא טבעת שההיקף הפנימי שלה 52 מ״מ.</div>
       <svg class="diagram" viewBox="0 0 320 250" role="img" aria-label="שרטוט: ההיקף של הטבעת הוא המידה, הקוטר הוא המרחק מצד לצד בפנים">
         <circle cx="160" cy="118" r="92" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 5"/>
         <circle cx="160" cy="118" r="78" fill="none" stroke="currentColor" stroke-width="10" opacity=".14"/>
@@ -736,8 +753,8 @@ html.ov-open{overflow:hidden}
       <ul class="tips">
         <li>מודדים בסוף היום, כשהאצבעות קצת יותר גדולות, ולא כשהידיים קרות.</li>
         <li>אם פרק האצבע רחב, בוחרים מידה שעוברת אותו.</li>
-        <li>לטבעות רחבות (יורו, צוצ׳י) כדאי לבחור מידה אחת למעלה.</li>
-        <li>מוסובי פתוחה ומתכווננת, אז היא מתאימה לרוב המידות.</li>
+        <li>לטבעות רחבות כדאי לבחור מידה אחת למעלה.</li>
+        <li>טבעות פתוחות ומתכווננות מתאימות לרוב המידות.</li>
         <li>בין שתי מידות? עדיף את הגדולה.</li>
       </ul>
     </div>
@@ -746,19 +763,26 @@ html.ov-open{overflow:hidden}
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 05</span><span class="t">בהזמנה אישית<span class="sp" lang="en">one of one</span></span><a href="#custom" tabindex="-1">להתחיל</a></div>
   <section class="custom" id="custom" aria-labelledby="customH">
-    <div class="ring-stage"><img src="assets/pieces/signet.webp" alt="טבעת בהזמנה אישית"></div>
+    <div class="ring-stage"><img src="assets/pieces/signet.webp" alt="תכשיט בהזמנה אישית"></div>
     <div>
       <div class="en-sub" lang="en">one of one</div>
-      <h2 id="customH"><span class="jp" lang="ja">一点物</span>טבעת אחת בעולם, שנעשית רק בשבילך.</h2>
-      <p class="jp-note">一点物 (<span lang="en">ippinmono</span>) ביפנית: פריט אחד ויחיד.</p>
-      <p>מביאים אבן, צורה, מילה או סיפור. מעצבים איתך את הטבעת ומכינים אותה ביד, והיא תהיה היחידה מסוגה.</p>
+      <h2 id="customH"><span class="jp" lang="ja">一点物</span>תכשיט אחד בעולם, שנעשה רק בשבילך.</h2>
+      <p>מביאים אבן, צורה, מילה או סיפור, ומעצבים יחד מאפס. אני מכינה את התכשיט רק בשבילך, והוא לא יימכר שוב לאף אחד.</p>
       <ol class="steps">
-        <li><b>01</b><div><strong>מספרים את הסיפור</strong><span>שולחים תמונה, סקיצה או רק רעיון.</span></div></li>
-        <li><b>02</b><div><strong>סקיצה ועבודת פטיש</strong><span>מסכמים יחד על העיצוב, ואז הטבעת מכופפת ומרוקעת ביד.</span></div></li>
-        <li><b>03</b><div><strong>היא שלך</strong><span>מלוטשת, ארוזה ונשלחת עם סימן ה-✦.</span></div></li>
+        <li><b>01</b><div><strong>מספרים לי</strong><span>שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</span></div></li>
+        <li><b>02</b><div><strong>מעצבים יחד</strong><span>אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</span></div></li>
+        <li><b>03</b><div><strong>הוא שלך</strong><span>גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</span></div></li>
       </ol>
       <a class="btn" href="#custom" id="customBtn">להתחיל עיצוב אישי <img src="assets/star.png" alt=""></a>
     </div>
+  </section>
+
+  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 06</span><span class="t">גלריה<span class="sp" lang="en">gallery</span></span><a href="#gallery" tabindex="-1">לצפייה</a></div>
+  <section class="gallery" id="gallery" aria-labelledby="galH">
+    <div class="sec-head"><h2 id="galH"><small lang="en">one of one · stalls</small>גלריה</h2></div>
+    <p class="gal-intro">תכשיטים שכבר מצאו בית: עיצובים אישיים שעשינו יחד, ותכשיטים שנוצרו רק לדוכנים. הם כאן כדי לראות, לא כדי לקנות.</p>
+    <nav class="cats" id="galTabs" aria-label="סוגי עבודות בגלריה"></nav>
+    <div class="gal-grid" id="galGrid"></div>
   </section>
 </div>
 
@@ -1179,12 +1203,41 @@ function mountGender(g, cat){
 }
 
 const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
+
+/* ---------- gallery ----------
+   To add a piece: put the photo in assets/gallery/ and add a line here, newest first.
+   kind: 'custom' (עיצוב אישי) or 'stall' (דוכנים) */
+const GALLERY = [
+  // {img:'assets/gallery/example.webp', title:'שם התכשיט', kind:'custom'},
+];
+const GKINDS = [['all','הכל'],['custom','עיצובים אישיים'],['stall','דוכנים']];
+let galKind='all';
+function renderGallery(){
+  const tabs=$('#galTabs'), grid=$('#galGrid'); if(!tabs||!grid) return;
+  tabs.innerHTML = GKINDS.map(([k,t])=>`<a href="#gallery" data-gk="${k}" ${k===galKind?'aria-current="page"':''}>${t}<sup>${k==='all'?GALLERY.length:GALLERY.filter(g=>g.kind===k).length}</sup></a>`).join('');
+  tabs.querySelectorAll('[data-gk]').forEach(a=>a.onclick=e=>{ e.preventDefault(); galKind=a.dataset.gk; renderGallery(); });
+  const list = GALLERY.filter(g=>galKind==='all'||g.kind===galKind);
+  grid.innerHTML = list.length ? list.map(g=>`<figure><div class="ph-img"><img src="${g.img}" alt="${g.title}" loading="lazy"></div><figcaption>${g.title}</figcaption></figure>`).join('')
+    : `<p class="gal-empty">העבודות הראשונות יעלו לכאן בקרוב.<br>בינתיים אפשר לראות מה קורה בסטודיו באינסטגרם ${'<a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>'}.</p>`;
+}
+renderGallery();
+
 /* ---------- policy pages ---------- */
 const PH = t => `<span class="ph">${t}</span>`;
 const UPDATED = 'עודכן לאחרונה: 3.11.2026';
 const DOCS = {
   about:{t:'אודות',en:'about',noDate:true,b:`
-    <p>${PH('כאן יופיע הטקסט עלייך ועל Duni: איך התחלת, איך את עובדת, ומה חשוב לך בכל תכשיט')}</p>`},
+    <p class="about-open">אני עדן, וברוכים הבאים לראש שלי.</p>
+    <p>כאן נמצא כל הבלאגן: הרעיונות שלא נותנים לי לישון, הסקיצות על פתקים, המקומות הכי אפלים שלי והכי שמחים שלי. Duni הוא המקום האישי והפרטי שלי, ומה שאתם רואים כאן זה מה שיוצא ממנו החוצה, בכסף.</p>
+    <p>כל תכשיט נולד אצלי בסטודיו ומקבל את הצורה שלו לאט, ביד, עם הרבה זמן ומחשבה. אף אחד מהם לא נעשה ״סתם״, ובכל אחד יש חתיכה ממני.</p>
+    <h2>איך זה עובד</h2>
+    <p><b>תכשיטים באתר.</b> חלק מהתכשיטים נמכרים באתר כל הזמן, וכשהם נגמרים אני מכינה אותם שוב. מאחרים יש רק כמה בודדים, ולפעמים רק אחד. כשהם נגמרים, הם נגמרים.</p>
+    <p><b>עיצוב אישי.</b> מתחילים משיחה: אבן, צורה, מילה או סיפור. מעצבים יחד מאפס, ואני מכינה את התכשיט רק בשבילך. תכשיט שעיצבנו יחד לא יימכר שוב. הוא עולה ל<a href="#gallery">גלריה</a>, כדי שאחרים יוכלו לראות אותו, אבל לא לקנות.</p>
+    <p><b>דוכנים.</b> יש תכשיטים שאני יוצרת רק לדוכנים, והם נמכרים רק שם. גם הם עולים לגלריה בהמשך. כדי לדעת איפה הדוכן הבא, הכי טוב לעקוב באינסטגרם <a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>.</p>
+    <h2>למה ככה</h2>
+    <p>כי בעיניי תכשיט צריך להרגיש כמו משהו שנעשה בשבילך, ולא כמו עוד מוצר מהמדף. בשבילי זו אמנות, והחיבור הוא חלק מהעבודה: החיבור שלי ליצירה, והחיבור עם כל מי שמגיע אליי. בגלל זה אני עובדת לאט, בכמויות קטנות, ומקשיבה לפני שאני מתחילה.</p>
+    <p>אם תכשיט מצא את הדרך אלייך, הוא כנראה היה אמור להיות שלך.</p>
+    <p class="about-sign">באהבה,<br>עדן <img src="assets/star.png" alt=""> Duni</p>`},
   reserve:{t:'תנאי השריון',en:'pre-order terms',b:`
     <h2>איך זה עובד</h2><ul><li>עד פתיחת המכירה ב-1 בפברואר 2027 בשעה 00:00 (שעון ישראל) אפשר לשריין תכשיטים מהקולקציה. השריון לא מחייב ולא משלמים עליו.</li><li>מכל תכשיט יש כמות מוגבלת. השריונים נרשמים לפי סדר ההגעה.</li><li>כשתכשיט כבר שוריין במלואו, אפשר להצטרף לרשימת ההמתנה שלו.</li></ul>
     <h2>ביום הפתיחה</h2><ul><li>ב-1.2 בשעה 00:00 נשלח לכל מי ששריינה הודעת וואטסאפ עם קישור אישי לרכישה.</li><li>התכשיטים ששוריינו שמורים עד 1.2 בשעה 18:00. שריון שלא מומש עד אז משתחרר.</li></ul>
@@ -1279,7 +1332,7 @@ function stopMotion(){ if(ctx){ ctx.revert(); ctx=null; } root.classList.remove(
 function refreshMotion(){ if(window.ScrollTrigger) ScrollTrigger.refresh(); }
 
 /* ---------- router ---------- */
-const HOME_SECTIONS = ['home','launch','drop','for','vision','sizing','custom'];
+const HOME_SECTIONS = ['home','launch','drop','gallery','for','vision','sizing','custom'];
 let currentView=null, baseHash='home', ovDepth=0, closing=false;
 function show(view){
   ['home','gender'].forEach(v=>$('#v-'+v).hidden = v!==view);
