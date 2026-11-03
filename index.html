@@ -342,6 +342,39 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .bag-list .rm{font-size:.75rem;color:var(--ink-2);text-decoration:underline}
 .bag-tot{display:flex;justify-content:space-between;font-size:1.1rem;border-top:1px solid var(--ink);padding-top:14px;font-family:var(--f-ui)}
 
+/* pre-launch: countdown + reservations */
+.launch{padding:clamp(70px,11vw,140px) var(--gut-r) clamp(70px,11vw,140px) var(--gut);text-align:center;border-bottom:1px solid var(--line)}
+.launch small{display:block;font-size:.75rem;letter-spacing:.3em;color:var(--ink-2);margin-bottom:18px;font-family:var(--f-ui)}
+.launch h2{font-weight:400;font-size:clamp(2rem,5vw,3.6rem);margin:0 0 12px;letter-spacing:.04em;line-height:1.1}
+.launch .when{font-size:1.05rem;color:var(--ink-2);margin:0 0 36px}
+.cd{display:flex;justify-content:center;gap:clamp(10px,3vw,34px);direction:ltr;font-family:var(--f-ui)}
+.cd div{min-width:clamp(62px,16vw,120px)}
+.cd b{display:block;font-weight:300;font-size:clamp(2.6rem,9vw,5.6rem);line-height:1;font-variant-numeric:tabular-nums}
+.cd span{display:block;font-size:.8rem;color:var(--ink-2);margin-top:8px;font-family:var(--f-he)}
+.launch .how{max-width:560px;margin:40px auto 30px;font-size:1rem;line-height:1.7;text-wrap:pretty}
+.launch .how a{color:inherit}
+.cd-mini{font-family:var(--f-ui);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.stock{font-size:.8rem;color:var(--ink-2);margin-top:6px}
+.stock.low{color:var(--ink)}
+.stock.full{color:#8a3b2e}
+.card .stock{margin-top:2px}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:99px;font-family:var(--f-ui)}
+.qty button{width:40px;height:40px;font-size:1.1rem}
+.qty output{min-width:28px;text-align:center}
+.res-note{font-size:.85rem;color:var(--ink-2);line-height:1.6;margin:0}
+.res-form{display:grid;gap:12px}
+.res-form label{display:grid;gap:5px;font-size:.85rem}
+.res-form input[type=text],.res-form input[type=tel],.res-form input[type=email]{font:inherit;font-size:1rem;padding:11px 12px;border:1px solid var(--line);background:#fff8;border-radius:6px;color:var(--ink)}
+.res-form .chk{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;line-height:1.5}
+.res-form .chk input{margin-top:3px;width:18px;height:18px;flex:none}
+.res-form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.res-err{color:#8a3b2e;font-size:.85rem;min-height:1.2em}
+.res-done{display:grid;gap:12px;line-height:1.6}
+.res-done .code{font-family:var(--f-ui);font-size:1.6rem;letter-spacing:.2em;direction:ltr}
+.bag-list .wl-tag{font-size:.72rem;border:1px solid currentColor;border-radius:99px;padding:1px 8px;margin-inline-start:6px}
+.bag-list .lq{display:flex;align-items:center;gap:8px;margin-top:6px}
+.bag-list .lq .qty button{width:30px;height:30px}
+
 /* accessibility */
 .a11y-btn{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:75;width:3.1rem;height:3.1rem;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .a11y-btn svg{width:1.6rem;height:1.6rem}
@@ -498,13 +531,14 @@ details .body ul{margin:0;padding-inline-start:1.1em}
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="פתיחת התפריט"><span></span><span></span><span></span></button>
     <a href="#home" aria-label="Duni, חזרה לעמוד הבית"><img class="mark" src="assets/logo.png" alt="Duni"></a>
   </div>
-  <nav aria-label="ניווט ראשי"><a href="#drop">הדרופ החדש</a><a href="#collection">הקולקציה</a><a href="#for">לנשים ולגברים</a><a href="#vision">החזון</a><a href="#sizing">מידות</a></nav>
-  <div class="hdr-end"><span class="clock" lang="en" aria-hidden="true">local time<br>tlv <span id="clock">--:--</span></span><button class="bag wishb" id="wishBtn" type="button" aria-haspopup="dialog" aria-label="רשימת המשאלות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>(<span id="wishN">0</span>)</button><button class="bag" id="bagBtn" type="button" aria-haspopup="dialog">סל (<span id="bagN">0</span>)</button></div>
+  <nav aria-label="ניווט ראשי"><a href="#launch">שריון מראש</a><a href="#drop">הדרופ החדש</a><a href="#collection">הקולקציה</a><a href="#for">לנשים ולגברים</a><a href="#vision">החזון</a><a href="#sizing">מידות</a></nav>
+  <div class="hdr-end"><span class="clock" lang="en" aria-hidden="true">local time<br>tlv <span id="clock">--:--</span></span><button class="bag wishb" id="wishBtn" type="button" aria-haspopup="dialog" aria-label="רשימת המשאלות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>(<span id="wishN">0</span>)</button><button class="bag" id="bagBtn" type="button" aria-haspopup="dialog">שריונים (<span id="bagN">0</span>)</button></div>
 </header>
 
 <nav class="stabs" id="stabs" aria-label="מעבר מהיר בין חלקי האתר">
   <button class="stabs-t" id="stabsT" type="button" aria-expanded="false" aria-controls="stabsL"><span class="ic" aria-hidden="true"><i></i><i></i><i></i></span>פרקים</button>
   <ul id="stabsL" hidden>
+    <li><a href="#launch" data-sec="launch"><b>✦</b>שריון</a></li>
     <li><a href="#drop" data-sec="drop"><b>01</b>דרופ</a></li>
     <li><a href="#collection" data-sec="collection"><b>02</b>קולקציה</a></li>
     <li><a href="#for" data-sec="for"><b>03</b>היא · הוא</a></li>
@@ -518,6 +552,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
   <div class="menu-in">
     <ul class="m-main">
       <li style="--i:0"><a href="#home"><span class="n" lang="en">—</span><span class="t">עמוד הבית</span><span class="en" lang="en">home</span></a></li>
+      <li style="--i:1"><a href="#launch"><span class="n" lang="en">✦</span><span class="t">שריון מראש</span><span class="en" lang="en">pre-order</span></a></li>
       <li style="--i:1"><a href="#drop"><span class="n" lang="en">01</span><span class="t">הדרופ החדש</span><span class="en" lang="en">latest drop</span></a></li>
       <li style="--i:2"><a href="#collection"><span class="n" lang="en">02</span><span class="t">הקולקציה</span><span class="en" lang="en">collection</span></a></li>
       <li style="--i:3"><a href="#for"><span class="n" lang="en">03</span><span class="t">לנשים ולגברים</span><span class="en" lang="en">her · him</span></a></li>
@@ -530,11 +565,11 @@ details .body ul{margin:0;padding-inline-start:1.1em}
       <ul class="m-pieces" id="mPieces"></ul>
       <h3>מידע ומדיניות <span lang="en" class="sp">info</span></h3>
       <ul class="m-info">
-        <li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#care">שמירה וניקוי של כסף</a></li>
+        <li><a href="#reserve">תנאי השריון</a></li><li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#care">שמירה וניקוי של כסף</a></li>
         <li><a href="#privacy">מדיניות פרטיות</a></li><li><a href="#terms">תקנון האתר</a></li><li><a href="#accessibility">הצהרת נגישות</a></li>
       </ul>
     </div>
-    <div class="m-foot"><span class="jp" lang="ja">手作りのジュエリー</span><span>אינסטגרם <span class="ph">@שם_המשתמש</span> · וואטסאפ <span class="ph">מספר טלפון</span></span><span class="sp" lang="en">small things carry big energy</span></div>
+    <div class="m-foot"><span class="jp" lang="ja">手作りのジュエリー</span><span>אינסטגרם <span class="ph">@שם_המשתמש</span> · וואטסאפ <a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a></span><span class="sp" lang="en">small things carry big energy</span></div>
   </div>
 </nav>
 
@@ -562,6 +597,17 @@ details .body ul{margin:0;padding-inline-start:1.1em}
   </section>
 
   <div class="marq" aria-hidden="true"><div class="marq-track" id="marq"></div></div>
+
+  <section class="launch" id="launch" aria-labelledby="launchH">
+    <small lang="en">pre-order · limited pieces</small>
+    <h2 id="launchH">הקולקציה נפתחת בעוד</h2>
+    <p class="when">1 בפברואר 2027 · 00:00 שעון ישראל</p>
+    <div class="cd" id="cd" role="timer" aria-live="off">
+      <div><b id="cdD">--</b><span>ימים</span></div><div><b id="cdH">--</b><span>שעות</span></div><div><b id="cdM">--</b><span>דקות</span></div><div><b id="cdS">--</b><span>שניות</span></div>
+    </div>
+    <p class="how">כל תכשיט נעשה ביד בכמות מוגבלת. אפשר כבר עכשיו לשריין, בלי לשלם. כשהמכירה נפתחת נשלח לך בוואטסאפ קישור אישי לרכישה, והשריון שמור לך עד 18:00 באותו יום. כשתכשיט כבר שוריין במלואו, אפשר להיכנס לרשימת ההמתנה. <a href="#reserve">תנאי השריון</a></p>
+    <a class="btn" href="#collection">לשריין מהקולקציה <img src="assets/star.png" alt=""></a>
+  </section>
 
   <section class="manifesto" aria-labelledby="manH">
     <div>
@@ -699,8 +745,8 @@ details .body ul{margin:0;padding-inline-start:1.1em}
   <div class="foot-in">
     <div class="foot-cols">
       <div><h3>Duni</h3><ul><li><a href="#drop">הדרופ החדש</a></li><li><a href="#collection">הקולקציה</a></li><li><a href="#for">לנשים ולגברים</a></li><li><a href="#vision">החזון</a></li><li><a href="#custom">בהזמנה אישית</a></li></ul></div>
-      <div><h3>מידע ומדיניות</h3><ul><li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#privacy">מדיניות פרטיות</a></li><li><a href="#terms">תקנון האתר</a></li><li><a href="#accessibility">הצהרת נגישות</a></li></ul></div>
-      <div><h3>יצירת קשר</h3><ul><li>אינסטגרם: <span class="ph">@שם_המשתמש</span></li><li>וואטסאפ: <span class="ph">מספר טלפון</span></li><li>מייל: <span class="ph">כתובת מייל</span></li></ul></div>
+      <div><h3>מידע ומדיניות</h3><ul><li><a href="#reserve">תנאי השריון</a></li><li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#privacy">מדיניות פרטיות</a></li><li><a href="#terms">תקנון האתר</a></li><li><a href="#accessibility">הצהרת נגישות</a></li></ul></div>
+      <div><h3>יצירת קשר</h3><ul><li>אינסטגרם: <span class="ph">@שם_המשתמש</span></li><li>וואטסאפ: <a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a></li><li>מייל: <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a></li></ul></div>
       <div><h3 lang="en" class="sp">care</h3><ul><li><a href="#care">שמירה וניקוי של כסף</a></li><li><a href="#sizing">מדריך מידות טבעות</a></li></ul></div>
     </div>
     <img class="big" src="assets/logo.png" alt="Duni">
@@ -728,10 +774,22 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 <div class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="bagH">
   <div class="scrim" id="drawerScrim"></div>
   <div class="panel">
-    <h2 id="bagH">הסל שלך <button class="x" type="button" id="drawerX" aria-label="סגירת הסל">×</button></h2>
+    <h2 id="bagH">השריונים שלי <button class="x" type="button" id="drawerX" aria-label="סגירת הסל">×</button></h2>
     <ul class="bag-list" id="bagList"></ul>
-    <div class="bag-tot"><span>סה״כ</span><span id="bagTot">₪0</span></div>
-    <button class="btn" type="button" id="checkout">המשך לתשלום <img src="assets/star.png" alt=""></button>
+    <div id="resBox">
+      <div class="bag-tot"><span>סה״כ משוער</span><span id="bagTot">₪0</span></div>
+      <p class="res-note" style="margin-top:8px">לא משלמים עכשיו. משלוח לכל הארץ: 25 ₪. ביום הפתיחה נשלח לך קישור אישי לרכישה.</p>
+      <form class="res-form" id="resForm" novalidate style="margin-top:16px">
+        <label>שם מלא<input type="text" id="rName" autocomplete="name" required></label>
+        <label>וואטסאפ<input type="tel" id="rPhone" autocomplete="tel" inputmode="tel" dir="ltr" placeholder="05X-XXX-XXXX" required></label>
+        <label>מייל (לאישור השריון)<input type="email" id="rEmail" autocomplete="email" dir="ltr"></label>
+        <label class="hp" aria-hidden="true">website<input type="text" id="rWeb" tabindex="-1" autocomplete="off"></label>
+        <label class="chk"><input type="checkbox" id="rOk" required><span>קראתי את <a href="#reserve">תנאי השריון</a>, ומאשרת ש-Duni תיצור איתי קשר בוואטסאפ לגבי השריון.</span></label>
+        <div class="res-err" id="resErr" role="alert"></div>
+        <button class="btn" type="submit" id="checkout">שליחת השריון <img src="assets/star.png" alt=""></button>
+      </form>
+    </div>
+    <div class="res-done" id="resDone" hidden></div>
   </div>
 </div>
 
@@ -791,6 +849,32 @@ const CAT = {rings:['טבעת','טבעות'],ears:['עגילים','עגילים'
 const src = id => `assets/pieces/${id}.webp`;
 const ils = n => '₪' + n;
 const byName = n => P.find(p=>p.name===n);
+/* ---------- pre-launch settings ---------- */
+// API_URL: the address of the Google Apps Script web app (from the Deploy step). Empty = not connected yet.
+const API_URL = '';
+const OPEN_AT = new Date('2027-02-01T00:00:00+02:00'); // 1.2.2027 00:00, Israel time
+const SHIP = 25;
+let STOCK = null; // {id:{total,left,waiting}} once loaded from the sheet
+function stockOf(p){ return STOCK && STOCK[p.id] ? STOCK[p.id] : null; }
+function stockHTML(p){
+  const s = stockOf(p); if(!s) return '';
+  if(s.left<=0) return '<div class="stock full">השריון מלא · אפשר להיכנס לרשימת ההמתנה</div>';
+  return `<div class="stock${s.left<=3?' low':''}">נשארו ${s.left} מתוך ${s.total} לשריון</div>`;
+}
+function loadStock(){
+  if(!API_URL) return Promise.resolve();
+  return fetch(API_URL).then(r=>r.json()).then(d=>{ if(d&&d.stock){ STOCK=d.stock; document.querySelectorAll('[data-stock]').forEach(el=>{ const p=P.find(x=>x.id===el.dataset.stock); if(p) el.innerHTML=stockHTML(p); }); if(currentView==='product') refreshPdpStock(); } }).catch(()=>{});
+}
+function cdTick(){
+  let ms = Math.max(0, OPEN_AT - Date.now());
+  const d=Math.floor(ms/864e5); ms-=d*864e5; const h=Math.floor(ms/36e5); ms-=h*36e5; const m=Math.floor(ms/6e4); ms-=m*6e4; const sec=Math.floor(ms/1e3);
+  const pad=n=>String(n).padStart(2,'0');
+  const set=(id,v)=>{ const el=document.getElementById(id); if(el&&el.textContent!==v) el.textContent=v; };
+  set('cdD',String(d)); set('cdH',pad(h)); set('cdM',pad(m)); set('cdS',pad(sec));
+  document.querySelectorAll('.cd-mini').forEach(el=>el.textContent=`${d} ימים ו-${pad(h)}:${pad(m)}:${pad(sec)}`);
+}
+setInterval(cdTick,1000); setTimeout(cdTick,0);
+
 const RING_SIZES = [[48,15.3,'4.5'],[50,15.9,'5.25'],[52,16.6,'6'],[54,17.2,'6.75'],[56,17.8,'7.5'],[58,18.5,'8.5']];
 
 /* ---------- accessibility prefs ---------- */
@@ -820,7 +904,7 @@ const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.
 const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} ברשימת המשאלות">${HEART}</button>`;
 const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="#p-${p.name}">
   <div class="stage">${p.drop && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" loading="lazy"></div>
-  <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he} · ${p.mean}</span></span><span class="pr">${ils(p.price)}</span></div>
+  <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he} · ${p.mean}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
   </a></div>`;
 $('#rail').innerHTML = P.filter(p=>p.drop).map(p=>cardHTML(p,'drop-item')).join('');
 $('#grid').innerHTML = P.map(p=>cardHTML(p)).join('');
@@ -926,20 +1010,56 @@ addEventListener('hashchange',()=>setTimeout(updateTabs,50));
 setTimeout(updateTabs,0);
 syncWish();
 
-/* ---------- bag ---------- */
-let bag = [];
+/* ---------- reservations (the old "bag") ---------- */
+let bag = []; // [{id,size,qty}]
+try{ bag = JSON.parse(localStorage.getItem('duni-res')||'[]').filter(it=>P.some(p=>p.id===it.id)); }catch(e){}
+function saveBag(){ try{ localStorage.setItem('duni-res', JSON.stringify(bag)); }catch(e){} }
+function isWait(it){ const s=stockOf(P.find(x=>x.id===it.id)); return s ? s.left<=0 : false; }
 function renderBag(){
-  $('#bagN').textContent = bag.length;
-  $('#bagList').innerHTML = bag.length ? bag.map((it,i)=>{const p=P.find(x=>x.id===it.id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he} <span lang="en" style="font-family:var(--f-ui)">(${p.name})</span></div><div style="font-size:.8rem;color:var(--ink-2)">מידה: ${it.size}</div><button class="rm" type="button" data-i="${i}">הסרה</button></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">הסל עדיין ריק.</li>';
-  $('#bagTot').textContent = ils(bag.reduce((s,it)=>s+P.find(x=>x.id===it.id).price,0));
-  $('#bagList').querySelectorAll('.rm').forEach(b=>b.onclick=()=>{bag.splice(+b.dataset.i,1);renderBag();});
+  $('#bagN').textContent = bag.reduce((n,it)=>n+it.qty,0);
+  $('#bagList').innerHTML = bag.length ? bag.map((it,i)=>{const p=P.find(x=>x.id===it.id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he}${isWait(it)?'<span class="wl-tag">רשימת המתנה</span>':''}</div><div style="font-size:.8rem;color:var(--ink-2)">מידה: ${it.size}</div><div class="lq"><span class="qty"><button type="button" data-dq="${i}" aria-label="פחות">−</button><output>${it.qty}</output><button type="button" data-iq="${i}" aria-label="עוד">+</button></span><button class="rm" type="button" data-i="${i}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price*it.qty)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שוריינו תכשיטים. בוחרים תכשיט בקולקציה ולוחצים "לשריין מראש".</li>';
+  const sum = bag.reduce((s,it)=>s+P.find(x=>x.id===it.id).price*it.qty,0);
+  $('#bagTot').textContent = sum ? `${ils(sum)} + ${ils(SHIP)} משלוח` : ils(0);
+  $('#resBox').hidden = !bag.length;
+  $('#bagList').querySelectorAll('.rm').forEach(b=>b.onclick=()=>{bag.splice(+b.dataset.i,1);saveBag();renderBag();});
+  $('#bagList').querySelectorAll('[data-dq]').forEach(b=>b.onclick=()=>{const it=bag[+b.dataset.dq]; if(it.qty>1){it.qty--;saveBag();renderBag();}});
+  $('#bagList').querySelectorAll('[data-iq]').forEach(b=>b.onclick=()=>{const it=bag[+b.dataset.iq]; if(it.qty<20){it.qty++;saveBag();renderBag();}});
+}
+function addRes(p,size,qty){
+  const ex = bag.find(it=>it.id===p.id && it.size===size);
+  if(ex) ex.qty=Math.min(20,ex.qty+qty); else bag.push({id:p.id,size,qty});
+  saveBag(); renderBag();
 }
 let lastFocus=null;
-function openBag(){ lastFocus=document.activeElement; renderBag(); $('#drawer').hidden=false; $('#drawerX').focus(); }
+function openBag(){ lastFocus=document.activeElement; $('#resDone').hidden=true; $('#bagList').hidden=false; renderBag(); $('#drawer').hidden=false; $('#drawerX').focus(); loadStock().then(renderBag); }
 function closeBag(){ $('#drawer').hidden=true; lastFocus&&lastFocus.focus(); }
 $('#bagBtn').onclick=openBag; $('#drawerX').onclick=closeBag; $('#drawerScrim').onclick=closeBag;
-$('#checkout').onclick=()=>say(bag.length?'התשלום יחובר בקרוב':'הסל ריק');
-$('#customBtn').onclick=e=>{e.preventDefault();say('קישור ליצירת קשר יתווסף בקרוב');};
+$('#resForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const err=$('#resErr'); err.textContent='';
+  const name=$('#rName').value.trim(), phone=$('#rPhone').value.trim(), email=$('#rEmail').value.trim();
+  if(!name){ err.textContent='צריך למלא שם'; $('#rName').focus(); return; }
+  if(phone.replace(/\D/g,'').length<9){ err.textContent='צריך מספר וואטסאפ תקין'; $('#rPhone').focus(); return; }
+  if(email && !/^\S+@\S+\.\S+$/.test(email)){ err.textContent='כתובת המייל לא נראית תקינה'; $('#rEmail').focus(); return; }
+  if(!$('#rOk').checked){ err.textContent='צריך לאשר את תנאי השריון'; $('#rOk').focus(); return; }
+  if(Date.now()>=OPEN_AT){ err.textContent='השריון המוקדם נסגר, המכירה כבר פתוחה'; return; }
+  if(!API_URL){ err.textContent='השריון עוד לא מחובר. נסו שוב בקרוב.'; return; }
+  const btn=$('#checkout'); btn.disabled=true; btn.firstChild.textContent='שולחת… ';
+  fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,phone,email,consent:true,website:$('#rWeb').value,lines:bag})})
+    .then(r=>r.json()).then(d=>{
+      if(!d.ok){ err.textContent = d.error==='closed' ? 'השריון המוקדם נסגר' : 'משהו לא עבר. בדקי את הפרטים ונסי שוב.'; return; }
+      const got=d.lines.filter(l=>l.reserved), wait=d.lines.filter(l=>l.waitlisted);
+      const li=(l,n)=>`<li>${l.name}${l.size?' · '+l.size:''} ×${n}</li>`;
+      $('#resDone').innerHTML = `<h3 style="margin:0;font-weight:400;font-size:1.3rem">תודה, ${name.split(' ')[0]}!</h3>
+        ${got.length?`<div><b>שוריין בשבילך:</b><ul>${got.map(l=>li(l,l.reserved)).join('')}</ul></div>`:''}
+        ${wait.length?`<div><b>ברשימת ההמתנה:</b><ul>${wait.map(l=>li(l,l.waitlisted)).join('')}</ul></div>`:''}
+        <div>הקוד שלך<div class="code">${d.code}</div></div>
+        <p class="res-note">ב-1.2 ב-00:00 נשלח לך לוואטסאפ קישור אישי לרכישה. השריון שמור עד 18:00 באותו יום.${email?' אישור נשלח גם למייל.':''}</p>`;
+      bag=[]; saveBag(); renderBag(); $('#bagList').hidden=true; $('#resDone').hidden=false; $('#resForm').reset(); loadStock();
+    }).catch(()=>{ err.textContent='אין חיבור כרגע. נסי שוב בעוד רגע.'; })
+    .finally(()=>{ btn.disabled=false; btn.firstChild.textContent='שליחת השריון '; });
+});
+$('#customBtn').onclick=e=>{e.preventDefault();open('https://wa.me/972584120104?text='+encodeURIComponent('היי, אשמח לשמוע על עיצוב אישי'),'_blank');};
 const toast=$('#toast'); let tt;
 function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2400);}
 
@@ -958,11 +1078,13 @@ function productHTML(p){
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
         <div class="heb-name">${CAT[p.cat][0]} ${p.he} · ״${p.mean}״</div>
         <p class="jp-note">${p.jp} (<span lang="en">${p.name}</span>, נקרא ${p.he}) ביפנית: ${p.mean}.</p>
-        <div class="pr">${ils(p.price)}</div>
+        <div class="pr">${ils(p.price)}</div><div id="pdpStock">${stockHTML(p)}</div>
         <p class="lead">${p.lead}</p>
+        <p class="res-note">מכירה נפתחת 1.2 · 00:00 · עוד <span class="cd-mini" dir="rtl"></span>. לא משלמים עכשיו.</p>
         <div><div class="sizes-l"><span id="sizeL">מידה</span>${isRing&&p.id!=='openring'?'<button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">איך מודדים אצבע?</button>':''}</div>
           <div class="sizes" id="sizes" role="group" aria-labelledby="sizeL" style="margin-top:8px">${sizes.map(s=>`<button type="button" aria-pressed="${sizes.length===1}">${s}</button>`).join('')}</div></div>
-        <div class="pdp-actions"><button class="btn" type="button" id="addBag">הוספה לסל <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה ברשימת המשאלות">${HEART}<span class="wl">לשמור</span></button></div>
+        <div><span class="sizes-l" id="qtyL">כמות</span><div style="margin-top:8px"><span class="qty" role="group" aria-labelledby="qtyL"><button type="button" id="qMinus" aria-label="פחות">−</button><output id="qOut">1</output><button type="button" id="qPlus" aria-label="עוד">+</button></span></div></div>
+        <div class="pdp-actions"><button class="btn" type="button" id="addBag"><span id="addBagT">לשריין מראש</span> <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה ברשימת המשאלות">${HEART}<span class="wl">לשמור</span></button></div>
         <div class="assure"><div><b>עבודת יד</b>כל תכשיט מיוצר בנפרד</div><div><b>כסף 925</b>כסף סטרלינג</div><div><b>אריזת מתנה</b>עם סימן ה-✦</div></div>
         <div>
           <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li><li>מכופף, מרוקע בפטיש ומלוטש ביד</li><li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li>${p.id==='signet'||p.id==='pendant'?'<li>האבן משתנה מעט בצורה ובגוון בין תכשיט לתכשיט</li>':''}</ul></div></details>
@@ -987,7 +1109,11 @@ function mountProduct(p){
   const v=$('#v-product'); v.innerHTML=productHTML(p);
   let size = v.querySelectorAll('#sizes button').length===1 ? v.querySelector('#sizes button').textContent : null;
   v.querySelectorAll('#sizes button').forEach(b=>b.onclick=()=>{size=b.textContent;v.querySelectorAll('#sizes button').forEach(x=>x.setAttribute('aria-pressed',x===b));});
-  v.querySelector('#addBag').onclick=()=>{ if(!size){say('צריך לבחור מידה');v.querySelector('#sizes button').focus();return;} bag.push({id:p.id,size}); renderBag(); say(`${CAT[p.cat][0]} ${p.he} נוספה לסל`); };
+  let qty=1; const qOut=v.querySelector('#qOut');
+  v.querySelector('#qMinus').onclick=()=>{ if(qty>1){qty--;qOut.textContent=qty;} };
+  v.querySelector('#qPlus').onclick=()=>{ if(qty<20){qty++;qOut.textContent=qty;} };
+  refreshPdpStock();
+  v.querySelector('#addBag').onclick=()=>{ if(!size){say('צריך לבחור מידה');v.querySelector('#sizes button').focus();return;} const s=stockOf(p); addRes(p,size,qty); say(s&&s.left<=0?`נכנסת לרשימת ההמתנה ל${CAT[p.cat][0]} ${p.he}`:`${CAT[p.cat][0]} ${p.he} נוספה לשריונים`); };
   const st=v.querySelector('#pdpStage'), im=st.querySelector('img');
   st.addEventListener('pointermove',e=>{ if(A.still) return; const r=st.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; im.style.transform=`rotateY(${x*18}deg) rotateX(${-y*14}deg) rotate(${x*6}deg) scale(1.04)`; });
   st.addEventListener('pointerleave',()=>im.style.transform='');
@@ -995,18 +1121,31 @@ function mountProduct(p){
   syncWish();
 }
 
+function refreshPdpStock(){
+  const h=decodeURIComponent(location.hash.slice(1)); const p=h.startsWith('p-')&&byName(h.slice(2)); if(!p) return;
+  const el=$('#pdpStock'); if(el) el.innerHTML=stockHTML(p);
+  const t=$('#addBagT'), s=stockOf(p); if(t) t.textContent = s&&s.left<=0 ? 'לרשימת ההמתנה' : 'לשריין מראש';
+  cdTick();
+}
+
 /* ---------- policy pages ---------- */
 const PH = t => `<span class="ph">${t}</span>`;
 const UPDATED = 'עודכן לאחרונה: 29.10.2026';
 const DOCS = {
+  reserve:{t:'תנאי השריון',en:'pre-order terms',b:`
+    <h2>איך זה עובד</h2><ul><li>עד פתיחת המכירה ב-1 בפברואר 2027 בשעה 00:00 (שעון ישראל) אפשר לשריין תכשיטים מהקולקציה. השריון לא מחייב ולא משלמים עליו.</li><li>מכל תכשיט יש כמות מוגבלת. השריונים נרשמים לפי סדר ההגעה.</li><li>כשתכשיט כבר שוריין במלואו, אפשר להצטרף לרשימת ההמתנה שלו.</li></ul>
+    <h2>ביום הפתיחה</h2><ul><li>ב-1.2 בשעה 00:00 נשלח לכל מי ששריינה הודעת וואטסאפ עם קישור אישי לרכישה.</li><li>התכשיטים ששוריינו שמורים עד 1.2 בשעה 18:00. שריון שלא מומש עד אז משתחרר.</li></ul>
+    <h2>רשימת ההמתנה</h2><ul><li>תכשיט שמשתחרר עובר לבאה בתור ברשימת ההמתנה, לפי סדר ההצטרפות.</li><li>היא מקבלת הודעה בוואטסאפ, ויש לה 24 שעות לרכוש אותו. אחר כך הוא עובר הלאה.</li></ul>
+    <h2>משלוח ותשלום</h2><p>משלוח לכל הארץ: 25 ₪. התשלום נעשה רק ברכישה עצמה, דרך הקישור האישי. המחירים באתר הם מחירי הרכישה.</p>
+    <h2>הפרטים שלך</h2><p>השם, מספר הוואטסאפ והמייל משמשים רק לטיפול בשריון ובהזמנה. אפשר לבטל שריון בכל עת בהודעה בוואטסאפ ל-${'<a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a>'} או במייל ל-${'<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>'}. <a href="#privacy">מדיניות פרטיות</a></p>`},
   shipping:{t:'משלוחים והחזרות',en:'shipping & returns',b:`
     <h2>זמן הכנה</h2><p>כל תכשיט של Duni נעשה ביד ומוכן אחרי ההזמנה. זמן ההכנה הוא ${PH('מספר ימי עסקים')} ימי עסקים, ותכשיט בהזמנה אישית ${PH('מספר ימים')} ימי עסקים.</p>
-    <h2>משלוח</h2><ul><li>משלוח עד הבית: ${PH('מחיר / חינם מעל סכום')} · ${PH('ימי אספקה')}</li><li>איסוף עצמי: ${PH('כתובת ושעות, אם קיים')}</li></ul><p>מספר מעקב נשלח במייל או בוואטסאפ ברגע שהחבילה יוצאת.</p>
+    <h2>משלוח</h2><ul><li>משלוח עד הבית: 25 ₪ · ${PH('ימי אספקה')}</li></ul><p>מספר מעקב נשלח במייל או בוואטסאפ ברגע שהחבילה יוצאת.</p>
     <h2>החזרות והחלפות</h2><p>אפשר להחזיר או להחליף תכשיט שלא נענד, באריזתו המקורית, בתוך 14 יום מיום קבלתו, לפי <a href="#cancel">מדיניות הביטולים</a>. תכשיטים שיוצרו בהזמנה אישית לא ניתנים להחזרה, חוץ ממקרה של פגם.</p>
-    <h2>פגם או נזק במשלוח</h2><p>אם התכשיט הגיע פגום, כותבים לנו בתוך 7 ימים עם תמונה ל-${PH('כתובת מייל')} ונתקן, נחליף או נחזיר את הכסף.</p>`},
+    <h2>פגם או נזק במשלוח</h2><p>אם התכשיט הגיע פגום, כותבים לנו בתוך 7 ימים עם תמונה ל-<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a> ונתקן, נחליף או נחזיר את הכסף.</p>`},
   cancel:{t:'מדיניות ביטולים',en:'cancellation policy',b:`
     <p>מדיניות זו נכתבה לפי חוק הגנת הצרכן, התשמ״א-1981, ותקנות הגנת הצרכן (ביטול עסקה), התשע״א-2010.</p>
-    <h2>ביטול עסקה</h2><ul><li>אפשר לבטל עסקה בתוך 14 יום מיום קבלת התכשיט או מיום קבלת מסמך פרטי העסקה, המאוחר מביניהם.</li><li>מודיעים על הביטול בכתב: במייל ל-${PH('כתובת מייל')} או בוואטסאפ ל-${PH('מספר טלפון')}, עם שם מלא ומספר הזמנה.</li><li>מחזירים את התכשיט כשהוא לא נענד, באריזתו המקורית. עלות המשלוח חזרה על הלקוח, חוץ ממקרה של פגם.</li><li>אם הביטול לא נובע מפגם, ייגבו דמי ביטול של 5% ממחיר העסקה או 100 ₪, הנמוך מביניהם.</li><li>הכסף מוחזר באותו אמצעי תשלום בתוך 14 יום מיום קבלת הודעת הביטול.</li></ul>
+    <h2>ביטול עסקה</h2><ul><li>אפשר לבטל עסקה בתוך 14 יום מיום קבלת התכשיט או מיום קבלת מסמך פרטי העסקה, המאוחר מביניהם.</li><li>מודיעים על הביטול בכתב: במייל ל-<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a> או בוואטסאפ ל-${PH('מספר טלפון')}, עם שם מלא ומספר הזמנה.</li><li>מחזירים את התכשיט כשהוא לא נענד, באריזתו המקורית. עלות המשלוח חזרה על הלקוח, חוץ ממקרה של פגם.</li><li>אם הביטול לא נובע מפגם, ייגבו דמי ביטול של 5% ממחיר העסקה או 100 ₪, הנמוך מביניהם.</li><li>הכסף מוחזר באותו אמצעי תשלום בתוך 14 יום מיום קבלת הודעת הביטול.</li></ul>
     <h2>אנשים עם מוגבלות, אזרחים ותיקים ועולים חדשים</h2><p>אדם עם מוגבלות, אזרח ותיק (מגיל 65) ועולה חדש (עד חמש שנים מיום העלייה) רשאים לבטל עסקה בתוך 4 חודשים, אם העסקה כללה שיחה עם העסק, כולל שיחה בתקשורת אלקטרונית. יש להציג תעודה מתאימה.</p>
     <h2>תכשיטים בהזמנה אישית</h2><p>לפי החוק, טובין שיוצרו במיוחד בעבור הצרכן לא ניתנים לביטול. תכשיט בהזמנה אישית (מידה, אבן או עיצוב לפי בקשה) לא ניתן לביטול אחרי שהעבודה עליו התחילה, חוץ ממקרה של פגם.</p>`},
   privacy:{t:'מדיניות פרטיות',en:'privacy policy',b:`
@@ -1015,19 +1154,19 @@ const DOCS = {
     <h2>למה משתמשים בו</h2><p>כדי לטפל בהזמנה, לשלוח אותה, ליצור קשר לגבי ההזמנה ולתת שירות. אם הסכמת לכך, נשלח גם עדכונים על דרופים חדשים, ואפשר להסיר את עצמך בכל רגע.</p>
     <h2>שיתוף מידע</h2><p>המידע לא נמכר. הוא מועבר רק למי שצריך אותו כדי להשלים את ההזמנה: חברת השליחויות וחברת הסליקה.</p>
     <h2>עוגיות (cookies)</h2><p>${PH('לעדכן לפי כלי מדידה ושיווק שיחוברו לאתר, כמו פיקסל או Google Analytics')}</p>
-    <h2>הזכויות שלך</h2><p>אפשר לבקש לעיין במידע שלך, לתקן אותו או למחוק אותו בפנייה ל-${PH('כתובת מייל')}.</p>`},
+    <h2>הזכויות שלך</h2><p>אפשר לבקש לעיין במידע שלך, לתקן אותו או למחוק אותו בפנייה ל-<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>.</p>`},
   terms:{t:'תקנון האתר',en:'terms of use',b:`
     <h2>כללי</h2><p>האתר מופעל על ידי ${PH('שם העסק')}, ${PH('עוסק מורשה / ח.פ.')}, ${PH('כתובת העסק')}. השימוש באתר ורכישה בו כפופים לתקנון הזה.</p>
     <h2>המוצרים</h2><p>כל התכשיטים נעשים ביד, ולכן כל תכשיט שונה מעט מהתמונה בצורה, בטקסטורה ובגוון האבן. ההבדלים האלה הם חלק מהתכשיט ולא פגם.</p>
     <h2>מחירים ותשלום</h2><p>המחירים באתר בשקלים וכוללים מע״מ ${PH('לאשר')}. דמי משלוח מוצגים לפני התשלום.</p>
     <h2>זכויות יוצרים</h2><p>העיצובים, התמונות, הלוגו והטקסטים באתר שייכים ל-Duni. אסור להעתיק או לשכפל אותם בלי אישור בכתב.</p>
     <h2>משלוחים, ביטולים ופרטיות</h2><p>ראו <a href="#shipping">משלוחים והחזרות</a>, <a href="#cancel">מדיניות ביטולים</a> ו<a href="#privacy">מדיניות פרטיות</a>.</p>
-    <h2>יצירת קשר</h2><p>${PH('טלפון')} · ${PH('מייל')}</p>`},
+    <h2>יצירת קשר</h2><p>וואטסאפ <a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a> · <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a></p>`},
   accessibility:{t:'הצהרת נגישות',en:'accessibility statement',b:`
     <p>ב-Duni רוצים שכל אחד ואחת יוכלו לגלוש באתר ולקנות בו בנוחות. אנחנו פועלים להנגיש את האתר לפי תקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע״ג-2013, ולפי התקן הישראלי ת״י 5568 המבוסס על הנחיות WCAG 2.0 ברמה AA.</p>
     <h2>מה עשינו באתר</h2><ul><li>תפריט נגישות (הכפתור בפינה השמאלית התחתונה): הגדלת טקסט, ניגודיות גבוהה, הדגשת קישורים, גופן קריא ועצירת אנימציות.</li><li>ניווט מלא במקלדת, עם סימון ברור של הרכיב שבפוקוס וקישור ״דילוג לתוכן הראשי״.</li><li>טקסט חלופי לתמונות התכשיטים.</li><li>מבנה כותרות מסודר ושפת עמוד מוגדרת (עברית, עם קטעים באנגלית וביפנית).</li><li>התאמה לטלפון ולמחשב.</li><li>כשהמכשיר מוגדר להפחתת תנועה, האנימציות נעצרות אוטומטית.</li></ul>
     <h2>מגבלות ידועות</h2><p>${PH('לעדכן אחרי בדיקת נגישות מקצועית')}</p>
-    <h2>נתקלת בבעיה?</h2><p>אם משהו באתר לא נגיש לך, נשמח לשמוע ולתקן. רכז/ת הנגישות: ${PH('שם')} · טלפון ${PH('מספר')} · מייל ${PH('כתובת מייל')}.</p>`},
+    <h2>נתקלת בבעיה?</h2><p>אם משהו באתר לא נגיש לך, נשמח לשמוע ולתקן. רכז/ת הנגישות: ${PH('שם')} · טלפון ${PH('מספר')} · מייל <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>.</p>`},
   care:{t:'שמירה וניקוי של כסף',en:'silver care',b:`
     <p>כסף סטרלינג 925 משנה גוון עם הזמן. זה טבעי וקל להחזיר לו את הברק.</p>
     <h2>ביום-יום</h2><ul><li>מורידים את התכשיט לפני מקלחת, ים, בריכה, ספורט ושימוש בחומרי ניקוי.</li><li>מרססים בושם וקרם לפני שעונדים, לא אחרי.</li><li>שומרים כל תכשיט בנפרד, במקום יבש ובשקית סגורה.</li></ul>
@@ -1087,7 +1226,7 @@ function stopMotion(){ if(ctx){ ctx.revert(); ctx=null; } root.classList.remove(
 function refreshMotion(){ if(window.ScrollTrigger) ScrollTrigger.refresh(); }
 
 /* ---------- router ---------- */
-const HOME_SECTIONS = ['home','drop','collection','for','vision','sizing','custom'];
+const HOME_SECTIONS = ['home','launch','drop','collection','for','vision','sizing','custom'];
 let currentView=null;
 function show(view){
   ['home','product','doc'].forEach(v=>$('#v-'+v).hidden = v!==view);
