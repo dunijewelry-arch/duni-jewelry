@@ -102,9 +102,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 
 /* marquee */
-.marq{border-block:1px solid var(--line);overflow:hidden;padding-block:14px;white-space:nowrap;direction:ltr}
-.marq-track{display:inline-flex;gap:3rem;animation:marq 90s linear infinite;font-size:.8rem}
-.marq-track span{display:inline-flex;align-items:center;gap:3rem}
+.marq{border-block:1px solid var(--line);padding:14px var(--gut-r) 14px var(--gut)}
+.marq-track{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 1.4rem;font-size:.8rem;text-align:center}
+.marq-track span{white-space:nowrap}
 .marq-track img{width:9px;display:inline-block}
 @keyframes marq{to{transform:translateX(-50%)}}
 
@@ -289,7 +289,7 @@ dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
 .sizes button{min-width:3rem;padding:9px 12px;border:1px solid var(--line);font-size:.85rem;font-family:var(--f-ui)}
 .sizes button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
 .pdp-info .btn{justify-content:center}
-.assure{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;font-size:.78rem;color:var(--ink-2);text-align:center;border-block:1px solid var(--line);padding-block:14px}
+.assure{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;font-size:.78rem;color:var(--ink-2);text-align:center;border-block:1px solid var(--line);padding-block:14px}
 .assure b{display:block;color:var(--ink);font-weight:400;font-size:.85rem}
 details{border-bottom:1px solid var(--line)}
 details:first-of-type{border-top:1px solid var(--line)}
@@ -328,7 +328,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .doc ul{padding-inline-start:1.2em}
 .ph{background:rgba(196,160,80,.22);padding:0 .3em;border-radius:3px;white-space:nowrap}
 :root.hc .ph{background:#ffe680}
-.doc .back{display:inline-block;margin-top:40px}
+.doc .back{display:inline-flex;margin-top:40px;white-space:nowrap}
 
 /* bag drawer */
 .drawer{position:fixed;inset:0;z-index:80;display:flex;justify-content:flex-start}
@@ -569,11 +569,10 @@ html.ov-open{overflow:hidden}
   <ul id="stabsL" hidden>
     <li><a href="#launch" data-sec="launch"><b>✦</b>שריון</a></li>
     <li><a href="#drop" data-sec="drop"><b>01</b>דרופ</a></li>
-    <li><a href="#collection" data-sec="collection"><b>02</b>קולקציה</a></li>
-    <li><a href="#for" data-sec="for"><b>03</b>היא · הוא</a></li>
-    <li><a href="#vision" data-sec="vision"><b>04</b>חזון</a></li>
-    <li><a href="#sizing" data-sec="sizing"><b>05</b>מידות</a></li>
-    <li><a href="#custom" data-sec="custom"><b>06</b>אישי</a></li>
+    <li><a href="#for" data-sec="for"><b>02</b>היא · הוא</a></li>
+    <li><a href="#vision" data-sec="vision"><b>03</b>חזון</a></li>
+    <li><a href="#sizing" data-sec="sizing"><b>04</b>מידות</a></li>
+    <li><a href="#custom" data-sec="custom"><b>05</b>אישי</a></li>
   </ul>
 </nav>
 
@@ -634,7 +633,7 @@ html.ov-open{overflow:hidden}
       <div><b id="cdD">--</b><span>ימים</span></div><div><b id="cdH">--</b><span>שעות</span></div><div><b id="cdM">--</b><span>דקות</span></div><div><b id="cdS">--</b><span>שניות</span></div>
     </div>
     <p class="how">כל תכשיט נעשה ביד בכמות מוגבלת. אפשר כבר עכשיו לשריין, בלי לשלם. כשהמכירה נפתחת נשלח לך בוואטסאפ קישור אישי לרכישה, והשריון שמור לך עד 18:00 באותו יום. כשתכשיט כבר שוריין במלואו, אפשר להיכנס לרשימת ההמתנה. <a href="#reserve">תנאי השריון</a></p>
-    <a class="btn" href="#collection">לשריין מהקולקציה <img src="assets/star.png" alt=""></a>
+    <a class="btn" href="#for">לשריין מהקולקציה <img src="assets/star.png" alt=""></a>
   </section>
 
   <section class="manifesto" aria-labelledby="manH">
@@ -643,7 +642,7 @@ html.ov-open{overflow:hidden}
       <h2 class="sr" id="manH">איך נולד כל תכשיט</h2>
       <p>כל תכשיט מתחיל כחוט כסף ישר. הוא מכופף, מרוקע בפטיש ומלוטש ביד, על שולחן עבודה אחד קטן. לכן אין שני תכשיטים שיוצאים זהים.</p>
       <p>קצוות לא אחידים, סימני פטיש, צורות שמזכירות חלוקי נחל ומים. זו כל הנקודה.</p>
-      <p class="jp-note">情熱 <span lang="en">jōnetsu · passion</span></p>
+      <p class="jp-note">情熱 <span lang="en">jōnetsu</span> · ג׳ונֶצוּ</p>
     </div>
   </section>
 
@@ -660,18 +659,8 @@ html.ov-open{overflow:hidden}
     <div class="rail" id="rail" tabindex="0" aria-label="התכשיטים החדשים, אפשר לגלול הצידה"></div>
   </section>
 
-  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 02</span><span class="t">הקולקציה<span class="sp" lang="en">collection</span></span><a href="#collection" tabindex="-1">הכל</a></div>
-  <section class="coll" id="collection" aria-labelledby="collH">
-    <div class="sec-head">
-      <h2 id="collH"><small lang="en">the collection · sterling silver 925</small>הקולקציה</h2>
-      <div class="filters" id="filters" role="group" aria-label="סינון לפי סוג"></div>
-    </div>
-    <div class="grid" id="grid"></div>
-  </section>
-
-  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 03</span><span class="t">לנשים ולגברים<span class="sp" lang="en">her · him</span></span><a href="#for" tabindex="-1">לבחירה</a></div>
-  <section class="gender" id="for" aria-labelledby="forH">
-    <div class="sec-head"><h2 id="forH"><small lang="en">for her · for him</small>לנשים ולגברים</h2></div>
+  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 02</span><span class="t">לנשים ולגברים<span class="sp" lang="en">her · him</span></span><a href="#for" tabindex="-1">לבחירה</a></div>
+  <section class="gender" id="for" aria-label="לנשים ולגברים">
     <div class="g-grid">
       <button class="g-tile" type="button" data-g="her" aria-label="לתכשיטים לנשים">
         <img class="gi" src="assets/pieces/lariat.webp" alt="" style="width:44%;left:6%;top:12%">
@@ -691,7 +680,7 @@ html.ov-open{overflow:hidden}
     <p class="note">החלוקה היא רק נקודת התחלה. כל התכשיטים של Duni מתאימים לכל מי שאוהב אותם.</p>
   </section>
 
-  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 04</span><span class="t">החזון<span class="sp" lang="en">vision</span></span><a href="#vision" tabindex="-1">לקרוא</a></div>
+  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 03</span><span class="t">החזון<span class="sp" lang="en">vision</span></span><a href="#vision" tabindex="-1">לקרוא</a></div>
   <section class="vision" id="vision" aria-labelledby="visionH">
     <div>
       <h2 id="visionH"><small lang="en">reality, by hand · החזון</small>החזון</h2>
@@ -710,7 +699,7 @@ html.ov-open{overflow:hidden}
     </div>
   </section>
 
-  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 05</span><span class="t">מידות<span class="sp" lang="en">sizing</span></span><a href="#sizing" tabindex="-1">טבלה</a></div>
+  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 04</span><span class="t">מידות<span class="sp" lang="en">sizing</span></span><a href="#sizing" tabindex="-1">טבלה</a></div>
   <section class="sizing" id="sizing" aria-labelledby="sizingH">
     <div>
       <h2 id="sizingH"><small lang="en">ring sizing · iso 8653</small>איך מודדים אצבע</h2>
@@ -744,7 +733,7 @@ html.ov-open{overflow:hidden}
   </section>
 
 
-  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 06</span><span class="t">בהזמנה אישית<span class="sp" lang="en">one of one</span></span><a href="#custom" tabindex="-1">להתחיל</a></div>
+  <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 05</span><span class="t">בהזמנה אישית<span class="sp" lang="en">one of one</span></span><a href="#custom" tabindex="-1">להתחיל</a></div>
   <section class="custom" id="custom" aria-labelledby="customH">
     <div class="ring-stage"><img src="assets/pieces/signet.webp" alt="טבעת בהזמנה אישית"></div>
     <div>
@@ -773,7 +762,7 @@ html.ov-open{overflow:hidden}
 <footer class="foot">
   <div class="foot-in">
     <div class="foot-cols">
-      <div><h3>Duni</h3><ul><li><a href="#about">אודות</a></li><li><a href="#her">נשים</a></li><li><a href="#him">גברים</a></li><li><a href="#collection">הקולקציה</a></li><li><a href="#vision">החזון</a></li><li><a href="#custom">בהזמנה אישית</a></li></ul></div>
+      <div><h3>Duni</h3><ul><li><a href="#about">אודות</a></li><li><a href="#her">נשים</a></li><li><a href="#him">גברים</a></li><li><a href="#vision">החזון</a></li><li><a href="#custom">בהזמנה אישית</a></li></ul></div>
       <div><h3>מידע ומדיניות</h3><ul><li><a href="#reserve">תנאי השריון</a></li><li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#privacy">מדיניות פרטיות</a></li><li><a href="#terms">תקנון האתר</a></li><li><a href="#accessibility">הצהרת נגישות</a></li></ul></div>
       <div><h3>יצירת קשר</h3><ul><li>אינסטגרם: <span class="ph">@שם_המשתמש</span></li><li>וואטסאפ: <a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a></li><li>מייל: <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a></li></ul></div>
       <div><h3 lang="en" class="sp">care</h3><ul><li><a href="#care">שמירה וניקוי של כסף</a></li><li><a href="#sizing">מדריך מידות טבעות</a></li></ul></div>
@@ -874,8 +863,6 @@ const P = [
    lead:'חוליות גדולות ולא סימטריות, מרוקעות ומחוברות ביד לשרשרת אחת.',
    story:['קוסארי זו שרשרת. כל חוליה בצמיד נוצרת בנפרד, מרוקעת ונסגרת ביד, ולכן אף חוליה לא זהה לאחרת.','יחד הן יוצרות צמיד כבד למראה עם תנועה רכה על פרק היד.']},
 ];
-// names stay in Japanese and romaji only; the story text uses the romaji too
-P.forEach(p=>{ p.story=p.story.map(t=>t.split(p.he).join(`<span lang="en">${p.name}</span>`)); p.he=p.name; });
 // the latest 10 pieces added (the end of the list) are "new" and fill the drop on the home page
 const LATEST = P.slice(-10).reverse();
 const isNew = p => LATEST.includes(p);
@@ -933,22 +920,21 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('#a11yPanel
 /* ---------- home content ---------- */
 const words = ['small things carry big energy','תכשיטים בעבודת יד','real materials','חומרים אמיתיים','slow process','手作りのジュエリー','timeless pieces','情熱'];
 const chunk = words.map(w=>`<span>${w}<img src="assets/star.png" alt=""></span>`).join('');
-const half = chunk.repeat(4);
-$('#marq').innerHTML = half + half;
+$('#marq').innerHTML = ['תכשיטים בעבודת יד','small things carry big energy','手作りのジュエリー'].map(w=>`<span>${w}</span>`).join('<img src="assets/star.png" alt="">');
 
 const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
 const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} ברשימת המשאלות">${HEART}</button>`;
 const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="#p-${p.name}">
-  <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" loading="lazy"></div>
-  <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
+  <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" ${cls==='card'?'loading="lazy"':''}></div>
+  <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
   </a></div>`;
 $('#rail').innerHTML = LATEST.map(p=>cardHTML(p,'drop-item')).join('');
-$('#grid').innerHTML = P.map(p=>cardHTML(p)).join('');
+if($('#grid')) $('#grid').innerHTML = P.map(p=>cardHTML(p)).join('');
 const railStep = ()=> ($('#rail').firstElementChild?.offsetWidth||300) + 30;
 $('#railNext').onclick = ()=> $('#rail').scrollBy({left:-railStep(),behavior:A.still?'auto':'smooth'});
 $('#railPrev').onclick = ()=> $('#rail').scrollBy({left: railStep(),behavior:A.still?'auto':'smooth'});
 
-const filters = $('#filters');
+const filters = $('#filters') || document.createElement('div');
 [['all','הכל',P.length],...Object.keys(CAT).map(c=>[c,CAT[c][1],P.filter(p=>p.cat===c).length])].forEach(([c,label,n],i)=>{
   const b=document.createElement('button'); b.type='button'; b.id='f-'+c; b.setAttribute('aria-pressed',i===0);
   b.innerHTML=`${label}<sup>${n}</sup>`;
@@ -967,7 +953,7 @@ tick(); setInterval(tick, 20000);
 
 /* ---------- three-line menu ---------- */
 const menu = $('#menu'), burger = $('#burger');
-$('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span><span lang="en">${p.name}</span> <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
+$('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span>${p.he} <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
 function openMenu(){
   menu.hidden = false; root.classList.add('menu-open'); root.style.overflow = 'hidden';
   burger.setAttribute('aria-expanded','true'); burger.setAttribute('aria-label','סגירת התפריט');
@@ -991,7 +977,7 @@ function saveWish(){ try{ localStorage.setItem('duni-wish', JSON.stringify(wish)
 function syncWish(){
   $('#wishN').textContent = wish.length;
   document.querySelectorAll('[data-wish]').forEach(b=>{ const on=wish.includes(b.dataset.wish); b.setAttribute('aria-pressed',on); const l=b.querySelector('.wl'); if(l) l.textContent = on?'שמור':'לשמור'; });
-  $('#wishList').innerHTML = wish.length ? wish.map(id=>{const p=P.find(x=>x.id===id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.name} <span class="jp" lang="ja">${p.jp}</span></div><div class="acts"><a href="#p-${p.name}" data-close-wish>לעמוד התכשיט</a><button type="button" data-unwish="${p.id}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שמרת תכשיטים. לוחצים על הלב ליד תכשיט כדי לשמור אותו כאן.</li>';
+  $('#wishList').innerHTML = wish.length ? wish.map(id=>{const p=P.find(x=>x.id===id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he} <span class="jp" lang="ja">${p.jp}</span></div><div class="acts"><a href="#p-${p.name}" data-close-wish>לעמוד התכשיט</a><button type="button" data-unwish="${p.id}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שמרת תכשיטים. לוחצים על הלב ליד תכשיט כדי לשמור אותו כאן.</li>';
 }
 function toggleWish(id, btn){
   const p=P.find(x=>x.id===id); const i=wish.indexOf(id);
@@ -1106,12 +1092,13 @@ function productHTML(p){
   const sizes = isRing ? (p.id==='openring'?['מתכווננת']:RING_SIZES.map(s=>String(s[0]))) : ['מידה אחת'];
   const related = P.filter(x=>x!==p && (x.cat===p.cat || isNew(x)===isNew(p))).slice(0,4);
   return `<article class="pdp">
-    <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#collection">הקולקציה</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
+    <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#${p.g}">${p.g==='her'?'נשים':'גברים'}</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
     <div class="pdp-top">
       <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>ריקוע ביד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
       <div class="pdp-info">
         <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':'לגברים'} · כסף 925 · עבודת יד</div>
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
+        <div class="heb-name">${CAT[p.cat][0]} ${p.he}</div>
         <div class="pr">${ils(p.price)}</div><div id="pdpStock">${stockHTML(p)}</div>
         <p class="lead">${p.lead}</p>
         <p class="res-note">מכירה נפתחת 1.2 · 00:00 · עוד <span class="cd-mini" dir="rtl"></span>. לא משלמים עכשיו.</p>
@@ -1119,7 +1106,7 @@ function productHTML(p){
           <div class="sizes" id="sizes" role="group" aria-labelledby="sizeL" style="margin-top:8px">${sizes.map(s=>`<button type="button" aria-pressed="${sizes.length===1}">${s}</button>`).join('')}</div></div>
         <div><span class="sizes-l" id="qtyL">כמות</span><div style="margin-top:8px"><span class="qty" role="group" aria-labelledby="qtyL"><button type="button" id="qMinus" aria-label="פחות">−</button><output id="qOut">1</output><button type="button" id="qPlus" aria-label="עוד">+</button></span></div></div>
         <div class="pdp-actions"><button class="btn" type="button" id="addBag"><span id="addBagT">לשריין מראש</span> <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה ברשימת המשאלות">${HEART}<span class="wl">לשמור</span></button></div>
-        <div class="assure"><div><b>עבודת יד</b>כל תכשיט מיוצר בנפרד</div><div><b>כסף 925</b>כסף סטרלינג</div><div><b>אריזת מתנה</b>עם סימן ה-✦</div></div>
+        <div class="assure"><div><b>עבודת יד</b>כל תכשיט מיוצר בנפרד</div><div><b>כסף 925</b>כסף סטרלינג</div></div>
         <div>
           <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li><li>מכופף, מרוקע בפטיש ומלוטש ביד</li><li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li>${p.id==='signet'||p.id==='pendant'?'<li>האבן משתנה מעט בצורה ובגוון בין תכשיט לתכשיט</li>':''}</ul></div></details>
           ${isRing&&p.id!=='openring'?`<details><summary>מדריך מידות</summary><div class="body">מודדים את ההיקף של האצבע במילימטרים, והמספר הוא המידה. אם יש ספק, עדיף לבחור מידה אחת למעלה. <button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">למדריך המדידה המלא</button><div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר (מ״מ)</th><th scope="col">US בערך</th></tr></thead><tbody>${RING_SIZES.map(([s,d,u])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td><td>${u}</td></tr>`).join('')}</tbody></table></div></div></details>`:''}
@@ -1277,7 +1264,7 @@ function stopMotion(){ if(ctx){ ctx.revert(); ctx=null; } root.classList.remove(
 function refreshMotion(){ if(window.ScrollTrigger) ScrollTrigger.refresh(); }
 
 /* ---------- router ---------- */
-const HOME_SECTIONS = ['home','launch','drop','collection','for','vision','sizing','custom'];
+const HOME_SECTIONS = ['home','launch','drop','for','vision','sizing','custom'];
 let currentView=null, baseHash='home', ovDepth=0, closing=false;
 function show(view){
   ['home','gender'].forEach(v=>$('#v-'+v).hidden = v!==view);
