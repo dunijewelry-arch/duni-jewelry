@@ -87,6 +87,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .piece img{width:100%;filter:drop-shadow(0 26px 30px rgba(40,34,26,.22)) drop-shadow(0 4px 6px rgba(40,34,26,.12))}
 .hero-ring{width:min(30vw,350px);top:61%;z-index:3}
 .orbit{width:min(12.5vw,160px);opacity:0;z-index:2}
+.orbit img{filter:none}
 .burst-copy{position:absolute;left:0;right:0;bottom:5vh;text-align:center;opacity:0;z-index:4;pointer-events:none}
 .burst-copy h2{font-weight:400;font-size:clamp(1.6rem,3.4vw,2.6rem);letter-spacing:.14em;margin:0;line-height:1.2}
 .burst-copy p{margin:.3em 0 0;font-size:.75rem;color:var(--ink-2)}
@@ -102,7 +103,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* marquee */
 .marq{border-block:1px solid var(--line);overflow:hidden;padding-block:14px;white-space:nowrap;direction:ltr}
-.marq-track{display:inline-flex;gap:3rem;animation:marq 40s linear infinite;font-size:.8rem}
+.marq-track{display:inline-flex;gap:3rem;animation:marq 90s linear infinite;font-size:.8rem}
 .marq-track span{display:inline-flex;align-items:center;gap:3rem}
 .marq-track img{width:9px;display:inline-block}
 @keyframes marq{to{transform:translateX(-50%)}}
@@ -375,6 +376,30 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .bag-list .lq{display:flex;align-items:center;gap:8px;margin-top:6px}
 .bag-list .lq .qty button{width:30px;height:30px}
 
+/* her / him pages */
+.gpage{padding:calc(110px + env(safe-area-inset-top,0px)) var(--gut-r) 100px var(--gut);max-width:1440px;margin:0 auto}
+.gpage h1{font-weight:400;font-size:clamp(2.4rem,6vw,4.4rem);margin:0;line-height:1;letter-spacing:.04em}
+.gpage h1 small{display:block;font-size:.75rem;letter-spacing:.3em;color:var(--ink-2);margin-bottom:16px;font-family:var(--f-ui);font-weight:300}
+.cats{display:flex;gap:4px 26px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin:34px 0 46px;border-bottom:1px solid var(--line)}
+.cats a{text-decoration:none;font-size:1rem;padding:10px 0 12px;margin-bottom:-1px;border-bottom:2px solid transparent;color:var(--ink-2);display:inline-flex;gap:6px;align-items:baseline}
+.cats a sup{font-family:var(--f-ui);font-size:.65rem}
+.cats a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--ink)}
+.cats a:hover{color:var(--ink)}
+.gpage .empty{color:var(--ink-2)}
+
+/* product & policy pages open as a sheet over the page */
+#v-product,#v-doc{position:fixed;inset:0;z-index:70;background:var(--paper);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.ov-bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--paper);border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top,0px)) var(--gut-r) 10px var(--gut)}
+.ov-x{font-size:1.9rem;line-height:1;width:44px;height:44px;display:grid;place-items:center;border-radius:50%}
+.ov-x:hover{background:var(--paper-2)}
+.ov-bag{font-size:.85rem}
+#v-product .pdp{padding-top:24px;padding-bottom:60px}
+@media (min-width:861px){#v-product .pdp-stage{top:80px}}
+#v-doc .doc{padding-top:30px}
+html.ov-open{overflow:hidden}
+.doc .back{white-space:nowrap}
+
 /* accessibility */
 .a11y-btn{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:75;width:3.1rem;height:3.1rem;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .a11y-btn svg{width:1.6rem;height:1.6rem}
@@ -434,7 +459,11 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .menu[hidden]{display:none}
 .menu-in{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(36px,6vw,100px)}
 .m-main{list-style:none;margin:0;padding:0;border-top:1px solid rgba(207,208,207,.18)}
-.m-main a{display:flex;align-items:baseline;gap:18px;text-decoration:none;font-size:clamp(1.9rem,5vw,3.9rem);line-height:1.2;font-weight:300;padding-block:.14em;border-bottom:1px solid rgba(207,208,207,.18);transition:color .3s,padding .4s}
+.m-main a{display:flex;align-items:baseline;gap:18px;text-decoration:none;font-size:clamp(1.35rem,3.4vw,2.3rem);line-height:1.25;font-weight:300;padding-block:.14em;border-bottom:1px solid rgba(207,208,207,.18);transition:color .3s,padding .4s}
+.m-sub{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 0 14px;border-bottom:1px solid rgba(207,208,207,.18);margin-top:-1px}
+.m-sub a{font-size:.9rem;color:var(--muted-d);text-decoration:none;padding:4px 0;border:0}
+.m-sub a:hover,.m-sub a:focus-visible{color:#fff}
+.m-main li:has(.m-sub)>a{border-bottom:0}
 .m-main a:hover,.m-main a:focus-visible{color:#fff;padding-inline-start:.3em}
 .m-main .n{font-family:var(--f-ui);font-size:.72rem;letter-spacing:.2em;color:var(--muted-d);min-width:3em}
 .m-main .en{font-family:var(--f-ui);font-size:.72rem;letter-spacing:.24em;color:var(--muted-d);margin-inline-start:auto;white-space:nowrap}
@@ -531,7 +560,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="פתיחת התפריט"><span></span><span></span><span></span></button>
     <a href="#home" aria-label="Duni, חזרה לעמוד הבית"><img class="mark" src="assets/logo.png" alt="Duni"></a>
   </div>
-  <nav aria-label="ניווט ראשי"><a href="#launch">שריון מראש</a><a href="#drop">הדרופ החדש</a><a href="#collection">הקולקציה</a><a href="#for">לנשים ולגברים</a><a href="#vision">החזון</a><a href="#sizing">מידות</a></nav>
+  <nav aria-label="ניווט ראשי"><a href="#launch">שריון מראש</a><a href="#her">נשים</a><a href="#him">גברים</a><a href="#vision">החזון</a><a href="#custom">בהזמנה אישית</a><a href="#sizing">מידות</a></nav>
   <div class="hdr-end"><span class="clock" lang="en" aria-hidden="true">local time<br>tlv <span id="clock">--:--</span></span><button class="bag wishb" id="wishBtn" type="button" aria-haspopup="dialog" aria-label="רשימת המשאלות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>(<span id="wishN">0</span>)</button><button class="bag" id="bagBtn" type="button" aria-haspopup="dialog">שריונים (<span id="bagN">0</span>)</button></div>
 </header>
 
@@ -551,14 +580,13 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 <nav class="menu" id="menu" hidden aria-label="תפריט האתר">
   <div class="menu-in">
     <ul class="m-main">
-      <li style="--i:0"><a href="#home"><span class="n" lang="en">—</span><span class="t">עמוד הבית</span><span class="en" lang="en">home</span></a></li>
-      <li style="--i:1"><a href="#launch"><span class="n" lang="en">✦</span><span class="t">שריון מראש</span><span class="en" lang="en">pre-order</span></a></li>
-      <li style="--i:1"><a href="#drop"><span class="n" lang="en">01</span><span class="t">הדרופ החדש</span><span class="en" lang="en">latest drop</span></a></li>
-      <li style="--i:2"><a href="#collection"><span class="n" lang="en">02</span><span class="t">הקולקציה</span><span class="en" lang="en">collection</span></a></li>
-      <li style="--i:3"><a href="#for"><span class="n" lang="en">03</span><span class="t">לנשים ולגברים</span><span class="en" lang="en">her · him</span></a></li>
-      <li style="--i:4"><a href="#vision"><span class="n" lang="en">04</span><span class="t">החזון</span><span class="en" lang="en">vision</span></a></li>
-      <li style="--i:5"><a href="#sizing"><span class="n" lang="en">05</span><span class="t">מידות</span><span class="en" lang="en">sizing</span></a></li>
-      <li style="--i:6"><a href="#custom"><span class="n" lang="en">06</span><span class="t">בהזמנה אישית</span><span class="en" lang="en">one of one</span></a></li>
+      <li style="--i:0"><a href="#home"><span class="t">עמוד הבית</span><span class="en" lang="en">home</span></a></li>
+      <li style="--i:1"><a href="#about"><span class="t">אודות</span><span class="en" lang="en">about</span></a></li>
+      <li style="--i:2"><a href="#her"><span class="t">נשים</span><span class="en" lang="en">her</span></a><div class="m-sub"><a href="#her">הכל</a><a href="#her-rings">טבעות</a><a href="#her-necks">שרשראות</a><a href="#her-wrists">צמידים</a><a href="#her-ears">עגילים</a></div></li>
+      <li style="--i:3"><a href="#him"><span class="t">גברים</span><span class="en" lang="en">him</span></a><div class="m-sub"><a href="#him">הכל</a><a href="#him-rings">טבעות</a><a href="#him-necks">שרשראות</a><a href="#him-wrists">צמידים</a><a href="#him-ears">עגילים</a></div></li>
+      <li style="--i:4"><a href="#vision"><span class="t">החזון</span><span class="en" lang="en">vision</span></a></li>
+      <li style="--i:5"><a href="#custom"><span class="t">בהזמנה אישית</span><span class="en" lang="en">one of one</span></a></li>
+      <li style="--i:6"><a href="#sizing"><span class="t">מידות</span><span class="en" lang="en">sizing</span></a></li>
     </ul>
     <div class="m-side">
       <h3>כל התכשיטים <span lang="en" class="sp">pieces</span></h3>
@@ -615,7 +643,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
       <h2 class="sr" id="manH">איך נולד כל תכשיט</h2>
       <p>כל תכשיט מתחיל כחוט כסף ישר. הוא מכופף, מרוקע בפטיש ומלוטש ביד, על שולחן עבודה אחד קטן. לכן אין שני תכשיטים שיוצאים זהים.</p>
       <p>קצוות לא אחידים, סימני פטיש, צורות שמזכירות חלוקי נחל ומים. זו כל הנקודה.</p>
-      <p class="jp-note">情熱 <span lang="en">jōnetsu</span> (ג׳ונֶצוּ) ביפנית: תשוקה. <span lang="en">passion.</span></p>
+      <p class="jp-note">情熱 <span lang="en">jōnetsu · passion</span></p>
     </div>
   </section>
 
@@ -624,12 +652,12 @@ details .body ul{margin:0;padding-inline-start:1.1em}
     <div class="drop-head">
       <div>
         <div class="eyebrow">הדרופ האחרון · <span class="sp" lang="en">latest drop</span></div>
-        <h2 id="dropH" lang="en">sen<span class="jp" lang="ja">線</span></h2>
-        <p>線 (<span lang="en">sen</span>) ביפנית: קו. חוט כסף אחד שמצויר על האצבע כמו קו של עיפרון: גל, שרבוט, לולאות וקשר. ארבע טבעות חדשות.</p>
+        <h2 id="dropH" lang="en">new<span class="jp" lang="ja">新</span></h2>
+        <p>עשרת התכשיטים האחרונים שעלו לאתר.</p>
       </div>
       <div class="rail-btns"><button type="button" id="railPrev" aria-label="הקודם">→</button><button type="button" id="railNext" aria-label="הבא">←</button></div>
     </div>
-    <div class="rail" id="rail" tabindex="0" aria-label="טבעות הדרופ, אפשר לגלול הצידה"></div>
+    <div class="rail" id="rail" tabindex="0" aria-label="התכשיטים החדשים, אפשר לגלול הצידה"></div>
   </section>
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 02</span><span class="t">הקולקציה<span class="sp" lang="en">collection</span></span><a href="#collection" tabindex="-1">הכל</a></div>
@@ -735,6 +763,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 </div>
 
 <!-- ============ PRODUCT ============ -->
+<div class="view" id="v-gender" hidden></div>
 <div class="view" id="v-product" hidden></div>
 
 <!-- ============ DOC ============ -->
@@ -744,7 +773,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 <footer class="foot">
   <div class="foot-in">
     <div class="foot-cols">
-      <div><h3>Duni</h3><ul><li><a href="#drop">הדרופ החדש</a></li><li><a href="#collection">הקולקציה</a></li><li><a href="#for">לנשים ולגברים</a></li><li><a href="#vision">החזון</a></li><li><a href="#custom">בהזמנה אישית</a></li></ul></div>
+      <div><h3>Duni</h3><ul><li><a href="#about">אודות</a></li><li><a href="#her">נשים</a></li><li><a href="#him">גברים</a></li><li><a href="#collection">הקולקציה</a></li><li><a href="#vision">החזון</a></li><li><a href="#custom">בהזמנה אישית</a></li></ul></div>
       <div><h3>מידע ומדיניות</h3><ul><li><a href="#reserve">תנאי השריון</a></li><li><a href="#shipping">משלוחים והחזרות</a></li><li><a href="#cancel">מדיניות ביטולים</a></li><li><a href="#privacy">מדיניות פרטיות</a></li><li><a href="#terms">תקנון האתר</a></li><li><a href="#accessibility">הצהרת נגישות</a></li></ul></div>
       <div><h3>יצירת קשר</h3><ul><li>אינסטגרם: <span class="ph">@שם_המשתמש</span></li><li>וואטסאפ: <a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a></li><li>מייל: <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a></li></ul></div>
       <div><h3 lang="en" class="sp">care</h3><ul><li><a href="#care">שמירה וניקוי של כסף</a></li><li><a href="#sizing">מדריך מידות טבעות</a></li></ul></div>
@@ -845,8 +874,14 @@ const P = [
    lead:'חוליות גדולות ולא סימטריות, מרוקעות ומחוברות ביד לשרשרת אחת.',
    story:['קוסארי זו שרשרת. כל חוליה בצמיד נוצרת בנפרד, מרוקעת ונסגרת ביד, ולכן אף חוליה לא זהה לאחרת.','יחד הן יוצרות צמיד כבד למראה עם תנועה רכה על פרק היד.']},
 ];
+// names stay in Japanese and romaji only; the story text uses the romaji too
+P.forEach(p=>{ p.story=p.story.map(t=>t.split(p.he).join(`<span lang="en">${p.name}</span>`)); p.he=p.name; });
+// the latest 10 pieces added (the end of the list) are "new" and fill the drop on the home page
+const LATEST = P.slice(-10).reverse();
+const isNew = p => LATEST.includes(p);
 const CAT = {rings:['טבעת','טבעות'],ears:['עגילים','עגילים'],necks:['שרשרת','שרשראות'],wrists:['צמיד','צמידים']};
 const src = id => `assets/pieces/${id}.webp`;
+const thumb = id => `assets/pieces/sm/${id}.webp`;
 const ils = n => '₪' + n;
 const byName = n => P.find(p=>p.name===n);
 /* ---------- pre-launch settings ---------- */
@@ -898,22 +933,23 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('#a11yPanel
 /* ---------- home content ---------- */
 const words = ['small things carry big energy','תכשיטים בעבודת יד','real materials','חומרים אמיתיים','slow process','手作りのジュエリー','timeless pieces','情熱'];
 const chunk = words.map(w=>`<span>${w}<img src="assets/star.png" alt=""></span>`).join('');
-$('#marq').innerHTML = chunk + chunk;
+const half = chunk.repeat(4);
+$('#marq').innerHTML = half + half;
 
 const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
 const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} ברשימת המשאלות">${HEART}</button>`;
 const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="#p-${p.name}">
-  <div class="stage">${p.drop && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" loading="lazy"></div>
-  <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he} · ${p.mean}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
+  <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" loading="lazy"></div>
+  <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
   </a></div>`;
-$('#rail').innerHTML = P.filter(p=>p.drop).map(p=>cardHTML(p,'drop-item')).join('');
+$('#rail').innerHTML = LATEST.map(p=>cardHTML(p,'drop-item')).join('');
 $('#grid').innerHTML = P.map(p=>cardHTML(p)).join('');
 const railStep = ()=> ($('#rail').firstElementChild?.offsetWidth||300) + 30;
 $('#railNext').onclick = ()=> $('#rail').scrollBy({left:-railStep(),behavior:A.still?'auto':'smooth'});
 $('#railPrev').onclick = ()=> $('#rail').scrollBy({left: railStep(),behavior:A.still?'auto':'smooth'});
 
 const filters = $('#filters');
-[['all','הכל',P.length],...Object.keys(CAT).map(c=>[c,CAT[c][1],P.filter(p=>p.cat===c).length]),['her','לנשים',P.filter(p=>p.g==='her').length],['him','לגברים',P.filter(p=>p.g==='him').length]].forEach(([c,label,n],i)=>{
+[['all','הכל',P.length],...Object.keys(CAT).map(c=>[c,CAT[c][1],P.filter(p=>p.cat===c).length])].forEach(([c,label,n],i)=>{
   const b=document.createElement('button'); b.type='button'; b.id='f-'+c; b.setAttribute('aria-pressed',i===0);
   b.innerHTML=`${label}<sup>${n}</sup>`;
   b.onclick=()=>{ filters.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
@@ -924,14 +960,14 @@ const filters = $('#filters');
 
 /* ---------- sizing, her/him, clock ---------- */
 $('#sizeTable tbody').innerHTML = RING_SIZES.map(([s,d,u])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td><td>${u}</td></tr>`).join('');
-document.querySelectorAll('.g-tile').forEach(t=>t.onclick=()=>{ $('#f-'+t.dataset.g).click(); const c=$('#collection'); window.scrollTo(0, c.getBoundingClientRect().top+scrollY); });
+document.querySelectorAll('.g-tile').forEach(t=>t.onclick=()=>{ location.hash = t.dataset.g; });
 const clockFmt = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit'});
 const tick = ()=>{ $('#clock').textContent = clockFmt.format(new Date()); };
 tick(); setInterval(tick, 20000);
 
 /* ---------- three-line menu ---------- */
 const menu = $('#menu'), burger = $('#burger');
-$('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${src(p.id)}" alt=""><span>${p.he} <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
+$('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span><span lang="en">${p.name}</span> <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
 function openMenu(){
   menu.hidden = false; root.classList.add('menu-open'); root.style.overflow = 'hidden';
   burger.setAttribute('aria-expanded','true'); burger.setAttribute('aria-label','סגירת התפריט');
@@ -955,7 +991,7 @@ function saveWish(){ try{ localStorage.setItem('duni-wish', JSON.stringify(wish)
 function syncWish(){
   $('#wishN').textContent = wish.length;
   document.querySelectorAll('[data-wish]').forEach(b=>{ const on=wish.includes(b.dataset.wish); b.setAttribute('aria-pressed',on); const l=b.querySelector('.wl'); if(l) l.textContent = on?'שמור':'לשמור'; });
-  $('#wishList').innerHTML = wish.length ? wish.map(id=>{const p=P.find(x=>x.id===id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he} <span lang="en" style="font-family:var(--f-ui)">(${p.name})</span></div><div class="acts"><a href="#p-${p.name}" data-close-wish>לעמוד התכשיט</a><button type="button" data-unwish="${p.id}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שמרת תכשיטים. לוחצים על הלב ליד תכשיט כדי לשמור אותו כאן.</li>';
+  $('#wishList').innerHTML = wish.length ? wish.map(id=>{const p=P.find(x=>x.id===id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.name} <span class="jp" lang="ja">${p.jp}</span></div><div class="acts"><a href="#p-${p.name}" data-close-wish>לעמוד התכשיט</a><button type="button" data-unwish="${p.id}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שמרת תכשיטים. לוחצים על הלב ליד תכשיט כדי לשמור אותו כאן.</li>';
 }
 function toggleWish(id, btn){
   const p=P.find(x=>x.id===id); const i=wish.indexOf(id);
@@ -999,7 +1035,7 @@ function updateTabs(){
   if(currentView==='home') tabLinks.forEach(a=>{ const r=document.getElementById(a.dataset.sec).getBoundingClientRect(); if(r.top<=mid && r.bottom>mid) cur=a.dataset.sec; });
   tabLinks.forEach(a=>{ const on=a.dataset.sec===cur; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
   // keep the opening clean on phones: the tab shows once the hero has scrolled away
-  const pinLen = ctx ? innerHeight*1.1 : 0;   // the hero stays pinned for 110% of a screen while motion is on
+  const pinLen = ctx ? innerHeight*(innerWidth<760?.55:.8) : 0;   // how long the hero stays pinned while motion is on
   const onHero = currentView==='home' && scrollY < pinLen + mid;
   $('#stabs').classList.toggle('hero', onHero);
   if(onHero && !stabsL.hidden && !wideTabs.matches){ stabsL.hidden=true; stabsT.setAttribute('aria-expanded','false'); }
@@ -1016,7 +1052,7 @@ try{ bag = JSON.parse(localStorage.getItem('duni-res')||'[]').filter(it=>P.some(
 function saveBag(){ try{ localStorage.setItem('duni-res', JSON.stringify(bag)); }catch(e){} }
 function isWait(it){ const s=stockOf(P.find(x=>x.id===it.id)); return s ? s.left<=0 : false; }
 function renderBag(){
-  $('#bagN').textContent = bag.reduce((n,it)=>n+it.qty,0);
+  $('#bagN').textContent = bag.reduce((n,it)=>n+it.qty,0); document.querySelectorAll('.bagN2').forEach(e=>e.textContent=$('#bagN').textContent);
   $('#bagList').innerHTML = bag.length ? bag.map((it,i)=>{const p=P.find(x=>x.id===it.id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he}${isWait(it)?'<span class="wl-tag">רשימת המתנה</span>':''}</div><div style="font-size:.8rem;color:var(--ink-2)">מידה: ${it.size}</div><div class="lq"><span class="qty"><button type="button" data-dq="${i}" aria-label="פחות">−</button><output>${it.qty}</output><button type="button" data-iq="${i}" aria-label="עוד">+</button></span><button class="rm" type="button" data-i="${i}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price*it.qty)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שוריינו תכשיטים. בוחרים תכשיט בקולקציה ולוחצים "לשריין מראש".</li>';
   const sum = bag.reduce((s,it)=>s+P.find(x=>x.id===it.id).price*it.qty,0);
   $('#bagTot').textContent = sum ? `${ils(sum)} + ${ils(SHIP)} משלוח` : ils(0);
@@ -1068,16 +1104,14 @@ function productHTML(p){
   const i=P.indexOf(p), prev=P[(i-1+P.length)%P.length], next=P[(i+1)%P.length];
   const isRing=p.cat==='rings';
   const sizes = isRing ? (p.id==='openring'?['מתכווננת']:RING_SIZES.map(s=>String(s[0]))) : ['מידה אחת'];
-  const related = P.filter(x=>x!==p && (x.cat===p.cat || x.drop===p.drop)).slice(0,4);
+  const related = P.filter(x=>x!==p && (x.cat===p.cat || isNew(x)===isNew(p))).slice(0,4);
   return `<article class="pdp">
     <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#collection">הקולקציה</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
     <div class="pdp-top">
-      <div class="pdp-stage" id="pdpStage">${p.drop?'<span class="tag"><img src="assets/star.png" alt="">מהדרופ החדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.mean}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>ריקוע ביד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
+      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>ריקוע ביד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
       <div class="pdp-info">
         <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':'לגברים'} · כסף 925 · עבודת יד</div>
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
-        <div class="heb-name">${CAT[p.cat][0]} ${p.he} · ״${p.mean}״</div>
-        <p class="jp-note">${p.jp} (<span lang="en">${p.name}</span>, נקרא ${p.he}) ביפנית: ${p.mean}.</p>
         <div class="pr">${ils(p.price)}</div><div id="pdpStock">${stockHTML(p)}</div>
         <p class="lead">${p.lead}</p>
         <p class="res-note">מכירה נפתחת 1.2 · 00:00 · עוד <span class="cd-mini" dir="rtl"></span>. לא משלמים עכשיו.</p>
@@ -1106,7 +1140,7 @@ function productHTML(p){
   </article>`;
 }
 function mountProduct(p){
-  const v=$('#v-product'); v.innerHTML=productHTML(p);
+  const v=$('#v-product'); v.innerHTML=OVBAR+productHTML(p);
   let size = v.querySelectorAll('#sizes button').length===1 ? v.querySelector('#sizes button').textContent : null;
   v.querySelectorAll('#sizes button').forEach(b=>b.onclick=()=>{size=b.textContent;v.querySelectorAll('#sizes button').forEach(x=>x.setAttribute('aria-pressed',x===b));});
   let qty=1; const qOut=v.querySelector('#qOut');
@@ -1128,10 +1162,27 @@ function refreshPdpStock(){
   cdTick();
 }
 
+
+/* ---------- her / him pages ---------- */
+const GCATS = [['','הכל'],['rings','טבעות'],['necks','שרשראות'],['wrists','צמידים'],['ears','עגילים']];
+function mountGender(g, cat){
+  const all = P.filter(p=>p.g===g), list = cat ? all.filter(p=>p.cat===cat) : all;
+  $('#v-gender').innerHTML = `<section class="gpage" aria-labelledby="gH">
+    <h1 id="gH"><small lang="en">${g==='her'?'for her':'for him'}</small>${g==='her'?'נשים':'גברים'}</h1>
+    <nav class="cats" aria-label="סוגי תכשיטים">${GCATS.map(([c,t])=>`<a href="#${g}${c?'-'+c:''}" ${c===cat?'aria-current="page"':''}>${t}<sup>${c?all.filter(p=>p.cat===c).length:all.length}</sup></a>`).join('')}</nav>
+    ${list.length?`<div class="grid">${list.map(p=>cardHTML(p)).join('')}</div>`:'<p class="empty">עוד אין כאן תכשיטים. בקרוב.</p>'}
+  </section>`;
+  document.title = `${g==='her'?'נשים':'גברים'} · Duni`;
+  syncWish();
+}
+
+const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
 /* ---------- policy pages ---------- */
 const PH = t => `<span class="ph">${t}</span>`;
 const UPDATED = 'עודכן לאחרונה: 29.10.2026';
 const DOCS = {
+  about:{t:'אודות',en:'about',noDate:true,b:`
+    <p>${PH('כאן יופיע הטקסט עלייך ועל Duni: איך התחלת, איך את עובדת, ומה חשוב לך בכל תכשיט')}</p>`},
   reserve:{t:'תנאי השריון',en:'pre-order terms',b:`
     <h2>איך זה עובד</h2><ul><li>עד פתיחת המכירה ב-1 בפברואר 2027 בשעה 00:00 (שעון ישראל) אפשר לשריין תכשיטים מהקולקציה. השריון לא מחייב ולא משלמים עליו.</li><li>מכל תכשיט יש כמות מוגבלת. השריונים נרשמים לפי סדר ההגעה.</li><li>כשתכשיט כבר שוריין במלואו, אפשר להצטרף לרשימת ההמתנה שלו.</li></ul>
     <h2>ביום הפתיחה</h2><ul><li>ב-1.2 בשעה 00:00 נשלח לכל מי ששריינה הודעת וואטסאפ עם קישור אישי לרכישה.</li><li>התכשיטים ששוריינו שמורים עד 1.2 בשעה 18:00. שריון שלא מומש עד אז משתחרר.</li></ul>
@@ -1179,7 +1230,7 @@ const DOCS = {
 };
 function mountDoc(k){
   const d=DOCS[k];
-  $('#v-doc').innerHTML=`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div><div class="upd">${UPDATED}</div>${d.b}<a class="btn ghost back" href="#home">חזרה לאתר <img src="assets/star.png" alt=""></a></div></article>`;
+  $('#v-doc').innerHTML=OVBAR+`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div>${d.noDate?'':`<div class="upd">${UPDATED}</div>`}${d.b}<button class="btn ghost back" type="button" data-ov-close>חזרה לאתר <img src="assets/star.png" alt=""></button></div></article>`;
   document.title = `${d.t} · Duni`;
 }
 
@@ -1189,7 +1240,7 @@ const ORB = P.filter(p=>!['signet','band'].includes(p.id));
 const SPOTS_D = [[-.78,-.56],[-.30,-.66],[.30,-.66],[.78,-.56],[-.94,.02],[.94,.02],[-.62,.44],[.62,.44]];
 const SPOTS_M = [[-.74,-.62],[.74,-.62],[-.78,-.22],[.78,-.22],[-.78,.18],[.78,.18],[-.6,.5],[.6,.5]];
 const ROT = [-14,8,-6,12,6,-10,10,-8];
-const orbs = ORB.map(p=>{ const d=document.createElement('div'); d.className='piece orbit'; d.innerHTML=`<img src="${src(p.id)}" alt="">`; $('#orbits').appendChild(d); return d; });
+const orbs = ORB.map(p=>{ const d=document.createElement('div'); d.className='piece orbit'; d.innerHTML=`<img src="${thumb(p.id)}" alt="" decoding="async">`; $('#orbits').appendChild(d); return d; });
 let ctx=null;
 function startMotion(){
   if(!window.gsap || A.still){ $('#burstCopy').style.opacity=0; orbs.forEach(o=>o.style.opacity=0); return; }
@@ -1206,7 +1257,7 @@ function startMotion(){
     const spot = i => (tall()?SPOTS_M:SPOTS_D)[i];
     const sizeOrbs = ()=>{ const W=innerWidth,H=innerHeight; const w = tall()? Math.min(.21*W,.15*H,160) : Math.min(.125*W,.21*H,160); orbs.forEach(o=>o.style.width=w+'px'); };
     sizeOrbs(); ScrollTrigger.addEventListener('refreshInit', sizeOrbs);
-    const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#hero',start:'top top',end:'+=110%',pin:true,scrub:.4,invalidateOnRefresh:true}});
+    const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#hero',start:'top top',end:()=>'+='+(innerWidth<760?55:80)+'%',pin:true,scrub:true,invalidateOnRefresh:true}});
     tl.fromTo('#logoWrap',{opacity:1,scale:1},{opacity:0,scale:.9,duration:.35,immediateRender:false},0)
       .fromTo('.corner,#heroTag,#hud',{opacity:1},{opacity:0,duration:.2,immediateRender:false},0)
       .fromTo(ring,{y:0,rotation:0,scale:1},{y:()=>-innerHeight*(innerWidth<760?.06:.11),rotation:18,scale:innerWidth<760?.7:.68,duration:.7,ease:'power1.inOut',immediateRender:false},0);
@@ -1227,23 +1278,58 @@ function refreshMotion(){ if(window.ScrollTrigger) ScrollTrigger.refresh(); }
 
 /* ---------- router ---------- */
 const HOME_SECTIONS = ['home','launch','drop','collection','for','vision','sizing','custom'];
-let currentView=null;
+let currentView=null, baseHash='home', ovDepth=0, closing=false;
 function show(view){
-  ['home','product','doc'].forEach(v=>$('#v-'+v).hidden = v!==view);
+  ['home','gender'].forEach(v=>$('#v-'+v).hidden = v!==view);
   if(view!==currentView){ if(currentView==='home') stopMotion(); currentView=view; if(view==='home') startMotion(); }
+}
+function openSheet(kind){
+  ['product','doc'].forEach(v=>$('#v-'+v).hidden = v!==kind);
+  root.classList.add('ov-open');
+  const el=$('#v-'+kind); el.scrollTop=0;
+  const x=el.querySelector('.ov-x'); x && x.focus({preventScroll:true});
+}
+function hideSheets(){ $('#v-product').hidden=true; $('#v-doc').hidden=true; root.classList.remove('ov-open'); }
+function sheetOpen(){ return !$('#v-product').hidden || !$('#v-doc').hidden; }
+function closeSheet(){
+  closing=true;
+  if(ovDepth>0) history.go(-ovDepth); else location.replace('#'+baseHash);
 }
 function route(){
   if(!menu.hidden && menu.classList.contains('on')) closeMenu(false);
   const h = decodeURIComponent(location.hash.slice(1));
-  if(h.startsWith('p-') && byName(h.slice(2))){ show('product'); mountProduct(byName(h.slice(2))); window.scrollTo(0,0); $('#main').focus({preventScroll:true}); return; }
-  if(DOCS[h]){ show('doc'); mountDoc(h); window.scrollTo(0,0); $('#main').focus({preventScroll:true}); return; }
+  const prod = h.startsWith('p-') && byName(h.slice(2));
+  if(prod || DOCS[h]){
+    const fresh = !currentView;
+    if(fresh) baseRoute('home', true);
+    if(sheetOpen()) ovDepth++; else ovDepth = fresh ? 0 : 1;
+    closing=false;
+    if(prod) mountProduct(prod); else mountDoc(h);
+    openSheet(prod?'product':'doc');
+    return;
+  }
+  const wasSheet = sheetOpen();
+  hideSheets(); ovDepth=0;
+  const quiet = closing && wasSheet; closing=false;
+  baseHash = h || 'home';
+  baseRoute(h, quiet);
+}
+function baseRoute(h, quiet){
+  const gm = /^(her|him)(?:-(rings|necks|wrists|ears))?$/.exec(h);
+  if(gm){ const was=currentView; show('gender'); mountGender(gm[1], gm[2]||''); if(!quiet && !(was==='gender' && gm)) window.scrollTo(0,0); if(quiet){ document.title = `${gm[1]==='her'?'נשים':'גברים'} · Duni`; } return; }
   document.title='Duni Jewelry';
   const wasHome = currentView==='home';
   show('home');
+  if(quiet) return;
   const target = HOME_SECTIONS.includes(h) && h!=='home' ? document.getElementById(h) : null;
-  const go = ()=>{ if(target){ const y=target.getBoundingClientRect().top+scrollY; window.scrollTo({top:y,behavior:'auto'}); } else if(!wasHome || h==='home'){ window.scrollTo({top:0,behavior:'auto'}); } };
+  const go = ()=>{ if(target){ const y=target.getBoundingClientRect().top+scrollY; window.scrollTo({top:y,behavior:'auto'}); } else if(!wasHome || h==='home' || !h){ window.scrollTo({top:0,behavior:'auto'}); } };
   if(wasHome) go(); else requestAnimationFrame(()=>{ refreshMotion(); requestAnimationFrame(go); });
 }
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-ov-close]')){ e.preventDefault(); closeSheet(); }
+  else if(e.target.closest('[data-open-bag]')){ openBag(); }
+});
+addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open) closeSheet(); });
 $('#skipLink').onclick = e=>{ e.preventDefault(); $('#main').focus(); };
 addEventListener('hashchange', route);
 route();
