@@ -314,7 +314,7 @@ function renderItems(){
   const list = q ? items.filter(i=>[i.name,i.he,i.jp].join(' ').toLowerCase().includes(q.toLowerCase())) : items;
   const shown = items.filter(i=>i.visible!==false).length;
   $('#main').innerHTML = `
-    <div class="sec-h"><h2>תכשיטים</h2><button class="btn" type="button" id="newItem">+ תכשיט חדש</button></div>
+    <div class="sec-h"><h2>תכשיטים</h2><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" type="button" id="importItems">ייבוא מקובץ</button><button class="btn" type="button" id="newItem">+ תכשיט חדש</button></span></div>
     <p class="hint">${shown} מוצגים באתר${items.length-shown?` · ${items.length-shown} מוסתרים`:''}. הסדר כאן הוא הסדר באתר, ו-10 האחרונים ברשימה מופיעים באתר ב״חדש״. אפשר להזיז עם החצים.</p>
     ${items.length>8?`<input class="search" id="itemQ" type="search" placeholder="חיפוש תכשיט" value="${esc(itemQ)}">`:''}
     ${list.length?`<ul class="rows">${list.map(it=>{
@@ -328,9 +328,61 @@ function renderItems(){
       ${q?'':`<span class="mv"><button type="button" data-mv="${esc(it.id)}" data-dir="-1" aria-label="להזיז למעלה" ${i===0?'disabled':''}>▲</button><button type="button" data-mv="${esc(it.id)}" data-dir="1" aria-label="להזיז למטה" ${i===items.length-1?'disabled':''}>▼</button></span>`}</li>`;
     }).join('')}</ul>`:`<p class="empty">${q?'לא נמצא תכשיט בשם הזה.':'עוד אין תכשיטים. לוחצים על ״תכשיט חדש״ כדי להוסיף את הראשון.'}</p>`}`;
   $('#newItem').onclick=()=>editItem(null);
+  $('#importItems').onclick=pickImport;
   const s=$('#itemQ'); if(s){ s.oninput=()=>{ itemQ=s.value; renderItems(); const n=$('#itemQ'); n.focus(); n.setSelectionRange(n.value.length,n.value.length); }; }
   document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(D.items.find(x=>x.id===b.dataset.edit)));
   document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{ busy('מזיזה…'); api('moveItem',{id:b.dataset.mv,dir:Number(b.dataset.dir)}).then(setData).catch(x=>say(x.message)).finally(idle); });
+}
+
+
+/* ---------- import many pieces from a file (made by Claude or the collection app) ---------- */
+function pickImport(){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
+  inp.onchange=()=>{ const f=inp.files[0]; if(!f) return; const r=new FileReader();
+    r.onload=()=>{ let d; try{ d=JSON.parse(r.result); }catch(e){ say('הקובץ לא נקרא.'); return; }
+      if(!d || !Array.isArray(d.items)){ say('זה לא קובץ תכשיטים לאתר.'); return; }
+      importSheet(d.items.filter(x=>x && (x.name||x.he))); };
+    r.readAsText(f); };
+  inp.click();
+}
+function importSheet(list){
+  const key=v=>String(v||'').trim().toLowerCase();
+  const have=new Set(D.items.map(i=>key(i.name)));
+  const fresh=list.filter(x=>!have.has(key(x.name)));
+  const sh=$('#sheet');
+  sh.innerHTML=`
+    <div class="sheet-bar"><button class="x" type="button" id="shX" aria-label="סגירה">×</button><h3 id="sheetH">ייבוא תכשיטים</h3><button class="btn sm" type="button" id="impGo" ${fresh.length?'':'disabled'}>ייבוא ${fresh.length}</button></div>
+    <div class="sheet-body">
+      <p class="hint" style="margin:0">נמצאו ${list.length} תכשיטים בקובץ${list.length-fresh.length?`. ${list.length-fresh.length} כבר קיימים באתר בשם הזה ולא ייובאו שוב`:''}. אחרי הייבוא אפשר לפתוח כל אחד ולתקן.</p>
+      <label class="switch"><span>להציג באתר מיד</span><input type="checkbox" id="impVis"></label>
+      <p class="hint" style="margin:0">כשהמתג כבוי, התכשיטים נכנסים מוסתרים. בודקים אותם, ומדליקים ״מוצג באתר״ בכל אחד.</p>
+      <ul class="rows">${list.map(x=>`<li><div class="row" style="cursor:default">
+        <span class="th">${x.photo?`<img src="${esc(x.photo)}" alt="">`:''}</span>
+        <span class="tx"><span class="nm">${esc(x.he||x.name)}<span class="jp">${esc(x.jp||'')}</span></span>
+        <span class="sub">${CAT[x.cat]||''} · ₪${esc(x.price||0)}${x.photo?'':' · בלי תמונה'}${have.has(key(x.name))?' · כבר קיים':''}</span></span></div></li>`).join('')}</ul>
+      <div class="err" id="impErr" role="alert"></div>
+    </div>`;
+  sh.hidden=false; sh.scrollTop=0; document.body.style.overflow='hidden';
+  const close=()=>{ sh.hidden=true; sh.innerHTML=''; document.body.style.overflow=''; };
+  $('#shX').onclick=close;
+  $('#impGo').onclick=async()=>{
+    const vis=$('#impVis').checked; let done=0, last=null; const fails=[];
+    for(const x of fresh){
+      busy(`מייבאת ${done+1} מתוך ${fresh.length}…`);
+      try{
+        let photo='';
+        if(/^data:image\//.test(x.photo||'')){ const u=await api('upload',{data:x.photo,name:x.name||x.he}); photo=u.photo; }
+        else if(x.photo) photo=String(x.photo);
+        const item={ name:x.name||'', jp:x.jp||'', he:x.he||'', mean:x.mean||'', cat:CAT[x.cat]?x.cat:'rings', g:G[x.g]?x.g:'her',
+          price:Number(x.price)||0, qty:Number(x.qty)>=0?Number(x.qty):1, sizes:x.sizes||'', lead:x.lead||'', story:x.story||'', made:x.made||'', photo, visible:vis };
+        last=await api('saveItem',{item}); done++;
+      }catch(e){ fails.push((x.he||x.name)+': '+e.message); }
+    }
+    idle();
+    if(last) setData(last);
+    if(fails.length){ $('#impErr').textContent=`${fails.length} לא יובאו: `+fails.join(' · '); say(`יובאו ${done} תכשיטים`); return; }
+    close(); say(`יובאו ${done} תכשיטים${vis?'':' (מוסתרים)'}`);
+  };
 }
 
 function editItem(it){
