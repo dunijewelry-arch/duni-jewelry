@@ -9,7 +9,7 @@
  *   "שריונים" – every reservation and waitlist entry
  * Photos uploaded from the admin page are saved in a Drive folder called "Duni – תמונות לאתר".
  *
- * FIRST TIME:
+ * FIRST TIME (on script.google.com → New project, or from the spreadsheet: Extensions → Apps Script):
  *   1. Change ADMIN_PASSWORD below to your own password (only here, never in GitHub).
  *   2. Choose "setup" at the top and press Run. Approve the permissions.
  *   3. Deploy → New deployment → Web app → Execute as: Me, Who has access: Anyone → Deploy.
@@ -46,7 +46,7 @@ const WAITLIST = 'רשימת המתנה';
 
 /* ================= setup ================= */
 function setup() {
-  const ss = SpreadsheetApp.getActive();
+  const ss = ss_();
   const make = (name, head) => {
     let sh = ss.getSheetByName(name);
     if (!sh) {
@@ -96,7 +96,17 @@ function seedSamples_(sh) {
 }
 
 /* ================= reading ================= */
-function sheet_(n) { return SpreadsheetApp.getActive().getSheetByName(n); }
+// works from inside the spreadsheet (Extensions → Apps Script) or as its own project on script.google.com:
+// then it uses the spreadsheet called "Duni אתר" in your Drive, or creates it
+function ss_() {
+  const a = SpreadsheetApp.getActive(); if (a) return a;
+  const p = PropertiesService.getScriptProperties(), id = p.getProperty('SHEET_ID');
+  if (id) { try { return SpreadsheetApp.openById(id); } catch (e) {} }
+  const it = DriveApp.getFilesByName('Duni אתר');
+  while (it.hasNext()) { const f = it.next(); if (f.getMimeType() === MimeType.GOOGLE_SHEETS && !f.isTrashed()) { p.setProperty('SHEET_ID', f.getId()); return SpreadsheetApp.openById(f.getId()); } }
+  const ss = SpreadsheetApp.create('Duni אתר'); p.setProperty('SHEET_ID', ss.getId()); return ss;
+}
+function sheet_(n) { return ss_().getSheetByName(n); }
 function rows_(name, cols) {
   const sh = sheet_(name); if (!sh || sh.getLastRow() < 2) return [];
   return sh.getRange(2, 1, sh.getLastRow() - 1, cols.length).getValues().map((r, i) => {
