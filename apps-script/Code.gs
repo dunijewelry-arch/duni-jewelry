@@ -26,8 +26,11 @@ const ITEM_COLS = [
   ['id', 'id'], ['name', 'שם באנגלית'], ['jp', 'שם ביפנית'], ['he', 'תעתיק לעברית'], ['mean', 'משמעות'],
   ['cat', 'סוג'], ['g', 'למי'], ['price', 'מחיר'], ['qty', 'כמות'], ['sizes', 'מידות'],
   ['lead', 'תיאור קצר'], ['story', 'הסיפור'], ['made', 'איך הוא נעשה'], ['photo', 'תמונה'],
-  ['visible', 'מוצג באתר'], ['added', 'נוסף בתאריך'],
+  ['visible', 'מוצג באתר'], ['added', 'נוסף בתאריך'], ['col', 'קולקציה'], ['place', 'איפה מוצג'],
 ];
+// where a piece shows: in the shop, or in the gallery as a custom piece / a stall piece
+const PLACES = ['shop', 'custom', 'stall'];
+const VERSION = 2;
 const GAL_COLS = [['id', 'id'], ['photo', 'תמונה'], ['title', 'כותרת'], ['kind', 'סוג'], ['added', 'נוסף בתאריך']];
 const RES_HEAD = ['תאריך', 'קוד', 'שם', 'טלפון', 'מייל', 'id פריט', 'פריט', 'מידה', 'כמות', 'סטטוס', 'מקום בתור', 'הערות'];
 const SETTINGS_DEFAULT = [
@@ -113,9 +116,15 @@ function rows_(name, cols) {
     const o = { _row: i + 2 }; cols.forEach((c, j) => o[c[0]] = r[j] instanceof Date ? stamp_(r[j]) : String(r[j]).trim()); return o;
   }).filter(o => o.id);
 }
+function ensureHeads_() {
+  const sh = sheet_(SH.items); if (!sh) return;
+  const head = sh.getRange(1, 1, 1, ITEM_COLS.length).getValues()[0];
+  ITEM_COLS.forEach((c, i) => { if (!String(head[i] || '').trim()) sh.getRange(1, i + 1).setValue(c[1]).setFontWeight('bold'); });
+}
 function items_() {
   return rows_(SH.items, ITEM_COLS).map(o => Object.assign(o, {
     price: Number(o.price) || 0, qty: Math.max(0, Math.floor(Number(o.qty) || 0)), visible: !/^(לא|no|false|0)$/i.test(o.visible),
+    place: PLACES.indexOf(o.place) >= 0 ? o.place : 'shop',
   }));
 }
 function gallery_() { return rows_(SH.gallery, GAL_COLS); }
@@ -169,8 +178,9 @@ function doGet() {
   const pub = {
     ok: true, open: Date.now() >= ts,
     settings: { openTs: ts, hold: s.hold_until, wait: Number(s.wait_hours) || 24, ship: Number(s.ship) || 0, hero: s.hero },
-    items: items.filter(i => i.visible).map(strip_),
-    gallery: gallery_().map(strip_),
+    items: items.filter(i => i.visible && i.place === 'shop').map(strip_),
+    gallery: items.filter(i => i.visible && i.place !== 'shop').map(i => ({ id: i.id, photo: i.photo, title: i.he || i.name, kind: i.place, col: i.col }))
+      .concat(gallery_().map(strip_)),
     texts: texts_(),
     stock: publicStock_(stock_(items, resRows_())),
   };
@@ -261,6 +271,7 @@ function admin_(d) {
     if (op === 'deleteItem') { const r = deleteItem_(String(d.id || '')); if (r) return json_({ ok: false, error: r }); clearCache_(); return json_(adminData_()); }
     if (op === 'moveItem') { moveItem_(String(d.id || ''), Number(d.dir) < 0 ? -1 : 1); clearCache_(); return json_(adminData_()); }
     if (op === 'saveGallery') { saveGallery_(d.entry || {}); clearCache_(); return json_(adminData_()); }
+    if (op === 'galleryToItem') { galleryToItem_(String(d.id || ''), d.item || {}); clearCache_(); return json_(adminData_()); }
     if (op === 'deleteGallery') { deleteRowById_(SH.gallery, String(d.id || ''), true); clearCache_(); return json_(adminData_()); }
     if (op === 'saveTexts') { saveTexts_(d.texts || {}); clearCache_(); return json_(adminData_()); }
     if (op === 'saveSettings') { saveSettings_(d.settings || {}); clearCache_(); return json_(adminData_()); }
@@ -273,7 +284,8 @@ function admin_(d) {
 
 function adminData_() {
   const items = items_(), res = resRows_();
-  return { ok: true, items: items.map(strip_), gallery: gallery_().map(strip_), settings: settings_(), texts: texts_(), reservations: res, stock: stock_(items, res) };
+  ensureHeads_();
+  return { ok: true, version: VERSION, items: items.map(strip_), gallery: gallery_().map(strip_), settings: settings_(), texts: texts_(), reservations: res, stock: stock_(items, res) };
 }
 
 function saveItem_(it) {
@@ -292,6 +304,7 @@ function saveItem_(it) {
     price: String(Math.max(0, Math.round(Number(it.price) || 0))), qty: String(Math.max(0, Math.floor(Number(it.qty) || 0))),
     sizes: cleanText_(it.sizes, 120), lead: cleanText_(it.lead, 400), story: cleanText_(it.story, 4000), made: cleanText_(it.made, 200),
     photo: cleanText_(it.photo, 300), visible: it.visible === false ? 'לא' : 'כן', added: old ? old.added : stamp_(),
+    col: cleanText_(it.col, 60), place: PLACES.indexOf(it.place) >= 0 ? it.place : 'shop',
   };
   const row = ITEM_COLS.map(c => o[c[0]]);
   if (old) {
@@ -321,6 +334,11 @@ function saveGallery_(g) {
   if (!o.photo) throw new Error('missing_photo');
   sh.insertRowBefore(2); // newest first
   sh.getRange(2, 1, 1, GAL_COLS.length).setNumberFormat('@').setValues([GAL_COLS.map(c => o[c[0]])]);
+}
+function galleryToItem_(id, it) {
+  const g = gallery_().find(x => x.id === id); if (!g) throw new Error('not_found');
+  saveItem_(Object.assign({ he: g.title, name: '', photo: g.photo, visible: false }, it, { id: '' }));
+  deleteRowById_(SH.gallery, id, false);
 }
 function deleteRowById_(name, id, trash) {
   const cols = name === SH.items ? ITEM_COLS : GAL_COLS;
