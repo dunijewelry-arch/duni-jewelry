@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin.html
+
+Sitemap: https://duni-jewelry.co.il/sitemap.xml
