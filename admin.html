@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Duni · ניהול</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Heebo:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: a phone-first back office on the site's own paper. Sticky header + tabs, lists of rows,
+   a full-screen sheet for editing one thing at a time. Deliberately single-theme, like the site: ink on paper. */
+:root{
+  --paper:#e9e6df; --paper-2:#dfdbd2; --card:#f3f1ec; --ink:#171615; --ink-2:#57534d; --line:rgba(23,22,21,.14);
+  --ok:#2f6b45; --warn:#8a5a14; --bad:#8a3b2e;
+  --f-ui:"Jost","Heebo",system-ui,sans-serif; --f-he:"Heebo","Jost",system-ui,sans-serif;
+  --gut:max(16px, env(safe-area-inset-left,0px)); --gut-r:max(16px, env(safe-area-inset-right,0px));
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--paper);color:var(--ink)}
+body{margin:0;font-family:var(--f-he);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paper)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+img{max-width:100%}
+.wrap{max-width:860px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r)}
+.muted{color:var(--ink-2)}
+.small{font-size:.82rem}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--ink);color:var(--paper);border-radius:99px;padding:12px 22px;font-size:.92rem;min-height:44px;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
+.btn.sm{padding:8px 14px;min-height:36px;font-size:.84rem}
+.btn.danger{background:none;color:var(--bad);border:1px solid currentColor}
+.btn.danger.armed{background:var(--bad);color:#fff;border-color:var(--bad)}
+.link{text-decoration:underline;font-size:.85rem;color:var(--ink-2)}
+
+/* login */
+.login{min-height:100svh;display:grid;place-items:center;padding:40px var(--gut-r) 40px var(--gut)}
+.login form{width:min(360px,100%);display:grid;gap:14px}
+.login .logo{font-family:var(--f-ui);font-weight:300;font-size:2.8rem;letter-spacing:.14em;margin:0;text-align:center;direction:ltr}
+.login h1{font-weight:400;font-size:1.2rem;margin:0 0 6px;text-align:center}
+
+/* header + tabs */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--paper);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:14px;padding-block:12px}
+.top-row .brand{font-family:var(--f-ui);font-size:1.25rem;letter-spacing:.14em;direction:ltr}
+.top-row .brand small{font-family:var(--f-he);letter-spacing:0;font-size:.82rem;color:var(--ink-2);margin-inline-start:8px}
+.top-row .grow{flex:1}
+.tabs{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{padding:10px 0 11px;border-bottom:2px solid transparent;color:var(--ink-2);white-space:nowrap;font-size:.95rem}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.tabs sup{font-family:var(--f-ui);font-size:.66rem;margin-inline-start:3px}
+
+main{padding-block:22px 120px}
+.sec-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.sec-h h2{margin:0;font-weight:400;font-size:1.5rem}
+.hint{font-size:.84rem;color:var(--ink-2);margin:0 0 16px;line-height:1.6}
+.search{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:99px;background:var(--card);margin-bottom:12px}
+
+/* rows */
+.rows{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.rows>li{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.row{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:12px 0;text-align:right}
+.row .th{width:58px;height:58px;flex:none;background:var(--paper-2);display:grid;place-items:center;overflow:hidden}
+.row .th img{width:86%;height:86%;object-fit:contain}
+.row .tx{flex:1;min-width:0}
+.row .nm{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .nm .jp{font-weight:400;color:var(--ink-2);margin-inline-start:6px}
+.row .sub{display:block;font-size:.82rem;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-block;font-size:.72rem;border-radius:99px;padding:2px 9px;border:1px solid currentColor;white-space:nowrap;line-height:1.5}
+.pill.hidden-p{color:var(--ink-2)}
+.pill.low{color:var(--warn)}
+.pill.out{color:var(--bad)}
+.pill.ok{color:var(--ok)}
+.mv{display:flex;flex-direction:column;flex:none}
+.mv button{width:34px;height:28px;color:var(--ink-2);font-size:.9rem}
+.mv button:disabled{opacity:.25}
+.empty{border:1px dashed var(--line);padding:28px 18px;text-align:center;color:var(--ink-2);line-height:1.7}
+
+/* editor sheet */
+.sheet{position:fixed;inset:0;z-index:70;background:var(--paper);overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.sheet-bar{position:sticky;top:0;z-index:2;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) var(--gut-r) 10px var(--gut)}
+.sheet-bar h3{flex:1;margin:0;font-weight:400;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x{width:44px;height:44px;display:grid;place-items:center;font-size:1.7rem;line-height:1;border-radius:50%}
+.x.armed{width:auto;font-size:.8rem;border:1px solid var(--bad);color:var(--bad);border-radius:99px;padding:0 12px}
+.sheet-body{max-width:640px;margin:0 auto;padding:18px var(--gut-r) 140px var(--gut);display:grid;gap:16px}
+.field{display:grid;gap:6px}
+.field>span,.lbl{font-size:.84rem;color:var(--ink-2)}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:11px 12px;font-size:1rem}
+.field textarea{resize:vertical;line-height:1.6;min-height:46px;unicode-bidi:plaintext}
+.field .help{font-size:.78rem;color:var(--ink-2)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.seg{display:flex;border:1px solid var(--ink);border-radius:99px;overflow:hidden}
+.seg button{flex:1;padding:10px 6px;font-size:.9rem}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-width:44px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-family:var(--f-ui);font-size:.9rem}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.photo{position:relative;aspect-ratio:1;background:var(--paper-2);display:grid;place-items:center;border:1px dashed rgba(23,22,21,.3);overflow:hidden;width:min(100%,360px);justify-self:center}
+.photo img{width:80%;height:80%;object-fit:contain}
+.photo .ph-add{display:grid;gap:4px;text-align:center;color:var(--ink-2);font-size:.9rem}
+.photo .ph-add b{font-size:2rem;font-weight:300;color:var(--ink)}
+.photo input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-tools{display:flex;justify-content:center;gap:16px;align-items:center}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:8px}
+.switch input{width:46px;height:28px;appearance:none;-webkit-appearance:none;background:var(--paper-2);border-radius:99px;position:relative;cursor:pointer;flex:none;border:1px solid var(--line);transition:background .2s}
+.switch input::after{content:"";position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.switch input:checked{background:var(--ink)}
+.switch input:checked::after{transform:translateX(-18px)}
+.statline{font-size:.86rem;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;line-height:1.7}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:65;background:var(--paper);border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;
+  padding:10px var(--gut-r) calc(10px + env(safe-area-inset-bottom,0px)) var(--gut)}
+.savebar .grow{flex:1}
+.err{color:var(--bad);font-size:.86rem;min-height:1.2em}
+
+/* reservations */
+.sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));gap:10px;margin-bottom:22px}
+.sum div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:.86rem;min-width:0}
+.sum b{display:block;font-weight:500;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.fchips button{padding:6px 12px;border:1px solid var(--line);border-radius:99px;font-size:.84rem}
+.fchips button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.res-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px;display:grid;gap:10px}
+.res-card .who{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.res-card .who b{font-size:1.05rem;font-weight:500}
+.res-card .code{font-family:var(--f-ui);letter-spacing:.12em;font-size:.82rem;color:var(--ink-2);direction:ltr}
+.res-card .contact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}
+.res-card .contact .num{direction:ltr;user-select:all;font-family:var(--f-ui)}
+.res-lines{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.res-lines li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding-top:8px;font-size:.9rem}
+.res-lines select{border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:6px 10px;font-size:.84rem}
+.wa{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ok);color:var(--ok);border-radius:99px;padding:6px 12px;font-size:.84rem;text-decoration:none}
+.wa svg{width:16px;height:16px;fill:currentColor}
+
+/* texts */
+.tgroup{border-top:1px solid var(--line)}
+.tgroup>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:14px 0;font-size:1.05rem}
+.tgroup>summary::-webkit-details-marker{display:none}
+.tgroup>summary::after{content:"+";font-size:1.3rem;color:var(--ink-2)}
+.tgroup[open]>summary::after{content:"–"}
+.tgroup .inner{display:grid;gap:18px;padding-bottom:22px}
+.tfield .top-l{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tfield .changed{font-size:.72rem;color:var(--warn)}
+.helpbox{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:.82rem;line-height:1.8;margin-bottom:18px}
+.helpbox code{font-family:ui-monospace,Menlo,monospace;background:var(--paper-2);padding:0 4px;border-radius:3px;direction:ltr;unicode-bidi:isolate}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,46%),1fr));gap:12px}
+.gal figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.gal .im{aspect-ratio:4/5;background:var(--paper-2)}
+.gal .im img{width:100%;height:100%;object-fit:cover;display:block}
+.gal figcaption{padding:8px 10px;font-size:.84rem;display:grid;gap:6px}
+
+/* settings */
+.stack{display:grid;gap:16px;max-width:520px}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;background:var(--ink);color:var(--paper);
+  padding:10px 18px;border-radius:99px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .25s;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1}
+.busy{position:fixed;inset:0;z-index:95;background:rgba(233,230,223,.6);display:grid;place-items:center;font-size:.95rem}
+.busy span{background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:99px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ login ============ -->
+<div class="login" id="loginView">
+  <form id="loginForm" novalidate>
+    <p class="logo">Duni</p>
+    <h1>ניהול האתר</h1>
+    <p class="hint" id="notConnected" hidden style="text-align:center">דף הניהול עוד לא מחובר לגיליון. אחרי שתקימי את הגיליון ותשלחי לי את הכתובת שלו, הוא יעבוד.</p>
+    <label class="field"><span>סיסמה</span><input type="password" id="pw" autocomplete="current-password" required></label>
+    <label class="switch"><span>לזכור אותי בטלפון הזה</span><input type="checkbox" id="remember" checked></label>
+    <div class="err" id="loginErr" role="alert"></div>
+    <button class="btn" type="submit" id="loginBtn">כניסה</button>
+  </form>
+</div>
+
+<!-- ============ app ============ -->
+<div id="appView" hidden>
+  <header class="top">
+    <div class="wrap">
+      <div class="top-row">
+        <span class="brand">Duni<small>ניהול</small></span>
+        <span class="grow"></span>
+        <a class="link" href="./" target="_blank" rel="noopener">לאתר ↗</a>
+        <button class="link" type="button" id="logout">יציאה</button>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="חלקי הניהול">
+        <button type="button" role="tab" data-tab="items" aria-selected="true">תכשיטים</button>
+        <button type="button" role="tab" data-tab="res">שריונים<sup id="resCount"></sup></button>
+        <button type="button" role="tab" data-tab="texts">טקסטים</button>
+        <button type="button" role="tab" data-tab="gallery">גלריה</button>
+        <button type="button" role="tab" data-tab="settings">הגדרות</button>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap" id="main"></main>
+</div>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetH"></div>
+<div class="savebar" id="textBar" hidden><span class="grow" id="textBarMsg"></span><button class="btn ghost sm" type="button" id="textUndo">ביטול</button><button class="btn sm" type="button" id="textSave">שמירה</button></div>
+<div class="busy" id="busy" hidden><span id="busyMsg">רגע…</span></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="texts.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const API = (window.DUNI_API||'').trim();
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CAT = {rings:'טבעת', necks:'שרשרת', wrists:'צמיד', ears:'עגילים'};
+const G = {her:'נשים', him:'גברים', both:'לכולם'};
+const STATUSES = ['שריון','רשימת המתנה','בוטל','נרכש'];
+const RING_CHIPS = [44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62];
+const ERR = {
+  wrong_password:'הסיסמה לא נכונה.', no_password:'עוד לא נבחרה סיסמה בגיליון. בקוד של הגיליון, בשורה ADMIN_PASSWORD, כותבים סיסמה ומפרסמים שוב.',
+  locked:'היו יותר מדי ניסיונות. אפשר לנסות שוב בעוד רבע שעה.', has_reservations:'יש לתכשיט הזה שריונים פעילים, אז אי אפשר למחוק אותו. אפשר להסתיר אותו מהאתר במקום.',
+  missing_name:'צריך לכתוב שם לתכשיט.', missing_photo:'צריך לבחור תמונה.', bad_image:'התמונה לא נקראה. נסי תמונה אחרת.', network:'אין חיבור כרגע. נסי שוב בעוד רגע.',
+};
+
+/* ---------- talking to the sheet ---------- */
+let PW = '';
+try{ PW = localStorage.getItem('duni-admin-pw') || sessionStorage.getItem('duni-admin-pw') || ''; }catch(e){}
+function api(op, extra){
+  return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action:'admin',password:PW,op},extra||{}))})
+    .then(r=>r.json(),()=>({ok:false,error:'network'}))
+    .then(d=>{
+      if(!d || !d.ok){
+        const e = d && d.error || 'network';
+        if(e==='wrong_password' && op!=='login'){ logout(); }
+        throw new Error(ERR[e] || (d && d.message ? 'משהו השתבש בגיליון: '+d.message : 'משהו השתבש. נסי שוב.'));
+      }
+      return d;
+    });
+}
+function busy(msg){ $('#busyMsg').textContent=msg||'רגע…'; $('#busy').hidden=false; }
+function idle(){ $('#busy').hidden=true; }
+let tt; function say(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),2600); }
+
+/* ---------- photos: shrink on the phone before upload; cut-out photos keep their see-through background ---------- */
+function readImage(file){
+  return new Promise((res,rej)=>{ const u=URL.createObjectURL(file), i=new Image(); i.onload=()=>res(i); i.onerror=()=>rej(new Error(ERR.bad_image)); i.src=u; });
+}
+async function prepImage(file, max){
+  const img = await readImage(file);
+  let w=img.naturalWidth, h=img.naturalHeight; const k=Math.min(1,(max||1400)/Math.max(w,h)); w=Math.round(w*k); h=Math.round(h*k);
+  const c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d'); x.drawImage(img,0,0,w,h);
+  if(!/png|webp/i.test(file.type)) return c.toDataURL('image/jpeg',.86);
+  const d=x.getImageData(0,0,w,h).data; let x0=w,y0=h,x1=-1,y1=-1, see=false;
+  for(let y=0;y<h;y++) for(let xx=0;xx<w;xx++){ const a=d[(y*w+xx)*4+3]; if(a<250) see=true; if(a>8){ if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(y<y0)y0=y; if(y>y1)y1=y; } }
+  if(!see || x1<0) return c.toDataURL('image/jpeg',.86);
+  const pad=Math.round(Math.max(x1-x0,y1-y0)*.03); x0=Math.max(0,x0-pad); y0=Math.max(0,y0-pad); x1=Math.min(w-1,x1+pad); y1=Math.min(h-1,y1+pad);
+  const c2=document.createElement('canvas'); c2.width=x1-x0+1; c2.height=y1-y0+1; c2.getContext('2d').drawImage(c,x0,y0,c2.width,c2.height,0,0,c2.width,c2.height);
+  return c2.toDataURL('image/png');
+}
+function photoURL(v,w){
+  v=String(v||'');
+  if(/^[A-Za-z0-9_-]{20,}$/.test(v)) return `https://lh3.googleusercontent.com/d/${v}=w${w||400}`;
+  if(v.startsWith('assets/')) return './'+v.replace('assets/pieces/','assets/pieces/sm/');
+  return v;
+}
+
+/* ---------- state ---------- */
+let D = null, TAB = 'items';
+function setData(d){ D = d; const n = (d.reservations||[]).filter(r=>r.status==='שריון'||r.status==='רשימת המתנה').length; $('#resCount').textContent = n||''; render(); }
+function render(){
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab===TAB));
+  ({items:renderItems, res:renderRes, texts:renderTexts, gallery:renderGallery, settings:renderSettings})[TAB]();
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  if(TAB==='texts' && Object.keys(textEdits).length && !confirmLeave()) return;
+  TAB=b.dataset.tab; textEdits={}; $('#textBar').hidden=true; render(); window.scrollTo(0,0);
+});
+function confirmLeave(){ say('יש טקסטים שלא נשמרו. שומרים או מבטלים למטה.'); return false; }
+
+/* ---------- login ---------- */
+function showApp(){ $('#loginView').hidden=true; $('#appView').hidden=false; }
+function logout(){ PW=''; try{ localStorage.removeItem('duni-admin-pw'); sessionStorage.removeItem('duni-admin-pw'); }catch(e){} $('#appView').hidden=true; $('#loginView').hidden=false; $('#sheet').hidden=true; $('#pw').value=''; }
+$('#logout').onclick=logout;
+$('#loginForm').addEventListener('submit', e=>{
+  e.preventDefault(); const err=$('#loginErr'); err.textContent='';
+  if(!API){ err.textContent='דף הניהול עוד לא מחובר לגיליון.'; return; }
+  PW=$('#pw').value; if(!PW){ err.textContent='צריך לכתוב סיסמה.'; return; }
+  $('#loginBtn').disabled=true;
+  api('login').then(d=>{
+    try{ ($('#remember').checked?localStorage:sessionStorage).setItem('duni-admin-pw',PW); }catch(e){}
+    showApp(); setData(d);
+  }).catch(x=>{ err.textContent=x.message; }).finally(()=>$('#loginBtn').disabled=false);
+});
+if(!API) $('#notConnected').hidden=false;
+else if(PW){ busy('נכנסת…'); api('login').then(d=>{ showApp(); setData(d); }).catch(()=>{}).finally(idle); }
+
+/* ---------- items ---------- */
+let itemQ='';
+function stockLine(st){
+  if(!st) return '';
+  if(st.left<=0) return `<span class="pill out">אזל${st.waiting?` · ${st.waiting} בהמתנה`:''}</span>`;
+  return `<span class="pill ${st.left<=2?'low':'ok'}">נשארו ${st.left}${st.reserved?` · ${st.reserved} שוריינו`:''}</span>`;
+}
+function renderItems(){
+  const items = D.items, q = itemQ.trim();
+  const list = q ? items.filter(i=>[i.name,i.he,i.jp].join(' ').toLowerCase().includes(q.toLowerCase())) : items;
+  const shown = items.filter(i=>i.visible!==false).length;
+  $('#main').innerHTML = `
+    <div class="sec-h"><h2>תכשיטים</h2><button class="btn" type="button" id="newItem">+ תכשיט חדש</button></div>
+    <p class="hint">${shown} מוצגים באתר${items.length-shown?` · ${items.length-shown} מוסתרים`:''}. הסדר כאן הוא הסדר באתר, ו-10 האחרונים ברשימה מופיעים באתר ב״חדש״. אפשר להזיז עם החצים.</p>
+    ${items.length>8?`<input class="search" id="itemQ" type="search" placeholder="חיפוש תכשיט" value="${esc(itemQ)}">`:''}
+    ${list.length?`<ul class="rows">${list.map(it=>{
+      const i = items.indexOf(it);
+      return `<li><button class="row" type="button" data-edit="${esc(it.id)}">
+        <span class="th">${it.photo?`<img src="${esc(photoURL(it.photo,200))}" alt="" loading="lazy">`:''}</span>
+        <span class="tx"><span class="nm">${esc(it.he||it.name)}<span class="jp">${esc(it.jp)}</span></span>
+        <span class="sub">${CAT[it.cat]||''} · ₪${esc(it.price)} · ${G[it.g]||''}</span>
+        <span class="sub" style="margin-top:4px">${it.visible===false?'<span class="pill hidden-p">מוסתר</span> ':''}${stockLine(D.stock[it.id])}</span></span>
+      </button>
+      ${q?'':`<span class="mv"><button type="button" data-mv="${esc(it.id)}" data-dir="-1" aria-label="להזיז למעלה" ${i===0?'disabled':''}>▲</button><button type="button" data-mv="${esc(it.id)}" data-dir="1" aria-label="להזיז למטה" ${i===items.length-1?'disabled':''}>▼</button></span>`}</li>`;
+    }).join('')}</ul>`:`<p class="empty">${q?'לא נמצא תכשיט בשם הזה.':'עוד אין תכשיטים. לוחצים על ״תכשיט חדש״ כדי להוסיף את הראשון.'}</p>`}`;
+  $('#newItem').onclick=()=>editItem(null);
+  const s=$('#itemQ'); if(s){ s.oninput=()=>{ itemQ=s.value; renderItems(); const n=$('#itemQ'); n.focus(); n.setSelectionRange(n.value.length,n.value.length); }; }
+  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(D.items.find(x=>x.id===b.dataset.edit)));
+  document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{ busy('מזיזה…'); api('moveItem',{id:b.dataset.mv,dir:Number(b.dataset.dir)}).then(setData).catch(x=>say(x.message)).finally(idle); });
+}
+
+function editItem(it){
+  const isNew = !it;
+  const f = Object.assign({id:'',name:'',jp:'',he:'',mean:'',cat:'rings',g:'her',price:'',qty:'1',sizes:'',lead:'',story:'',made:'',photo:'',visible:true}, it||{});
+  let newPhoto = null, dirty = false;
+  const st = it && D.stock[it.id];
+  const sh = $('#sheet');
+  sh.innerHTML = `
+    <div class="sheet-bar"><button class="x" type="button" id="shX" aria-label="סגירה">×</button><h3 id="sheetH">${isNew?'תכשיט חדש':esc(f.he||f.name)}</h3><button class="btn sm" type="button" id="shSave">שמירה</button></div>
+    <form class="sheet-body" id="itemForm" novalidate>
+      <div class="photo" id="photoBox">${f.photo?`<img src="${esc(photoURL(f.photo,800))}" alt="">`:'<span class="ph-add"><b>+</b>הוספת תמונה</span>'}<input type="file" accept="image/*" id="photoIn" aria-label="בחירת תמונה"></div>
+      <p class="hint" style="margin:0;text-align:center">התמונה הכי יפה באתר היא בלי רקע. באייפון: לוחצים לחיצה ארוכה על התכשיט בתמונה, ״שיתוף״, ואז ״שמירת תמונה״. את התמונה הזו מעלים לכאן.</p>
+      <div class="two">
+        <label class="field"><span>שם באנגלית</span><input id="fName" value="${esc(f.name)}" dir="ltr" placeholder="nami"></label>
+        <label class="field"><span>שם ביפנית</span><input id="fJp" value="${esc(f.jp)}" placeholder="波"></label>
+      </div>
+      <div class="two">
+        <label class="field"><span>תעתיק לעברית</span><input id="fHe" value="${esc(f.he)}" placeholder="נאמי"></label>
+        <label class="field"><span>משמעות (לא חובה)</span><input id="fMean" value="${esc(f.mean)}" placeholder="גל"></label>
+      </div>
+      <label class="field"><span>סוג</span><select id="fCat">${Object.entries(CAT).map(([k,v])=>`<option value="${k}" ${f.cat===k?'selected':''}>${v}</option>`).join('')}</select></label>
+      <div class="field"><span class="lbl">למי</span><div class="seg" id="fG">${Object.entries(G).map(([k,v])=>`<button type="button" data-g="${k}" aria-pressed="${f.g===k}">${v}</button>`).join('')}</div></div>
+      <div class="two">
+        <label class="field"><span>מחיר (₪)</span><input id="fPrice" type="number" inputmode="numeric" min="0" value="${esc(f.price)}"></label>
+        <label class="field"><span>כמות במלאי</span><input id="fQty" type="number" inputmode="numeric" min="0" value="${esc(f.qty)}"></label>
+      </div>
+      ${st?`<div class="statline">נשארו לשריון: <b>${st.left}</b> · שוריינו: ${st.reserved} · ברשימת המתנה: ${st.waiting}${st.sold?` · נרכשו: ${st.sold}`:''}</div>`:''}
+      <div class="field" id="sizesField"></div>
+      <label class="field"><span>תיאור קצר</span><textarea id="fLead" rows="2">${esc(f.lead)}</textarea><span class="help">מופיע מתחת למחיר.</span></label>
+      <label class="field"><span>הסיפור (לא חובה)</span><textarea id="fStory" rows="5">${esc(f.story)}</textarea><span class="help">שורה ריקה מתחילה פסקה חדשה.</span></label>
+      <label class="field"><span>איך הוא נעשה (לא חובה)</span><input id="fMade" value="${esc(f.made)}" placeholder="למשל: נוצק מכסף 925 וגומר ביד בסטודיו"></label>
+      <label class="switch"><span>מוצג באתר</span><input type="checkbox" id="fVis" ${f.visible!==false?'checked':''}></label>
+      <div class="err" id="itemErr" role="alert"></div>
+      ${isNew?'':`<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:8px">
+        <a class="link" href="./#p-${encodeURIComponent(f.name||f.id)}" target="_blank" rel="noopener">לראות באתר ↗</a>
+        <button class="btn danger sm" type="button" id="delItem">מחיקת התכשיט</button></div>`}
+    </form>`;
+  sh.hidden=false; sh.scrollTop=0; document.body.style.overflow='hidden';
+  const form=$('#itemForm');
+  form.addEventListener('input',()=>dirty=true);
+  // sizes: chips for rings, free text for the rest
+  let sizes = f.sizes;
+  function drawSizes(){
+    const cat=$('#fCat').value, box=$('#sizesField');
+    if(cat==='rings'){
+      const sel = sizes.split(/[,\s]+/).filter(Boolean), adj = sizes.trim()==='מתכווננת';
+      box.innerHTML = `<span class="lbl">מידות</span><div class="chips" id="chips">${RING_CHIPS.map(n=>`<button type="button" data-s="${n}" aria-pressed="${!adj&&sel.includes(String(n))}">${n}</button>`).join('')}<button type="button" data-s="adj" aria-pressed="${adj}" style="font-family:var(--f-he)">מתכווננת</button></div>
+        <span class="help">${sizes?'':'כשלא בוחרים מידות, באתר מופיעות המידות 48–58.'}</span>`;
+      box.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{
+        dirty=true;
+        if(b.dataset.s==='adj'){ sizes = sizes.trim()==='מתכווננת' ? '' : 'מתכווננת'; }
+        else { let cur = sizes.trim()==='מתכווננת' ? [] : sizes.split(/[,\s]+/).filter(Boolean); const v=b.dataset.s;
+          cur = cur.includes(v) ? cur.filter(x=>x!==v) : cur.concat(v); sizes = cur.map(Number).sort((a,c)=>a-c).join(','); }
+        drawSizes();
+      });
+    } else {
+      const v = /^[\d,\s]+$/.test(sizes)||sizes.trim()==='מתכווננת' ? '' : sizes;
+      box.innerHTML = `<label class="field" style="gap:6px"><span>מידות (לא חובה)</span><input id="fSizes" value="${esc(v)}" placeholder="למשל: 40 ס״מ, 45 ס״מ"><span class="help">ריק = מידה אחת. כמה מידות מפרידים בפסיק.</span></label>`;
+      $('#fSizes').oninput=e=>{ sizes=e.target.value; };
+    }
+  }
+  drawSizes();
+  $('#fCat').onchange=()=>{ if($('#fCat').value!=='rings' && /^[\d,\s]+$/.test(sizes)) sizes=''; drawSizes(); };
+  let g=f.g; document.querySelectorAll('#fG button').forEach(b=>b.onclick=()=>{ g=b.dataset.g; dirty=true; document.querySelectorAll('#fG button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
+  $('#photoIn').onchange=async e=>{
+    const file=e.target.files[0]; if(!file) return;
+    try{ busy('מכינה את התמונה…'); newPhoto = await prepImage(file,1400); dirty=true;
+      $('#photoBox').querySelector('img,.ph-add').outerHTML = `<img src="${newPhoto}" alt="">`; }
+    catch(x){ say(x.message); } finally{ idle(); e.target.value=''; }
+  };
+  const close=()=>{ sh.hidden=true; sh.innerHTML=''; document.body.style.overflow=''; };
+  const x=$('#shX'); let armed=false;
+  x.onclick=()=>{ if(dirty && !armed){ armed=true; x.classList.add('armed'); x.textContent='לסגור בלי לשמור?'; setTimeout(()=>{ if(armed){ armed=false; x.classList.remove('armed'); x.textContent='×'; } },3500); return; } close(); };
+  const del=$('#delItem'); if(del){ let a=false; del.onclick=()=>{ if(!a){ a=true; del.classList.add('armed'); del.textContent='ללחוץ שוב כדי למחוק'; setTimeout(()=>{ a=false; del.classList.remove('armed'); del.textContent='מחיקת התכשיט'; },3500); return; }
+    busy('מוחקת…'); api('deleteItem',{id:f.id}).then(d=>{ close(); setData(d); say('התכשיט נמחק'); }).catch(x=>{ $('#itemErr').textContent=x.message; }).finally(idle); }; }
+  const save=async()=>{
+    const err=$('#itemErr'); err.textContent='';
+    const item = { id:f.id, name:$('#fName').value.trim(), jp:$('#fJp').value.trim(), he:$('#fHe').value.trim(), mean:$('#fMean').value.trim(),
+      cat:$('#fCat').value, g, price:$('#fPrice').value, qty:$('#fQty').value, sizes:sizes.trim(), lead:$('#fLead').value.trim(),
+      story:$('#fStory').value.trim(), made:$('#fMade').value.trim(), photo:f.photo, visible:$('#fVis').checked };
+    if(!item.name && !item.he){ err.textContent='צריך לכתוב שם לתכשיט.'; $('#fName').focus(); return; }
+    if(item.name && !/^[A-Za-z0-9 \-']+$/.test(item.name)){ err.textContent='השם באנגלית יכול להכיל רק אותיות באנגלית, מספרים ורווחים.'; $('#fName').focus(); return; }
+    if(!(Number(item.price)>0)){ err.textContent='צריך לכתוב מחיר.'; $('#fPrice').focus(); return; }
+    if(!(Number(item.qty)>=0) || item.qty===''){ err.textContent='צריך לכתוב כמות.'; $('#fQty').focus(); return; }
+    if(!item.photo && !newPhoto){ err.textContent='צריך להוסיף תמונה.'; return; }
+    try{
+      if(newPhoto){ busy('מעלה את התמונה…'); const u = await api('upload',{data:newPhoto, name:item.name||item.he}); item.photo=u.photo; }
+      busy('שומרת…'); const d = await api('saveItem',{item}); close(); setData(d); say(isNew?'התכשיט נוסף לאתר':'נשמר');
+    }catch(x){ err.textContent=x.message; } finally{ idle(); }
+  };
+  $('#shSave').onclick=save; form.addEventListener('submit',e=>{ e.preventDefault(); save(); });
+}
+
+/* ---------- reservations ---------- */
+let resFilter='active', resQ='';
+const WA_ICON='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.7-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>';
+function waLink(phone, name){
+  let n = String(phone).replace(/\D/g,''); if(n.startsWith('0')) n = '972'+n.slice(1);
+  return `https://wa.me/${n}?text=${encodeURIComponent(`היי ${String(name).split(' ')[0]}, כאן עדן מ-Duni ✦ `)}`;
+}
+const dateHe = t => { const d = new Date(typeof t==='number'?t:Date.parse(t)); return isNaN(d) ? '' : d.toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}); };
+function renderRes(){
+  const R = D.reservations||[], byId={}; D.items.forEach(i=>byId[i.id]=i);
+  const counts = {active:R.filter(r=>r.status==='שריון'||r.status==='רשימת המתנה').length, 'שריון':R.filter(r=>r.status==='שריון').length, 'רשימת המתנה':R.filter(r=>r.status==='רשימת המתנה').length, 'בוטל':R.filter(r=>r.status==='בוטל').length, 'נרכש':R.filter(r=>r.status==='נרכש').length, all:R.length};
+  const rows = R.filter(r=> resFilter==='all' ? true : resFilter==='active' ? (r.status==='שריון'||r.status==='רשימת המתנה') : r.status===resFilter)
+    .filter(r=>{ const q=resQ.trim(); return !q || (r.name+' '+r.phone+' '+r.code).includes(q); });
+  const groups = {}; rows.forEach(r=>{ (groups[r.code] = groups[r.code] || []).push(r); });
+  const order = Object.keys(groups).sort((a,b)=>Math.max(...groups[b].map(r=>+new Date(r.date)||0)) - Math.max(...groups[a].map(r=>+new Date(r.date)||0)));
+  const sumItems = D.items.filter(i=>{ const s=D.stock[i.id]; return s && (s.reserved||s.waiting||s.sold); });
+  $('#main').innerHTML = `
+    <div class="sec-h"><h2>שריונים</h2></div>
+    ${sumItems.length?`<div class="sum">${sumItems.map(i=>{ const s=D.stock[i.id]; return `<div><b>${esc(i.he||i.name)}</b>שוריינו ${s.reserved} מתוך ${s.total}${s.waiting?` · ${s.waiting} בהמתנה`:''}${s.sold?` · ${s.sold} נרכשו`:''}</div>`; }).join('')}</div>`:''}
+    <div class="fchips" role="group" aria-label="סינון">${[['active','פעילים'],['שריון','שריונים'],['רשימת המתנה','רשימת המתנה'],['נרכש','נרכשו'],['בוטל','בוטלו'],['all','הכל']].map(([k,t])=>`<button type="button" data-f="${k}" aria-pressed="${resFilter===k}">${t} ${counts[k]}</button>`).join('')}</div>
+    <input class="search" id="resQ" type="search" placeholder="חיפוש לפי שם, טלפון או קוד" value="${esc(resQ)}">
+    ${order.length ? order.map(code=>{ const g=groups[code], r0=g[0]; return `<article class="res-card">
+      <div class="who"><b>${esc(r0.name)}</b><span class="code">${esc(code)}</span><span class="muted small">${dateHe(r0.date)}</span></div>
+      <div class="contact"><span class="num">${esc(r0.phone)}</span><a class="wa" href="${waLink(r0.phone,r0.name)}" target="_blank" rel="noopener">${WA_ICON}וואטסאפ</a>${r0.email?`<span class="muted small" dir="ltr">${esc(r0.email)}</span>`:''}</div>
+      <ul class="res-lines">${g.map(r=>`<li><span>${esc((byId[r.id]&&(byId[r.id].he||byId[r.id].name))||r.item)}${r.size?` · ${esc(r.size)}`:''} · ×${esc(r.qty)}${r.status==='רשימת המתנה'&&r.place?` <span class="muted small">(מקום ${esc(r.place)} בתור)</span>`:''}</span>
+        <select data-row="${esc(r.row)}" aria-label="סטטוס">${STATUSES.map(s=>`<option ${s===r.status?'selected':''}>${s}</option>`).join('')}</select></li>`).join('')}</ul>
+    </article>`; }).join('') : `<p class="empty">${R.length?'אין שריונים שמתאימים לסינון.':'עוד אין שריונים. כשמישהי תשריין באתר, השריון יופיע כאן ויגיע אלייך גם למייל.'}</p>`}`;
+  document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ resFilter=b.dataset.f; renderRes(); });
+  const q=$('#resQ'); q.oninput=()=>{ resQ=q.value; renderRes(); const n=$('#resQ'); n.focus(); n.setSelectionRange(n.value.length,n.value.length); };
+  document.querySelectorAll('select[data-row]').forEach(s=>s.onchange=()=>{ busy('מעדכנת…'); api('setRes',{row:Number(s.dataset.row),status:s.value}).then(d=>{ setData(d); say('עודכן'); }).catch(x=>say(x.message)).finally(idle); });
+}
+
+/* ---------- texts ---------- */
+let textEdits = {};
+const TX = window.DUNI_TEXTS || [];
+const curText = k => { const v=(D.texts||{})[k]; return typeof v==='string' && v.trim() ? v : (TX.find(x=>x.key===k)||{}).def || ''; };
+function renderTexts(){
+  const groups = []; TX.forEach(x=>{ let g=groups.find(y=>y.name===x.group); if(!g) groups.push(g={name:x.group, items:[]}); g.items.push(x); });
+  $('#main').innerHTML = `
+    <div class="sec-h"><h2>טקסטים</h2></div>
+    <p class="hint">כל הטקסטים באתר. משנים, ולוחצים ״שמירה״ למטה. השינוי מופיע באתר מיד.</p>
+    <details class="helpbox"><summary style="cursor:pointer">איך מעצבים טקסט</summary>
+      שורה ריקה = פסקה חדשה<br><code>## </code> בתחילת שורה = כותרת<br><code>- </code> בתחילת שורה = שורה ברשימה<br><code>**מילה**</code> = מודגש<br>
+      <code>[טקסט](#reserve)</code> = קישור (לדף באתר עם #, או לאתר אחר עם https://)<br><code>[[טקסט]]</code> = מסומן בצהוב, למשהו שעוד צריך למלא<br>
+      מילים שמתעדכנות לבד מההגדרות: <code>{ship}</code> מחיר משלוח, <code>{open_long}</code> או <code>{open_day}</code> תאריך הפתיחה, <code>{open_time}</code> שעת הפתיחה, <code>{hold}</code> עד מתי השריון שמור, <code>{wait}</code> שעות ההמתנה, <code>{whatsapp}</code> <code>{email}</code> <code>{instagram}</code>.
+    </details>
+    ${groups.map((g,gi)=>`<details class="tgroup" ${gi===0?'open':''}><summary>${esc(g.name)}</summary><div class="inner">${g.items.map(x=>{
+      const v = x.key in textEdits ? textEdits[x.key] : curText(x.key), changed = v !== x.def;
+      const rows = x.kind==='line' ? 1 : Math.min(18, Math.max(3, Math.ceil(v.length/42) + (v.match(/\n/g)||[]).length));
+      return `<div class="field tfield"><div class="top-l"><span>${esc(x.label)}</span>${changed?`<button type="button" class="link" data-reset="${x.key}">לחזור לטקסט המקורי</button>`:''}</div>
+        ${x.kind==='line'?`<input data-k="${x.key}" value="${esc(v)}" ${/^[A-Za-z]/.test(x.def)?'dir="ltr"':''}>`:`<textarea data-k="${x.key}" rows="${rows}">${esc(v)}</textarea>`}</div>`;
+    }).join('')}</div></details>`).join('')}`;
+  document.querySelectorAll('[data-k]').forEach(el=>el.oninput=()=>{ textEdits[el.dataset.k]=el.value; updateTextBar(); });
+  document.querySelectorAll('[data-reset]').forEach(b=>b.onclick=()=>{ const x=TX.find(y=>y.key===b.dataset.reset); textEdits[x.key]=x.def; const el=document.querySelector(`[data-k="${x.key}"]`); el.value=x.def; updateTextBar(); b.remove(); });
+  updateTextBar();
+}
+function updateTextBar(){
+  const n = Object.keys(textEdits).filter(k=>textEdits[k]!==curText(k)).length;
+  $('#textBar').hidden = !n; $('#textBarMsg').textContent = n===1 ? 'שינוי אחד שלא נשמר' : `${n} שינויים שלא נשמרו`;
+}
+$('#textUndo').onclick=()=>{ textEdits={}; renderTexts(); };
+$('#textSave').onclick=()=>{
+  const out={}; Object.keys(textEdits).forEach(k=>{ const def=(TX.find(x=>x.key===k)||{}).def; const v=textEdits[k]; if(v!==curText(k)) out[k] = (v===def||!v.trim()) ? '' : v; });
+  busy('שומרת…'); api('saveTexts',{texts:out}).then(d=>{ textEdits={}; $('#textBar').hidden=true; setData(d); say('הטקסטים נשמרו'); }).catch(x=>say(x.message)).finally(idle);
+};
+
+/* ---------- gallery ---------- */
+function renderGallery(){
+  const list = D.gallery||[];
+  $('#main').innerHTML = `
+    <div class="sec-h"><h2>גלריה</h2></div>
+    <p class="hint">עיצובים אישיים ותכשיטים מהדוכנים. הם מופיעים באתר בגלריה, לצפייה בלבד. החדשים מופיעים ראשונים.</p>
+    <form class="res-card" id="galForm" novalidate style="margin-bottom:22px">
+      <div class="photo" id="gPhoto" style="width:min(100%,240px);aspect-ratio:4/5"><span class="ph-add"><b>+</b>בחירת תמונה</span><input type="file" accept="image/*" id="gIn" aria-label="בחירת תמונה"></div>
+      <label class="field"><span>כותרת</span><input id="gTitle" placeholder="למשל: טבעת אירוסין לנועה"></label>
+      <div class="field"><span class="lbl">סוג</span><div class="seg" id="gKind"><button type="button" data-k="custom" aria-pressed="true">עיצוב אישי</button><button type="button" data-k="stall" aria-pressed="false">דוכנים</button></div></div>
+      <div class="err" id="gErr" role="alert"></div>
+      <button class="btn" type="submit">הוספה לגלריה</button>
+    </form>
+    ${list.length?`<div class="gal">${list.map(g=>`<figure><div class="im"><img src="${esc(photoURL(g.photo,500))}" alt="" loading="lazy"></div><figcaption><span>${esc(g.title)||'<span class="muted">בלי כותרת</span>'}</span><span class="muted small">${g.kind==='stall'?'דוכנים':'עיצוב אישי'}</span><button class="btn danger sm" type="button" data-gdel="${esc(g.id)}">מחיקה</button></figcaption></figure>`).join('')}</div>`:'<p class="empty">הגלריה עוד ריקה.</p>'}`;
+  let img=null, kind='custom';
+  $('#gIn').onchange=async e=>{ const file=e.target.files[0]; if(!file) return; try{ busy('מכינה את התמונה…'); img=await prepImage(file,1600); $('#gPhoto').querySelector('img,.ph-add').outerHTML=`<img src="${img}" alt="" style="width:100%;height:100%;object-fit:cover">`; }catch(x){ say(x.message); } finally{ idle(); e.target.value=''; } };
+  document.querySelectorAll('#gKind button').forEach(b=>b.onclick=()=>{ kind=b.dataset.k; document.querySelectorAll('#gKind button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
+  $('#galForm').addEventListener('submit',async e=>{
+    e.preventDefault(); const err=$('#gErr'); err.textContent='';
+    if(!img){ err.textContent='צריך לבחור תמונה.'; return; }
+    try{ busy('מעלה את התמונה…'); const u=await api('upload',{data:img,name:'gallery'}); busy('שומרת…');
+      const d=await api('saveGallery',{entry:{photo:u.photo,title:$('#gTitle').value.trim(),kind}}); setData(d); say('נוסף לגלריה'); }
+    catch(x){ err.textContent=x.message; } finally{ idle(); }
+  });
+  document.querySelectorAll('[data-gdel]').forEach(b=>{ let a=false; b.onclick=()=>{ if(!a){ a=true; b.classList.add('armed'); b.textContent='ללחוץ שוב'; setTimeout(()=>{ a=false; b.classList.remove('armed'); b.textContent='מחיקה'; },3500); return; }
+    busy('מוחקת…'); api('deleteGallery',{id:b.dataset.gdel}).then(d=>{ setData(d); say('נמחק'); }).catch(x=>say(x.message)).finally(idle); }; });
+}
+
+/* ---------- settings ---------- */
+function renderSettings(){
+  const s = D.settings||{}; const [od,ot] = String(s.open_at||'2027-02-01 00:00').split(' ');
+  $('#main').innerHTML = `
+    <div class="sec-h"><h2>הגדרות</h2></div>
+    <form class="stack" id="setForm" novalidate>
+      <div class="two"><label class="field"><span>תאריך פתיחת המכירה</span><input type="date" id="sDate" value="${esc(od)}"></label><label class="field"><span>שעה (שעון ישראל)</span><input type="time" id="sTime" value="${esc(ot)}"></label></div>
+      <label class="field"><span>עד איזו שעה השריון שמור ביום הפתיחה</span><input type="time" id="sHold" value="${esc(s.hold_until||'18:00')}"></label>
+      <label class="field"><span>כמה שעות יש למי שברשימת ההמתנה</span><input type="number" inputmode="numeric" min="1" id="sWait" value="${esc(s.wait_hours||'24')}"></label>
+      <label class="field"><span>מחיר משלוח (₪)</span><input type="number" inputmode="numeric" min="0" id="sShip" value="${esc(s.ship||'25')}"></label>
+      <label class="field"><span>התכשיט שבפתיחת האתר</span><select id="sHero"><option value="">הטבעת הראשונה ברשימה</option>${D.items.map(i=>`<option value="${esc(i.id)}" ${s.hero===i.id?'selected':''}>${esc(i.he||i.name)}</option>`).join('')}</select><span class="help">מופיע גדול במרכז, ובחלק של העיצוב האישי.</span></label>
+      <p class="hint" style="margin:0">התאריך, השעות ומחיר המשלוח מתעדכנים לבד בכל האתר: בספירה לאחור, בתנאי השריון, במשלוחים ובמייל ללקוחות.</p>
+      <div class="err" id="sErr" role="alert"></div>
+      <button class="btn" type="submit">שמירה</button>
+    </form>`;
+  $('#setForm').addEventListener('submit',e=>{
+    e.preventDefault(); const err=$('#sErr'); err.textContent='';
+    const d=$('#sDate').value, t=$('#sTime').value;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d) || !/^\d{2}:\d{2}$/.test(t)){ err.textContent='צריך לבחור תאריך ושעה.'; return; }
+    busy('שומרת…'); api('saveSettings',{settings:{open_at:`${d} ${t}`, hold_until:$('#sHold').value, wait_hours:String($('#sWait').value), ship:String($('#sShip').value), hero:$('#sHero').value}})
+      .then(x=>{ setData(x); say('ההגדרות נשמרו'); }).catch(x=>{ err.textContent=x.message; }).finally(idle);
+  });
+}
+</script>
+</body>
+</html>

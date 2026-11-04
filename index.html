@@ -329,7 +329,8 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .ph{background:rgba(196,160,80,.22);padding:0 .3em;border-radius:3px;white-space:nowrap}
 :root.hc .ph{background:#ffe680}
 .doc p b{font-weight:500}
-.doc .about-open{font-size:1.45rem;line-height:1.5;margin-top:0}
+.doc .about>p:first-child{font-size:1.45rem;line-height:1.5;margin-top:0}
+.doc .about>p:last-child{margin-top:2em;font-size:1.1rem}
 .doc .about-sign{margin-top:2em;font-size:1.1rem;line-height:1.7}
 .doc .about-sign img{width:8px;display:inline-block;vertical-align:middle;margin:0 4px}
 .doc .back{display:inline-flex;margin-top:40px;white-space:nowrap}
@@ -640,12 +641,12 @@ html.ov-open{overflow:hidden}
     <div class="hero-tag corner-t" id="heroTag"><span class="he">תכשיטים בעבודת יד</span><span class="sp" lang="en">hand made jewelry</span></div>
     <div class="burst-copy" id="burstCopy" aria-hidden="true"><h2>הקולקציה</h2><p class="sp" lang="en">the collection · sterling silver 925</p></div>
     <div id="orbits" aria-hidden="true"></div>
-    <div class="piece hero-ring" id="heroRing"><img src="assets/pieces/signet.webp" alt="טבעת יורו: פס כסף רחב מרוקע עם אבן שחורה">
+    <div class="piece hero-ring" id="heroRing"><img id="heroImg" alt="">
       <div class="hud" id="hud" aria-hidden="true">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="56,20 118,20 132,9"/><polyline points="14,62 -28,62 -40,76"/><polyline points="70,84 70,104 106,104"/></svg>
         <span class="dot" style="left:56%;top:20%"></span><span class="dot" style="left:14%;top:62%"></span><span class="dot" style="left:70%;top:84%"></span>
-        <span class="lbl" style="left:132%;top:9%"><b>אבן שחורה</b><span class="sp" lang="en">black stone · bezel set</span></span>
-        <span class="lbl" style="right:140%;top:76%"><b>פס מרוקע ביד</b><span class="sp" lang="en">hand-hammered band</span></span>
+        <span class="lbl" id="hudName" style="left:132%;top:9%"><b></b><span class="sp" lang="en"></span></span>
+        <span class="lbl" style="right:140%;top:76%"><b>עבודת יד</b><span class="sp" lang="en">handmade</span></span>
         <span class="lbl" style="left:106%;top:104%"><b>כסף 925</b><span class="sp" lang="en">sterling silver</span></span>
       </div>
     </div>
@@ -655,21 +656,20 @@ html.ov-open{overflow:hidden}
 
   <section class="launch" id="launch" aria-labelledby="launchH">
     <small lang="en">pre-order · limited pieces</small>
-    <h2 id="launchH">הקולקציה נפתחת בעוד</h2>
-    <p class="when">1 בפברואר 2027 · 00:00 שעון ישראל</p>
+    <h2 id="launchH" data-t="launch_title">הקולקציה נפתחת בעוד</h2>
+    <p class="when" id="openWhen"></p>
     <div class="cd" id="cd" role="timer" aria-live="off">
       <div><b id="cdD">--</b><span>ימים</span></div><div><b id="cdH">--</b><span>שעות</span></div><div><b id="cdM">--</b><span>דקות</span></div><div><b id="cdS">--</b><span>שניות</span></div>
     </div>
-    <p class="how">אני מכינה כל תכשיט ביד, ולכן מכל אחד יש רק כמה. אפשר כבר עכשיו לשריין, בלי לשלם. כשהמכירה נפתחת אשלח לך בוואטסאפ קישור אישי לרכישה, והשריון שמור לך עד 18:00 באותו יום. כשתכשיט כבר שוריין במלואו, אפשר להיכנס לרשימת ההמתנה. <a href="#reserve">תנאי השריון</a></p>
-    <a class="btn" href="#for">לשריין מהקולקציה <img src="assets/star.png" alt=""></a>
+    <p class="how" id="openHow" data-t="launch_how">אני מכינה כל תכשיט ביד, ולכן מכל אחד יש רק כמה. אפשר כבר עכשיו לשריין, בלי לשלם. כשהמכירה נפתחת אשלח לך בוואטסאפ קישור אישי לרכישה, והשריון שמור לך עד 18:00 באותו יום. כשתכשיט כבר שוריין במלואו, אפשר להיכנס לרשימת ההמתנה. <a href="#reserve">תנאי השריון</a></p>
+    <a class="btn" href="#for"><span data-t="launch_btn">לשריין מהקולקציה</span> <img src="assets/star.png" alt=""></a>
   </section>
 
   <section class="manifesto" aria-labelledby="manH">
     <div>
       <p class="jp" lang="ja" aria-hidden="true">情熱</p>
       <h2 class="sr" id="manH">איך נולד כל תכשיט</h2>
-      <p>כל תכשיט מתחיל אצלי בראש, לפעמים ממשהו שראיתי ולפעמים מתחושה. משם הוא עובר לשולחן בסטודיו ומקבל צורה לאט, ביד. לכן אין שני תכשיטים שיוצאים זהים.</p>
-      <p>לא מושלם, לא מהמדף, ועם הרבה ממני בפנים. זו כל הנקודה.</p>
+      <div data-t="manifesto"><p>כל תכשיט מתחיל אצלי בראש, לפעמים ממשהו שראיתי ולפעמים מתחושה. משם הוא עובר לשולחן בסטודיו ומקבל צורה לאט, ביד. לכן אין שני תכשיטים שיוצאים זהים.</p><p>לא מושלם, לא מהמדף, ועם הרבה ממני בפנים. זו כל הנקודה.</p></div>
       <p class="jp-note">情熱 <span lang="en">jōnetsu</span> · ג׳ונֶצוּ</p>
     </div>
   </section>
@@ -680,7 +680,7 @@ html.ov-open{overflow:hidden}
       <div>
         <div class="eyebrow">הדרופ האחרון · <span class="sp" lang="en">latest drop</span></div>
         <h2 id="dropH" lang="en">new<span class="jp" lang="ja">新</span></h2>
-        <p>עשרת התכשיטים האחרונים שעלו לאתר.</p>
+        <p data-t="drop_sub">עשרת התכשיטים האחרונים שעלו לאתר.</p>
       </div>
       <div class="rail-btns"><button type="button" id="railPrev" aria-label="הקודם">→</button><button type="button" id="railNext" aria-label="הבא">←</button></div>
     </div>
@@ -691,38 +691,38 @@ html.ov-open{overflow:hidden}
   <section class="gender" id="for" aria-label="לנשים ולגברים">
     <div class="g-grid">
       <button class="g-tile" type="button" data-g="her" aria-label="לתכשיטים לנשים">
-        <img class="gi" src="assets/pieces/lariat.webp" alt="" style="width:44%;left:6%;top:12%">
-        <img class="gi" src="assets/pieces/earrings.webp" alt="" style="width:40%;right:8%;top:16%">
-        <img class="gi" src="assets/pieces/wave.webp" alt="" style="width:25%;right:30%;top:40%">
-        <div class="top"><span>5 תכשיטים</span><span class="sp" lang="en">for her</span></div>
-        <div class="bot"><h3>לנשים</h3><div class="names" lang="en">nami · rakugaki · wa · koishi · shizuku</div><span class="go">לקולקציה לנשים ←</span></div>
+        <img class="gi" alt="" style="width:44%;left:6%;top:12%">
+        <img class="gi" alt="" style="width:40%;right:8%;top:16%">
+        <img class="gi" alt="" style="width:25%;right:30%;top:40%">
+        <div class="top"><span class="gcount"></span><span class="sp" lang="en">for her</span></div>
+        <div class="bot"><h3>לנשים</h3><div class="names" lang="en"></div><span class="go">לקולקציה לנשים ←</span></div>
       </button>
       <button class="g-tile dk" type="button" data-g="him" aria-label="לתכשיטים לגברים">
-        <img class="gi" src="assets/pieces/signet.webp" alt="" style="width:38%;right:10%;top:10%">
-        <img class="gi" src="assets/pieces/bracelet.webp" alt="" style="width:40%;left:8%;top:18%">
-        <img class="gi" src="assets/pieces/pendant.webp" alt="" style="width:38%;left:30%;top:46%">
-        <div class="top"><span>5 תכשיטים</span><span class="sp" lang="en">for him</span></div>
-        <div class="bot"><h3>לגברים</h3><div class="names" lang="en">yoru · tsuchi · kusari · ishi · musubi</div><span class="go">לקולקציה לגברים ←</span></div>
+        <img class="gi" alt="" style="width:38%;right:10%;top:10%">
+        <img class="gi" alt="" style="width:40%;left:8%;top:18%">
+        <img class="gi" alt="" style="width:38%;left:30%;top:46%">
+        <div class="top"><span class="gcount"></span><span class="sp" lang="en">for him</span></div>
+        <div class="bot"><h3>לגברים</h3><div class="names" lang="en"></div><span class="go">לקולקציה לגברים ←</span></div>
       </button>
     </div>
-    <p class="note">החלוקה היא רק נקודת התחלה. תכשיט מתאים למי שהוא מדבר אליו.</p>
+    <p class="note" data-t="gender_note">החלוקה היא רק נקודת התחלה. תכשיט מתאים למי שהוא מדבר אליו.</p>
   </section>
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 03</span><span class="t">החזון<span class="sp" lang="en">vision</span></span><a href="#vision" tabindex="-1">לקרוא</a></div>
   <section class="vision" id="vision" aria-labelledby="visionH">
     <div>
       <h2 id="visionH"><small lang="en">reality, by hand · החזון</small>החזון</h2>
-      <p class="lead">אני רוצה להחזיר לתכשיט את מה שהלך לאיבוד בדרך: את היד, את הזמן ואת האופי. ליצור משהו שונה, תכשיט שמרגיש כמו יצירה ולא כמו מוצר.</p>
-      <p class="en" lang="en">Duni exists to bring something different into design and art: jewelry that feels like a piece of work, not a product. Small things carry big energy.</p>
+      <p class="lead" data-t="vision_lead">אני רוצה להחזיר לתכשיט את מה שהלך לאיבוד בדרך: את היד, את הזמן ואת האופי. ליצור משהו שונה, תכשיט שמרגיש כמו יצירה ולא כמו מוצר.</p>
+      <p class="en" lang="en" data-t="vision_en">Duni exists to bring something different into design and art: jewelry that feels like a piece of work, not a product. Small things carry big energy.</p>
     </div>
     <div>
       <div class="threads-h"><span lang="en">core threads</span><span>חמישה עקרונות</span></div>
       <ul class="threads">
-        <li><div class="k" lang="ja">手作り<small lang="en">tezukuri</small></div><div><strong>עבודת יד</strong><p>כל תכשיט מתוכנן ונגמר אצלי בסטודיו, ובכל אחד יש מגע אישי שלי. בלי פס ייצור.</p></div></li>
-        <li><div class="k" lang="ja">侘寂<small lang="en">wabi-sabi</small></div><div><strong>היופי שבחוסר שלמות</strong><p>קו לא ישר, צורה לא סימטרית. אני לא מתקנת אותם, הם מה שהופך תכשיט לחי.</p></div></li>
-        <li><div class="k" lang="ja">ゆっくり<small lang="en">yukkuri</small></div><div><strong>לאט</strong><p>אני עובדת לאט ובכמויות קטנות. עדיף תכשיט אחד שנשאר איתך שנים, על פני עשרה שנזרקים.</p></div></li>
-        <li><div class="k" lang="ja">一点物<small lang="en">ippinmono</small></div><div><strong>אחד ויחיד</strong><p>מהרבה תכשיטים יש רק כמה, ומעיצוב אישי יש רק אחד. מה שעונדים הוא שלך.</p></div></li>
-        <li><div class="k" lang="ja">情熱<small lang="en">jōnetsu</small></div><div><strong>תשוקה</strong><p>Duni נולד מאהבה לאמנות ולעיצוב, וזה מה שמניע אותי בכל תכשיט.</p></div></li>
+        <li><div class="k" lang="ja">手作り<small lang="en">tezukuri</small></div><div><strong data-t="p1_title">עבודת יד</strong><p data-t="p1_text">כל תכשיט מתוכנן ונגמר אצלי בסטודיו, ובכל אחד יש מגע אישי שלי. בלי פס ייצור.</p></div></li>
+        <li><div class="k" lang="ja">侘寂<small lang="en">wabi-sabi</small></div><div><strong data-t="p2_title">היופי שבחוסר שלמות</strong><p data-t="p2_text">קו לא ישר, צורה לא סימטרית. אני לא מתקנת אותם, הם מה שהופך תכשיט לחי.</p></div></li>
+        <li><div class="k" lang="ja">ゆっくり<small lang="en">yukkuri</small></div><div><strong data-t="p3_title">לאט</strong><p data-t="p3_text">אני עובדת לאט ובכמויות קטנות. עדיף תכשיט אחד שנשאר איתך שנים, על פני עשרה שנזרקים.</p></div></li>
+        <li><div class="k" lang="ja">一点物<small lang="en">ippinmono</small></div><div><strong data-t="p4_title">אחד ויחיד</strong><p data-t="p4_text">מהרבה תכשיטים יש רק כמה, ומעיצוב אישי יש רק אחד. מה שעונדים הוא שלך.</p></div></li>
+        <li><div class="k" lang="ja">情熱<small lang="en">jōnetsu</small></div><div><strong data-t="p5_title">תשוקה</strong><p data-t="p5_text">Duni נולד מאהבה לאמנות ולעיצוב, וזה מה שמניע אותי בכל תכשיט.</p></div></li>
       </ul>
     </div>
   </section>
@@ -763,24 +763,24 @@ html.ov-open{overflow:hidden}
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 05</span><span class="t">בהזמנה אישית<span class="sp" lang="en">one of one</span></span><a href="#custom" tabindex="-1">להתחיל</a></div>
   <section class="custom" id="custom" aria-labelledby="customH">
-    <div class="ring-stage"><img src="assets/pieces/signet.webp" alt="תכשיט בהזמנה אישית"></div>
+    <div class="ring-stage"><img id="customImg" alt="תכשיט בהזמנה אישית"></div>
     <div>
       <div class="en-sub" lang="en">one of one</div>
-      <h2 id="customH"><span class="jp" lang="ja">一点物</span>תכשיט אחד בעולם, שנעשה רק בשבילך.</h2>
-      <p>מביאים אבן, צורה, מילה או סיפור, ומעצבים יחד מאפס. אני מכינה את התכשיט רק בשבילך, והוא לא יימכר שוב לאף אחד.</p>
+      <h2 id="customH"><span class="jp" lang="ja">一点物</span><span data-t="custom_title">תכשיט אחד בעולם, שנעשה רק בשבילך.</span></h2>
+      <p data-t="custom_text">מביאים אבן, צורה, מילה או סיפור, ומעצבים יחד מאפס. אני מכינה את התכשיט רק בשבילך, והוא לא יימכר שוב לאף אחד.</p>
       <ol class="steps">
-        <li><b>01</b><div><strong>מספרים לי</strong><span>שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</span></div></li>
-        <li><b>02</b><div><strong>מעצבים יחד</strong><span>אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</span></div></li>
-        <li><b>03</b><div><strong>הוא שלך</strong><span>גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</span></div></li>
+        <li><b>01</b><div><strong data-t="s1_title">מספרים לי</strong><span data-t="s1_text">שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</span></div></li>
+        <li><b>02</b><div><strong data-t="s2_title">מעצבים יחד</strong><span data-t="s2_text">אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</span></div></li>
+        <li><b>03</b><div><strong data-t="s3_title">הוא שלך</strong><span data-t="s3_text">גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</span></div></li>
       </ol>
-      <a class="btn" href="#custom" id="customBtn">להתחיל עיצוב אישי <img src="assets/star.png" alt=""></a>
+      <a class="btn" href="#custom" id="customBtn"><span data-t="custom_btn">להתחיל עיצוב אישי</span> <img src="assets/star.png" alt=""></a>
     </div>
   </section>
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 06</span><span class="t">גלריה<span class="sp" lang="en">gallery</span></span><a href="#gallery" tabindex="-1">לצפייה</a></div>
   <section class="gallery" id="gallery" aria-labelledby="galH">
     <div class="sec-head"><h2 id="galH"><small lang="en">one of one · stalls</small>גלריה</h2></div>
-    <p class="gal-intro">תכשיטים שכבר מצאו בית: עיצובים אישיים שעשינו יחד, ותכשיטים שנוצרו רק לדוכנים. הם כאן כדי לראות, לא כדי לקנות.</p>
+    <p class="gal-intro" data-t="gallery_intro">תכשיטים שכבר מצאו בית: עיצובים אישיים שעשינו יחד, ותכשיטים שנוצרו רק לדוכנים. הם כאן כדי לראות, לא כדי לקנות.</p>
     <nav class="cats" id="galTabs" aria-label="סוגי עבודות בגלריה"></nav>
     <div class="gal-grid" id="galGrid"></div>
   </section>
@@ -835,7 +835,7 @@ html.ov-open{overflow:hidden}
     <ul class="bag-list" id="bagList"></ul>
     <div id="resBox">
       <div class="bag-tot"><span>סה״כ משוער</span><span id="bagTot">₪0</span></div>
-      <p class="res-note" style="margin-top:8px">לא משלמים עכשיו. משלוח לכל הארץ: 25 ₪. ביום הפתיחה נשלח לך קישור אישי לרכישה.</p>
+      <p class="res-note" style="margin-top:8px">לא משלמים עכשיו. <span id="shipNote"></span></p>
       <form class="res-form" id="resForm" novalidate style="margin-top:16px">
         <label>שם מלא<input type="text" id="rName" autocomplete="name" required></label>
         <label>וואטסאפ<input type="tel" id="rPhone" autocomplete="tel" inputmode="tel" dir="ltr" placeholder="05X-XXX-XXXX" required></label>
@@ -868,59 +868,96 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="config.js"></script>
+<script src="texts.js"></script>
 <script>
 const $ = s => document.querySelector(s);
-const P = [
-  {id:'wave',g:'her',name:'nami',he:'נאמי',jp:'波',mean:'גל',cat:'rings',price:180,drop:true,
+const SAMPLE = [
+  {id:'wave',photo:'assets/pieces/wave.webp',g:'her',name:'nami',he:'נאמי',jp:'波',mean:'גל',cat:'rings',price:180,drop:true,
    lead:'טבעת חוט דקה עם גל אחד רך בחלק העליון, כמו קו שמישהו צייר על האצבע.',
    story:['נאמי היא הטבעת הכי שקטה בקולקציה. חוט כסף אחד, עגול ודק, שבחלק העליון שלו מכופף ביד גל אחד קטן.','אין שתי טבעות עם אותו גל בדיוק, כי כל כיפוף נעשה ביד ולא בתבנית. אפשר לענוד אותה לבד, או לערום אותה עם טבעות נוספות.']},
-  {id:'scribble',g:'her',name:'rakugaki',he:'רקוגאקי',jp:'落書き',mean:'שרבוט',cat:'rings',price:260,drop:true,
+  {id:'scribble',photo:'assets/pieces/scribble.webp',g:'her',name:'rakugaki',he:'רקוגאקי',jp:'落書き',mean:'שרבוט',cat:'rings',price:260,drop:true,
    lead:'טבעת חוט רחבה שמתפתלת ללולאות ולזיגזגים. שרבוט שאפשר לענוד.',
    story:['רקוגאקי ביפנית זה שרבוט: הקווים שמציירים בשולי המחברת בלי לחשוב. הטבעת הזו היא בדיוק זה, חוט כסף שמתפתל קדימה ואחורה עד שהוא הופך לצורה.','היא רחבה ומשחקית, וכל זווית שלה נראית אחרת. החוט מרוקע לכל אורכו ולכן הוא תופס את האור בכל תנועה של היד.']},
-  {id:'loops',g:'her',name:'wa',he:'ווה',jp:'輪',mean:'מעגל',cat:'rings',price:240,drop:true,
+  {id:'loops',photo:'assets/pieces/loops.webp',g:'her',name:'wa',he:'ווה',jp:'輪',mean:'מעגל',cat:'rings',price:240,drop:true,
    lead:'לולאות מרוקעות שמחוברות בשורה לאורך חזית הטבעת.',
    story:['ווה פירושו מעגל, וגם חיבור. לולאות קטנות בגדלים שונים מתחברות יחד על פס כסף דק, וכל אחת מרוקעת בפטיש.','הלולאות לא מושלמות, וזה בכוונה. כל טבעת יוצאת עם קצב קצת אחר של עיגולים.']},
-  {id:'openring',g:'him',name:'musubi',he:'מוסובי',jp:'結び',mean:'קשר',cat:'rings',price:220,drop:true,
+  {id:'openring',photo:'assets/pieces/openring.webp',sizes:'מתכווננת',g:'him',name:'musubi',he:'מוסובי',jp:'結び',mean:'קשר',cat:'rings',price:220,drop:true,
    lead:'פס מרוקע פתוח ששני קצותיו מתעקלים ועוברים זה ליד זה. מתכווננת.',
    story:['מוסובי זה קשר. הטבעת לא נסגרת: שני הקצוות שלה מתעקלים לשתי קשתות שעוברות אחת ליד השנייה על האצבע, כמו שני קווים שנפגשים.','בגלל שהיא פתוחה, אפשר להתאים אותה בעדינות לאצבע. כדאי לכוון אותה פעם אחת ולא לכופף שוב ושוב.']},
-  {id:'signet',g:'him',name:'yoru',he:'יורו',jp:'夜',mean:'לילה',cat:'rings',price:480,drop:false,
+  {id:'signet',photo:'assets/pieces/signet.webp',g:'him',name:'yoru',he:'יורו',jp:'夜',mean:'לילה',cat:'rings',price:480,drop:false,
    lead:'פס כסף רחב ומרוקע, עם אבן שחורה בשיבוץ כסף מוגבה.',
    story:['יורו היא הטבעת הכי נוכחת של Duni. פס כסף רחב שמכוסה כולו בסימני פטיש, ועליו אבן שחורה בשיבוץ מוגבה.','הכסף המבריק והאבן הכהה יוצרים יחד את הניגוד של יום ולילה, ומכאן השם.']},
-  {id:'band',g:'him',name:'tsuchi',he:'צוצ׳י',jp:'槌',mean:'פטיש',cat:'rings',price:190,drop:false,
+  {id:'band',photo:'assets/pieces/band.webp',g:'him',name:'tsuchi',he:'צוצ׳י',jp:'槌',mean:'פטיש',cat:'rings',price:190,drop:false,
    lead:'פס שטוח שמכוסה בסימני פטיש. פשוטה ויציבה, ליום-יום.',
    story:['צוצ׳י זה הפטיש, הכלי שנותן לכל התכשיטים של Duni את הטקסטורה שלהם. כאן הוא הכל: פס כסף שטוח בלי שום תוספת, רק סימני הרוקוע שתופסים את האור.','זו טבעת ליום-יום, ועם הזמן היא מקבלת ברק משלה מהשימוש.']},
-  {id:'earrings',g:'her',name:'koishi',he:'קויישי',jp:'小石',mean:'חלוק נחל',cat:'ears',price:260,drop:false,
+  {id:'earrings',photo:'assets/pieces/earrings.webp',g:'her',name:'koishi',he:'קויישי',jp:'小石',mean:'חלוק נחל',cat:'ears',price:260,drop:false,
    lead:'חישוקים גדולים בצורה חופשית על וו. כל אחד בצורה של חלוק אחר.',
    story:['קויישי זה חלוק קטן. שני החישוקים לא זהים, וגם לא אמורים להיות: כל אחד מקבל צורה משלו, כמו שני חלוקים שנאספו מאותו חוף.','החוט דק ומרוקע לכל אורכו, כך שהם נראים גדולים אבל מרגישים קלים.']},
-  {id:'lariat',g:'her',name:'shizuku',he:'שיזוקו',jp:'雫',mean:'טיפה',cat:'necks',price:390,drop:false,
+  {id:'lariat',photo:'assets/pieces/lariat.webp',g:'her',name:'shizuku',he:'שיזוקו',jp:'雫',mean:'טיפה',cat:'necks',price:390,drop:false,
    lead:'שרשרת דקה עם מעגלים מרוקעים שנופלים לטיפה.',
    story:['שיזוקו היא טיפה. מעגלים מרוקעים בגדלים שונים יושבים לאורך שרשרת דקה: הם מתחילים קטנים ליד הצוואר וגדלים ככל שהם יורדים.','המעגל האחרון תלוי בקו ישר, כמו טיפה רגע לפני שהיא נופלת.']},
-  {id:'pendant',g:'him',name:'ishi',he:'אישי',jp:'石',mean:'אבן',cat:'necks',price:290,drop:false,
+  {id:'pendant',photo:'assets/pieces/pendant.webp',g:'him',name:'ishi',he:'אישי',jp:'石',mean:'אבן',cat:'necks',price:290,drop:false,
    lead:'אבן שחורה גולמית בכיפת כסף מרוקעת, על שרשרת דקה.',
    story:['אישי היא אבן, בלי ליטוש. האבן נשארת גולמית עם כל השברים והזוויות שלה, ומחזיקה אותה רק כיפה קטנה של כסף מרוקע.','זו השרשרת הכי ״אדמה״ בקולקציה. היא נראית טוב לבד, או בשכבות עם שרשרת עדינה נוספת.']},
-  {id:'bracelet',g:'him',name:'kusari',he:'קוסארי',jp:'鎖',mean:'שרשרת',cat:'wrists',price:420,drop:false,
+  {id:'bracelet',photo:'assets/pieces/bracelet.webp',g:'him',name:'kusari',he:'קוסארי',jp:'鎖',mean:'שרשרת',cat:'wrists',price:420,drop:false,
    lead:'חוליות גדולות ולא סימטריות, מרוקעות ומחוברות ביד לשרשרת אחת.',
    story:['קוסארי זו שרשרת. כל חוליה בצמיד נוצרת בנפרד, מרוקעת ונסגרת ביד, ולכן אף חוליה לא זהה לאחרת.','יחד הן יוצרות צמיד כבד למראה עם תנועה רכה על פרק היד.']},
 ];
+const CAT = {rings:['טבעת','טבעות'],ears:['עגילים','עגילים'],necks:['שרשרת','שרשראות'],wrists:['צמיד','צמידים']};
+const ils = n => '₪' + n;
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- data ----------
+   Pieces, gallery and settings come from the Google Sheet (apps-script/Code.gs), edited on admin.html.
+   Until config.js has the sheet's address, the site shows the sample pieces above. */
+const API_URL = (window.DUNI_API || '').trim();
+const DEFAULT_SETTINGS = {openTs: Date.parse('2027-02-01T00:00:00+02:00'), hold:'18:00', wait:24, ship:25, hero:''};
+function loadData(){
+  if(!API_URL) return Promise.resolve({settings:DEFAULT_SETTINGS, items:SAMPLE, gallery:[], stock:null});
+  let cached=null; try{ cached=JSON.parse(localStorage.getItem('duni-data')||'null'); }catch(e){}
+  const fresh = fetch(API_URL,{cache:'no-store'}).then(r=>r.json()).then(d=>{ if(!d||!d.ok) throw new Error('bad'); try{ localStorage.setItem('duni-data',JSON.stringify(d)); }catch(e){} return d; });
+  if(!cached) return fresh.catch(()=>({settings:DEFAULT_SETTINGS, items:[], gallery:[], stock:null, failed:true}));
+  return Promise.race([fresh, new Promise(r=>setTimeout(()=>r(cached),2500))]).catch(()=>cached);
+}
+// a photo is a Drive file id (uploaded from the admin page) or a path in this site
+function photoURL(v, w){
+  v = String(v||'');
+  if(/^[A-Za-z0-9_-]{20,}$/.test(v)) return `https://lh3.googleusercontent.com/d/${v}=w${w}`;
+  if(w<=500 && v.startsWith('assets/pieces/') && !v.includes('/sm/')) return v.replace('assets/pieces/','assets/pieces/sm/');
+  return v;
+}
+function normItem(p){
+  const t = v => esc(String(v==null?'':v).trim());
+  const story = Array.isArray(p.story) ? p.story : String(p.story||'').split(/\n\s*\n/);
+  return { id:String(p.id), key:String(p.name||p.id).trim(), name:t(p.name), jp:t(p.jp), he:t(p.he||p.name), mean:t(p.mean),
+    cat:p.cat, g:['her','him','both'].includes(p.g)?p.g:'her', price:Number(p.price)||0, sizes:String(p.sizes||'').trim(),
+    lead:t(p.lead), story:story.map(x=>t(x)).filter(Boolean), made:t(p.made), photo:String(p.photo||'') };
+}
+loadData().then(boot);
+
+function boot(DATA){
+const S = Object.assign({}, DEFAULT_SETTINGS, DATA.settings||{});
+const P = (DATA.items||[]).map(normItem).filter(p=>CAT[p.cat]);
 // the latest 10 pieces added (the end of the list) are "new" and fill the drop on the home page
 const LATEST = P.slice(-10).reverse();
 const isNew = p => LATEST.includes(p);
-const CAT = {rings:['טבעת','טבעות'],ears:['עגילים','עגילים'],necks:['שרשרת','שרשראות'],wrists:['צמיד','צמידים']};
-const src = id => `assets/pieces/${id}.webp`;
-const thumb = id => `assets/pieces/sm/${id}.webp`;
-const ils = n => '₪' + n;
-const byName = n => P.find(p=>p.name===n);
-/* ---------- pre-launch settings ---------- */
-// API_URL: the address of the Google Apps Script web app (from the Deploy step). Empty = not connected yet.
-const API_URL = '';
-const OPEN_AT = new Date('2027-02-01T00:00:00+02:00'); // 1.2.2027 00:00, Israel time
-const SHIP = 25;
-let STOCK = null; // {id:{total,left,waiting}} once loaded from the sheet
+const IMG = {}, THUMB = {};
+P.forEach(p=>{ IMG[p.id]=photoURL(p.photo,1400); THUMB[p.id]=photoURL(p.photo,400); });
+const src = id => IMG[id]||'';
+const thumb = id => THUMB[id]||'';
+const byName = n => P.find(p=>p.key===n);
+const plink = p => '#p-' + encodeURIComponent(p.key);
+const HERO = P.find(p=>p.id===S.hero) || P.find(p=>p.cat==='rings') || P[0];
+const OPEN_AT = new Date(S.openTs), SHIP = Number(S.ship)||0, HOLD = S.hold||'18:00', WAIT = Number(S.wait)||24;
+const dfmt = o => new Intl.DateTimeFormat('he-IL',Object.assign({timeZone:'Asia/Jerusalem'},o)).format(OPEN_AT);
+const OPEN_DAY = dfmt({day:'numeric',month:'numeric'}), OPEN_LONG = dfmt({day:'numeric',month:'long',year:'numeric'}), OPEN_TIME = dfmt({hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+let STOCK = DATA.stock || null; // {id:{total,left,waiting}} from the sheet
 function stockOf(p){ return STOCK && STOCK[p.id] ? STOCK[p.id] : null; }
 function stockHTML(p){
   const s = stockOf(p); if(!s) return '';
   if(s.left<=0) return '<div class="stock full">השריון מלא · אפשר להיכנס לרשימת ההמתנה</div>';
-  return `<div class="stock${s.left<=3?' low':''}">נשארו ${s.left} מתוך ${s.total} לשריון</div>`;
+  return `<div class="stock${s.left<=3?' low':''}">${s.left===1?'נשאר אחד אחרון':`נשארו ${s.left}`}</div>`;
 }
 function loadStock(){
   if(!API_URL) return Promise.resolve();
@@ -963,7 +1000,7 @@ $('#marq').innerHTML = ['תכשיטים בעבודת יד','small things carry b
 
 const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
 const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} ברשימת המשאלות">${HEART}</button>`;
-const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="#p-${p.name}">
+const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="${plink(p)}">
   <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" ${cls==='card'?'loading="lazy"':''}></div>
   <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
   </a></div>`;
@@ -992,7 +1029,7 @@ tick(); setInterval(tick, 20000);
 
 /* ---------- three-line menu ---------- */
 const menu = $('#menu'), burger = $('#burger');
-if($('#mPieces')) $('#mPieces').innerHTML = P.map(p=>`<li><a href="#p-${p.name}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span>${p.he} <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
+if($('#mPieces')) $('#mPieces').innerHTML = P.map(p=>`<li><a href="${plink(p)}"><img src="${thumb(p.id)}" loading="lazy" alt=""><span>${p.he} <span class="jp" lang="ja">${p.jp}</span></span></a></li>`).join('');
 function openMenu(){
   menu.hidden = false; root.classList.add('menu-open'); root.style.overflow = 'hidden';
   burger.setAttribute('aria-expanded','true'); burger.setAttribute('aria-label','סגירת התפריט');
@@ -1016,7 +1053,7 @@ function saveWish(){ try{ localStorage.setItem('duni-wish', JSON.stringify(wish)
 function syncWish(){
   $('#wishN').textContent = wish.length;
   document.querySelectorAll('[data-wish]').forEach(b=>{ const on=wish.includes(b.dataset.wish); b.setAttribute('aria-pressed',on); const l=b.querySelector('.wl'); if(l) l.textContent = on?'שמור':'לשמור'; });
-  $('#wishList').innerHTML = wish.length ? wish.map(id=>{const p=P.find(x=>x.id===id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he} <span class="jp" lang="ja">${p.jp}</span></div><div class="acts"><a href="#p-${p.name}" data-close-wish>לעמוד התכשיט</a><button type="button" data-unwish="${p.id}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שמרת תכשיטים. לוחצים על הלב ליד תכשיט כדי לשמור אותו כאן.</li>';
+  $('#wishList').innerHTML = wish.length ? wish.map(id=>{const p=P.find(x=>x.id===id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he} <span class="jp" lang="ja">${p.jp}</span></div><div class="acts"><a href="${plink(p)}" data-close-wish>לעמוד התכשיט</a><button type="button" data-unwish="${p.id}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שמרת תכשיטים. לוחצים על הלב ליד תכשיט כדי לשמור אותו כאן.</li>';
 }
 function toggleWish(id, btn){
   const p=P.find(x=>x.id===id); const i=wish.indexOf(id);
@@ -1115,54 +1152,63 @@ $('#resForm').addEventListener('submit', e=>{
         ${got.length?`<div><b>שוריין בשבילך:</b><ul>${got.map(l=>li(l,l.reserved)).join('')}</ul></div>`:''}
         ${wait.length?`<div><b>ברשימת ההמתנה:</b><ul>${wait.map(l=>li(l,l.waitlisted)).join('')}</ul></div>`:''}
         <div>הקוד שלך<div class="code">${d.code}</div></div>
-        <p class="res-note">ב-1.2 ב-00:00 נשלח לך לוואטסאפ קישור אישי לרכישה. השריון שמור עד 18:00 באותו יום.${email?' אישור נשלח גם למייל.':''}</p>`;
+        <p class="res-note">ב-${OPEN_DAY} ב-${OPEN_TIME} אשלח לך לוואטסאפ קישור אישי לרכישה. השריון שמור עד ${HOLD} באותו יום.${email?' אישור נשלח גם למייל.':''}</p>`;
       bag=[]; saveBag(); renderBag(); $('#bagList').hidden=true; $('#resDone').hidden=false; $('#resForm').reset(); loadStock();
     }).catch(()=>{ err.textContent='אין חיבור כרגע. נסי שוב בעוד רגע.'; })
     .finally(()=>{ btn.disabled=false; btn.firstChild.textContent='שליחת השריון '; });
 });
-$('#customBtn').onclick=e=>{e.preventDefault();open('https://wa.me/972584120104?text='+encodeURIComponent('היי, אשמח לשמוע על עיצוב אישי'),'_blank');};
+$('#customBtn').onclick=e=>{e.preventDefault();open('https://wa.me/972584120104?text='+encodeURIComponent(T.custom_wa||''),'_blank');};
 const toast=$('#toast'); let tt;
 function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2400);}
 
 /* ---------- product page ---------- */
+// sizes come from the sheet: "48,50,52" (ring sizes), any text ("מתכווננת", "40 ס״מ, 45 ס״מ"), or empty
+function sizesOf(p){
+  const raw = p.sizes;
+  if(raw){
+    const nums = raw.split(/[,\s]+/).filter(Boolean);
+    if(nums.every(x=>/^\d+(\.\d)?$/.test(x))) return {list:nums, guide:p.cat==='rings'};
+    return {list:raw.split(/[,،]/).map(x=>esc(x.trim())).filter(Boolean), guide:false};
+  }
+  return p.cat==='rings' ? {list:RING_SIZES.map(r=>String(r[0])), guide:true} : {list:['מידה אחת'], guide:false};
+}
 function productHTML(p){
   const i=P.indexOf(p), prev=P[(i-1+P.length)%P.length], next=P[(i+1)%P.length];
-  const isRing=p.cat==='rings';
-  const sizes = isRing ? (p.id==='openring'?['מתכווננת']:RING_SIZES.map(s=>String(s[0]))) : ['מידה אחת'];
+  const sz = sizesOf(p), sizes = sz.list;
   const related = P.filter(x=>x!==p && (x.cat===p.cat || isNew(x)===isNew(p))).slice(0,4);
   return `<article class="pdp">
-    <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#${p.g}">${p.g==='her'?'נשים':'גברים'}</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
+    <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#${p.g==='him'?'him':'her'}">${p.g==='him'?'גברים':'נשים'}</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
     <div class="pdp-top">
-      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>ריקוע ביד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
+      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
       <div class="pdp-info">
-        <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':'לגברים'} · כסף 925 · עבודת יד</div>
+        <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':p.g==='him'?'לגברים':'לכולם'} · כסף 925 · עבודת יד</div>
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
         <div class="heb-name">${CAT[p.cat][0]} ${p.he}</div>
         <div class="pr">${ils(p.price)}</div><div id="pdpStock">${stockHTML(p)}</div>
         <p class="lead">${p.lead}</p>
-        <p class="res-note">מכירה נפתחת 1.2 · 00:00 · עוד <span class="cd-mini" dir="rtl"></span>. לא משלמים עכשיו.</p>
-        <div><div class="sizes-l"><span id="sizeL">מידה</span>${isRing&&p.id!=='openring'?'<button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">איך מודדים אצבע?</button>':''}</div>
+        <p class="res-note">מכירה נפתחת ${OPEN_DAY} · ${OPEN_TIME} · עוד <span class="cd-mini" dir="rtl"></span>. לא משלמים עכשיו.</p>
+        <div><div class="sizes-l"><span id="sizeL">מידה</span>${sz.guide?'<button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">איך מודדים אצבע?</button>':''}</div>
           <div class="sizes" id="sizes" role="group" aria-labelledby="sizeL" style="margin-top:8px">${sizes.map(s=>`<button type="button" aria-pressed="${sizes.length===1}">${s}</button>`).join('')}</div></div>
         <div><span class="sizes-l" id="qtyL">כמות</span><div style="margin-top:8px"><span class="qty" role="group" aria-labelledby="qtyL"><button type="button" id="qMinus" aria-label="פחות">−</button><output id="qOut">1</output><button type="button" id="qPlus" aria-label="עוד">+</button></span></div></div>
         <div class="pdp-actions"><button class="btn" type="button" id="addBag"><span id="addBagT">לשריין מראש</span> <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה ברשימת המשאלות">${HEART}<span class="wl">לשמור</span></button></div>
         <div class="assure"><div><b>עבודת יד</b>כל תכשיט מיוצר בנפרד</div><div><b>כסף 925</b>כסף סטרלינג</div></div>
         <div>
-          <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li><li>מכופף, מרוקע בפטיש ומלוטש ביד</li><li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li>${p.id==='signet'||p.id==='pendant'?'<li>האבן משתנה מעט בצורה ובגוון בין תכשיט לתכשיט</li>':''}</ul></div></details>
-          ${isRing&&p.id!=='openring'?`<details><summary>מדריך מידות</summary><div class="body">מודדים את ההיקף של האצבע במילימטרים, והמספר הוא המידה. אם יש ספק, עדיף לבחור מידה אחת למעלה. <button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">למדריך המדידה המלא</button><div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר (מ״מ)</th><th scope="col">US בערך</th></tr></thead><tbody>${RING_SIZES.map(([s,d,u])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td><td>${u}</td></tr>`).join('')}</tbody></table></div></div></details>`:''}
+          <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li>${p.made?`<li>${p.made}</li>`:''}<li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li></ul></div></details>
+          ${sz.guide?`<details><summary>מדריך מידות</summary><div class="body">מודדים את ההיקף של האצבע במילימטרים, והמספר הוא המידה. אם יש ספק, עדיף לבחור מידה אחת למעלה. <button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">למדריך המדידה המלא</button><div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר (מ״מ)</th><th scope="col">US בערך</th></tr></thead><tbody>${RING_SIZES.map(([s,d,u])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td><td>${u}</td></tr>`).join('')}</tbody></table></div></div></details>`:''}
           <details><summary>שמירה וניקוי</summary><div class="body">כסף משנה גוון עם הזמן במגע עם אוויר ולחות. מורידים לפני מקלחת, ים, בריכה ושימוש בחומרי ניקוי, שומרים במקום יבש ומבריקים מדי פעם עם מטלית לניקוי כסף. <a href="#care">למדריך המלא</a></div></details>
           <details><summary>משלוח והחזרות</summary><div class="body">כל תכשיט מוכן בהזמנה. זמן הכנה ומשלוח: <span class="ph">ימי עסקים</span>. אפשר לבטל עסקה לפי חוק הגנת הצרכן. <a href="#shipping">משלוחים והחזרות</a> · <a href="#cancel">מדיניות ביטולים</a></div></details>
         </div>
       </div>
     </div>
-    <section class="pdp-story" aria-labelledby="pstH">
+    ${p.story.length?`<section class="pdp-story" aria-labelledby="pstH">
       <h2 id="pstH"><small lang="en">the story of ${p.name}</small>הסיפור של ${p.he}</h2>
       <div>${p.story.map(t=>`<p>${t}</p>`).join('')}<div class="by"><img src="assets/star.png" alt="">עוצב ונעשה ביד ב-Duni</div></div>
-    </section>
+    </section>`:''}
     <section class="related" aria-labelledby="relH">
       <h2 id="relH">עוד מהקולקציה<small lang="en">more pieces</small></h2>
       <div class="grid">${related.map(x=>cardHTML(x)).join('')}</div>
     </section>
-    <nav class="pager" aria-label="תכשיט קודם והבא"><a href="#p-${prev.name}">→ ${CAT[prev.cat][0]} ${prev.he}</a><a href="#p-${next.name}">${CAT[next.cat][0]} ${next.he} ←</a></nav>
+    <nav class="pager" aria-label="תכשיט קודם והבא"><a href="${plink(prev)}">→ ${CAT[prev.cat][0]} ${prev.he}</a><a href="${plink(next)}">${CAT[next.cat][0]} ${next.he} ←</a></nav>
   </article>`;
 }
 function mountProduct(p){
@@ -1192,7 +1238,7 @@ function refreshPdpStock(){
 /* ---------- her / him pages ---------- */
 const GCATS = [['','הכל'],['rings','טבעות'],['necks','שרשראות'],['wrists','צמידים'],['ears','עגילים']];
 function mountGender(g, cat){
-  const all = P.filter(p=>p.g===g), list = cat ? all.filter(p=>p.cat===cat) : all;
+  const all = P.filter(p=>p.g===g||p.g==='both'), list = cat ? all.filter(p=>p.cat===cat) : all;
   $('#v-gender').innerHTML = `<section class="gpage" aria-labelledby="gH">
     <h1 id="gH"><small lang="en">${g==='her'?'for her':'for him'}</small>${g==='her'?'נשים':'גברים'}</h1>
     <nav class="cats" aria-label="סוגי תכשיטים">${GCATS.map(([c,t])=>`<a href="#${g}${c?'-'+c:''}" ${c===cat?'aria-current="page"':''}>${t}<sup>${c?all.filter(p=>p.cat===c).length:all.length}</sup></a>`).join('')}</nav>
@@ -1204,12 +1250,8 @@ function mountGender(g, cat){
 
 const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
 
-/* ---------- gallery ----------
-   To add a piece: put the photo in assets/gallery/ and add a line here, newest first.
-   kind: 'custom' (עיצוב אישי) or 'stall' (דוכנים) */
-const GALLERY = [
-  // {img:'assets/gallery/example.webp', title:'שם התכשיט', kind:'custom'},
-];
+/* ---------- gallery (added from the admin page) ---------- */
+const GALLERY = (DATA.gallery||[]).map(g=>({img:photoURL(g.photo,900), title:esc(g.title), kind:g.kind}));
 const GKINDS = [['all','הכל'],['custom','עיצובים אישיים'],['stall','דוכנים']];
 let galKind='all';
 function renderGallery(){
@@ -1223,74 +1265,54 @@ function renderGallery(){
 renderGallery();
 
 /* ---------- policy pages ---------- */
-const PH = t => `<span class="ph">${t}</span>`;
-const UPDATED = 'עודכן לאחרונה: 3.11.2026';
-const DOCS = {
-  about:{t:'אודות',en:'about',noDate:true,b:`
-    <p class="about-open">אני עדן, וברוכים הבאים לראש שלי.</p>
-    <p>כאן נמצא כל הבלאגן: הרעיונות שלא נותנים לי לישון, הסקיצות על פתקים, המקומות הכי אפלים שלי והכי שמחים שלי. Duni הוא המקום האישי והפרטי שלי, ומה שאתם רואים כאן זה מה שיוצא ממנו החוצה, בכסף.</p>
-    <p>כל תכשיט נולד אצלי בסטודיו ומקבל את הצורה שלו לאט, ביד, עם הרבה זמן ומחשבה. אף אחד מהם לא נעשה ״סתם״, ובכל אחד יש חתיכה ממני.</p>
-    <h2>איך זה עובד</h2>
-    <p><b>תכשיטים באתר.</b> חלק מהתכשיטים נמכרים באתר כל הזמן, וכשהם נגמרים אני מכינה אותם שוב. מאחרים יש רק כמה בודדים, ולפעמים רק אחד. כשהם נגמרים, הם נגמרים.</p>
-    <p><b>עיצוב אישי.</b> מתחילים משיחה: אבן, צורה, מילה או סיפור. מעצבים יחד מאפס, ואני מכינה את התכשיט רק בשבילך. תכשיט שעיצבנו יחד לא יימכר שוב. הוא עולה ל<a href="#gallery">גלריה</a>, כדי שאחרים יוכלו לראות אותו, אבל לא לקנות.</p>
-    <p><b>דוכנים.</b> יש תכשיטים שאני יוצרת רק לדוכנים, והם נמכרים רק שם. גם הם עולים לגלריה בהמשך. כדי לדעת איפה הדוכן הבא, הכי טוב לעקוב באינסטגרם <a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>.</p>
-    <h2>למה ככה</h2>
-    <p>כי בעיניי תכשיט צריך להרגיש כמו משהו שנעשה בשבילך, ולא כמו עוד מוצר מהמדף. בשבילי זו אמנות, והחיבור הוא חלק מהעבודה: החיבור שלי ליצירה, והחיבור עם כל מי שמגיע אליי. בגלל זה אני עובדת לאט, בכמויות קטנות, ומקשיבה לפני שאני מתחילה.</p>
-    <p>אם תכשיט מצא את הדרך אלייך, הוא כנראה היה אמור להיות שלך.</p>
-    <p class="about-sign">באהבה,<br>עדן <img src="assets/star.png" alt=""> Duni</p>`},
-  reserve:{t:'תנאי השריון',en:'pre-order terms',b:`
-    <h2>איך זה עובד</h2><ul><li>עד פתיחת המכירה ב-1 בפברואר 2027 בשעה 00:00 (שעון ישראל) אפשר לשריין תכשיטים מהקולקציה. השריון לא מחייב ולא משלמים עליו.</li><li>מכל תכשיט יש כמות מוגבלת. השריונים נרשמים לפי סדר ההגעה.</li><li>כשתכשיט כבר שוריין במלואו, אפשר להצטרף לרשימת ההמתנה שלו.</li></ul>
-    <h2>ביום הפתיחה</h2><ul><li>ב-1.2 בשעה 00:00 נשלח לכל מי ששריינה הודעת וואטסאפ עם קישור אישי לרכישה.</li><li>התכשיטים ששוריינו שמורים עד 1.2 בשעה 18:00. שריון שלא מומש עד אז משתחרר.</li></ul>
-    <h2>רשימת ההמתנה</h2><ul><li>תכשיט שמשתחרר עובר לבאה בתור ברשימת ההמתנה, לפי סדר ההצטרפות.</li><li>היא מקבלת הודעה בוואטסאפ, ויש לה 24 שעות לרכוש אותו. אחר כך הוא עובר הלאה.</li></ul>
-    <h2>משלוח ותשלום</h2><p>משלוח לכל הארץ: 25 ₪. התשלום נעשה רק ברכישה עצמה, דרך הקישור האישי. המחירים באתר הם מחירי הרכישה.</p>
-    <h2>הפרטים שלך</h2><p>השם, מספר הוואטסאפ והמייל משמשים רק לטיפול בשריון ובהזמנה. אפשר לבטל שריון בכל עת בהודעה בוואטסאפ ל-${'<a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a>'} או במייל ל-${'<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>'}. <a href="#privacy">מדיניות פרטיות</a></p>`},
-  shipping:{t:'משלוחים והחזרות',en:'shipping & returns',b:`
-    <h2>זמן הכנה</h2><p>כל תכשיט של Duni נעשה ביד ומוכן אחרי ההזמנה. זמן ההכנה הוא ${PH('מספר ימי עסקים')} ימי עסקים, ותכשיט בהזמנה אישית ${PH('מספר ימים')} ימי עסקים.</p>
-    <h2>משלוח</h2><ul><li>משלוח עד הבית: 25 ₪ · ${PH('ימי אספקה')}</li></ul><p>מספר מעקב נשלח במייל או בוואטסאפ ברגע שהחבילה יוצאת.</p>
-    <h2>החזרות והחלפות</h2><p>אפשר להחזיר או להחליף תכשיט שלא נענד, באריזתו המקורית, בתוך 14 יום מיום קבלתו, לפי <a href="#cancel">מדיניות הביטולים</a>. תכשיטים שיוצרו בהזמנה אישית לא ניתנים להחזרה, חוץ ממקרה של פגם.</p>
-    <h2>פגם או נזק במשלוח</h2><p>אם התכשיט הגיע פגום, כותבים לנו בתוך 7 ימים עם תמונה ל-<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a> ונתקן, נחליף או נחזיר את הכסף.</p>`},
-  cancel:{t:'מדיניות ביטולים',en:'cancellation policy',b:`
-    <p>מדיניות זו נכתבה לפי חוק הגנת הצרכן, התשמ״א-1981, ותקנות הגנת הצרכן (ביטול עסקה), התשע״א-2010.</p>
-    <h2>ביטול עסקה</h2><ul><li>אפשר לבטל עסקה בתוך 14 יום מיום קבלת התכשיט או מיום קבלת מסמך פרטי העסקה, המאוחר מביניהם.</li><li>מודיעים על הביטול בכתב: במייל ל-<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a> או בוואטסאפ ל-<a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a>, עם שם מלא ומספר הזמנה.</li><li>מחזירים את התכשיט כשהוא לא נענד, באריזתו המקורית. עלות המשלוח חזרה על הלקוח, חוץ ממקרה של פגם.</li><li>אם הביטול לא נובע מפגם, ייגבו דמי ביטול של 5% ממחיר העסקה או 100 ₪, הנמוך מביניהם.</li><li>הכסף מוחזר באותו אמצעי תשלום בתוך 14 יום מיום קבלת הודעת הביטול.</li></ul>
-    <h2>אנשים עם מוגבלות, אזרחים ותיקים ועולים חדשים</h2><p>אדם עם מוגבלות, אזרח ותיק (מגיל 65) ועולה חדש (עד חמש שנים מיום העלייה) רשאים לבטל עסקה בתוך 4 חודשים, אם העסקה כללה שיחה עם העסק, כולל שיחה בתקשורת אלקטרונית. יש להציג תעודה מתאימה.</p>
-    <h2>תכשיטים בהזמנה אישית</h2><p>לפי החוק, טובין שיוצרו במיוחד בעבור הצרכן לא ניתנים לביטול. תכשיט בהזמנה אישית (מידה, אבן או עיצוב לפי בקשה) לא ניתן לביטול אחרי שהעבודה עליו התחילה, חוץ ממקרה של פגם.</p>`},
-  privacy:{t:'מדיניות פרטיות',en:'privacy policy',b:`
-    <p>Duni מכבדת את הפרטיות שלך. המדיניות הזו מסבירה איזה מידע נאסף באתר ומה עושים איתו, לפי חוק הגנת הפרטיות, התשמ״א-1981.</p>
-    <h2>איזה מידע נאסף</h2><ul><li>פרטים שמסרת בהזמנה: שם, טלפון, מייל וכתובת למשלוח.</li><li>פרטי תשלום מעובדים אצל חברת הסליקה ${PH('שם חברת הסליקה')} ולא נשמרים אצלנו.</li><li>העדפות נגישות שבחרת (כמו גודל טקסט) נשמרות רק בדפדפן שלך.</li></ul>
-    <h2>למה משתמשים בו</h2><p>כדי לטפל בהזמנה, לשלוח אותה, ליצור קשר לגבי ההזמנה ולתת שירות. אם הסכמת לכך, נשלח גם עדכונים על דרופים חדשים, ואפשר להסיר את עצמך בכל רגע.</p>
-    <h2>שיתוף מידע</h2><p>המידע לא נמכר. הוא מועבר רק למי שצריך אותו כדי להשלים את ההזמנה: חברת השליחויות וחברת הסליקה.</p>
-    <h2>עוגיות (cookies)</h2><p>האתר לא משתמש כרגע בעוגיות למעקב או לפרסום. בדפדפן שלך נשמרים רק דברים שעוזרים לך באתר: רשימת המשאלות, השריונים שעוד לא נשלחו והגדרות הנגישות.</p>
-    <h2>הזכויות שלך</h2><p>אפשר לבקש לעיין במידע שלך, לתקן אותו או למחוק אותו בפנייה ל-<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>.</p>`},
-  terms:{t:'תקנון האתר',en:'terms of use',b:`
-    <h2>כללי</h2><p>האתר מופעל על ידי ${PH('שם העסק')}, ${PH('עוסק מורשה / ח.פ.')}, ${PH('כתובת העסק')}. השימוש באתר ורכישה בו כפופים לתקנון הזה.</p>
-    <h2>המוצרים</h2><p>כל התכשיטים נעשים ביד, ולכן כל תכשיט שונה מעט מהתמונה בצורה, בטקסטורה ובגוון האבן. ההבדלים האלה הם חלק מהתכשיט ולא פגם.</p>
-    <h2>מחירים ותשלום</h2><p>המחירים באתר בשקלים וכוללים מע״מ ${PH('לאשר')}. דמי משלוח מוצגים לפני התשלום.</p>
-    <h2>זכויות יוצרים</h2><p>העיצובים, התמונות, הלוגו והטקסטים באתר שייכים ל-Duni. אסור להעתיק או לשכפל אותם בלי אישור בכתב.</p>
-    <h2>משלוחים, ביטולים ופרטיות</h2><p>ראו <a href="#shipping">משלוחים והחזרות</a>, <a href="#cancel">מדיניות ביטולים</a> ו<a href="#privacy">מדיניות פרטיות</a>.</p>
-    <h2>יצירת קשר</h2><p>וואטסאפ <a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a> · <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a></p>`},
-  accessibility:{t:'הצהרת נגישות',en:'accessibility statement',b:`
-    <p>ב-Duni רוצים שכל אחד ואחת יוכלו לגלוש באתר ולקנות בו בנוחות. אנחנו פועלים להנגיש את האתר לפי תקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע״ג-2013, ולפי התקן הישראלי ת״י 5568 המבוסס על הנחיות WCAG 2.0 ברמה AA.</p>
-    <h2>מה עשינו באתר</h2><ul><li>תפריט נגישות (הכפתור בפינה השמאלית התחתונה): הגדלת טקסט, ניגודיות גבוהה, הדגשת קישורים, גופן קריא ועצירת אנימציות.</li><li>ניווט מלא במקלדת, עם סימון ברור של הרכיב שבפוקוס וקישור ״דילוג לתוכן הראשי״.</li><li>טקסט חלופי לתמונות התכשיטים.</li><li>מבנה כותרות מסודר ושפת עמוד מוגדרת (עברית, עם קטעים באנגלית וביפנית).</li><li>התאמה לטלפון ולמחשב.</li><li>כשהמכשיר מוגדר להפחתת תנועה, האנימציות נעצרות אוטומטית.</li></ul>
-    <h2>מגבלות ידועות</h2><p>${PH('לעדכן אחרי בדיקת נגישות מקצועית')}</p>
-    <h2>נתקלת בבעיה?</h2><p>אם משהו באתר לא נגיש לך, נשמח לשמוע ולתקן. רכז/ת הנגישות: ${PH('שם')} · טלפון ${PH('מספר')} · מייל <a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>.</p>`},
-  care:{t:'שמירה וניקוי של כסף',en:'silver care',b:`
-    <p>כסף סטרלינג 925 משנה גוון עם הזמן. זה טבעי וקל להחזיר לו את הברק.</p>
-    <h2>ביום-יום</h2><ul><li>מורידים את התכשיט לפני מקלחת, ים, בריכה, ספורט ושימוש בחומרי ניקוי.</li><li>מרססים בושם וקרם לפני שעונדים, לא אחרי.</li><li>שומרים כל תכשיט בנפרד, במקום יבש ובשקית סגורה.</li></ul>
-    <h2>ניקוי</h2><ul><li>מבריקים בעדינות עם מטלית לניקוי כסף.</li><li>לא משתמשים במברשת קשה או בחומרים שוחקים על תכשיטים עם אבן.</li><li>סימני הפטיש הם חלק מהעיצוב. אין צורך ״להחליק״ אותם.</li></ul>`},
-  sizes:{t:'מדריך מידות טבעות',en:'ring size guide',b:`
-    <p>המידה של טבעת היא ההיקף של האצבע במילימטרים.</p>
-    <h2>איך מודדים</h2><ul><li>כורכים פס נייר דק סביב בסיס האצבע.</li><li>מסמנים איפה הוא נפגש, ומודדים בסרגל את האורך במילימטרים.</li><li>מודדים בסוף היום, כשהאצבעות מעט נפוחות. אם יש ספק, עדיף מידה אחת למעלה.</li></ul>
-    <div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר פנימי (מ״מ)</th></tr></thead><tbody>${RING_SIZES.map(([s,d])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td></tr>`).join('')}</tbody></table></div>
-    <p>טבעת מוסובי מתכווננת ומתאימה לרוב המידות.</p>`},
+/* ---------- texts: defaults in texts.js, edits from the admin page ---------- */
+const T = {};
+(window.DUNI_TEXTS||[]).forEach(x=>T[x.key]=x.def);
+Object.entries(DATA.texts||{}).forEach(([k,v])=>{ if(typeof v==='string' && v.trim()) T[k]=v; });
+const TOK = {
+  ship:String(SHIP), open_day:OPEN_DAY, open_long:OPEN_LONG, open_time:OPEN_TIME, hold:HOLD, wait:String(WAIT),
+  whatsapp:'<a href="https://wa.me/972584120104" lang="en" dir="ltr">058-412-0104</a>',
+  email:'<a href="mailto:dunijewelry2@gmail.com" lang="en">dunijewelry2@gmail.com</a>',
+  instagram:'<a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>',
+  size_table:`<div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר פנימי (מ״מ)</th></tr></thead><tbody>${RING_SIZES.map(([s,d])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td></tr>`).join('')}</tbody></table></div>`,
 };
+// a small writing format: empty line = new paragraph, "## " heading, "- " list, **bold**, [text](link), {ship} and friends
+function mdInline(v){
+  return esc(v)
+    .replace(/\[\[(.+?)\]\]/g,'<span class="ph">$1</span>')
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/\[([^\]]+)\]\(((?:https?:\/\/|#|mailto:)[^)\s]+)\)/g,(m,t,u)=>`<a href="${u}"${u.startsWith('http')?' target="_blank" rel="noopener"':''}>${t}</a>`)
+    .replace(/\{(\w+)\}/g,(m,k)=>k in TOK && k!=='size_table' ? TOK[k] : m)
+    .replace(/\n/g,'<br>');
+}
+function mdBlock(v){
+  return String(v||'').replace(/\r/g,'').split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean).map(b=>{
+    if(b==='{size_table}') return TOK.size_table;
+    if(b.startsWith('## ')) return `<h2>${mdInline(b.slice(3))}</h2>`;
+    const lines=b.split('\n');
+    if(lines.every(l=>/^-\s/.test(l))) return `<ul>${lines.map(l=>`<li>${mdInline(l.replace(/^-\s+/,''))}</li>`).join('')}</ul>`;
+    return `<p>${mdInline(b)}</p>`;
+  }).join('');
+}
+function applyTexts(){
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const v = T[el.dataset.t]; if(v==null) return;
+    if(el.tagName==='DIV') el.innerHTML = mdBlock(v);
+    else if(/^(P|SPAN)$/.test(el.tagName) && /[\n*\[{]/.test(v)) el.innerHTML = mdInline(v);
+    else el.textContent = v;
+  });
+}
+const UPDATED = 'עודכן לאחרונה: ' + (T.docs_updated||'');
+const DOCS = {};
+Object.entries(window.DUNI_DOCS||{}).forEach(([k,d])=>DOCS[k]={t:d.t, en:d.en, noDate:d.noDate, get b(){ return mdBlock(T['doc_'+k]); }});
 function mountDoc(k){
   const d=DOCS[k];
-  $('#v-doc').innerHTML=OVBAR+`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div>${d.noDate?'':`<div class="upd">${UPDATED}</div>`}${d.b}<button class="btn ghost back" type="button" data-ov-close>חזרה לאתר <img src="assets/star.png" alt=""></button></div></article>`;
+  $('#v-doc').innerHTML=OVBAR+`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div>${d.noDate?'':`<div class="upd">${UPDATED}</div>`}<div class="doc-body${k==='about'?' about':''}">${d.b}</div><button class="btn ghost back" type="button" data-ov-close>חזרה לאתר <img src="assets/star.png" alt=""></button></div></article>`;
   document.title = `${d.t} · Duni`;
 }
 
 /* ---------- motion (home only) ---------- */
-const ORB = P.filter(p=>!['signet','band'].includes(p.id));
+const ORB = P.filter(p=>p!==HERO).slice(0,8);
 // [x, y] as fractions of the half-viewport; the bottom-centre band stays empty for the caption
 const SPOTS_D = [[-.78,-.56],[-.30,-.66],[.30,-.66],[.78,-.56],[-.94,.02],[.94,.02],[-.62,.44],[.62,.44]];
 const SPOTS_M = [[-.74,-.62],[.74,-.62],[-.78,-.22],[.78,-.22],[-.78,.18],[.78,.18],[-.6,.5],[.6,.5]];
@@ -1386,10 +1408,28 @@ document.addEventListener('click',e=>{
 });
 addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open) closeSheet(); });
 $('#skipLink').onclick = e=>{ e.preventDefault(); $('#main').focus(); };
+function fillHome(){
+  if(HERO){ $('#heroImg').src=src(HERO.id); $('#heroImg').alt=`${CAT[HERO.cat][0]} ${HERO.he}`; $('#customImg').src=src(HERO.id);
+    $('#hudName b').innerHTML=`${CAT[HERO.cat][0]} ${HERO.he}`; $('#hudName .sp').innerHTML=`${HERO.name} · ${HERO.jp}`; }
+  else { $('#heroRing').hidden=true; $('#customImg').hidden=true; }
+  $('#openWhen').textContent = `${OPEN_LONG} · ${OPEN_TIME} שעון ישראל`;
+  applyTexts();
+  $('#shipNote').textContent = `משלוח לכל הארץ: ${SHIP} ₪. ביום הפתיחה אשלח לך קישור אישי לרכישה.`;
+  document.querySelectorAll('.g-tile').forEach(t=>{
+    const g=t.dataset.g, list=P.filter(p=>p.g===g||p.g==='both');
+    t.querySelectorAll('.gi').forEach((im,k)=>{ const p=list[k]; if(p){ im.src=thumb(p.id).replace(/=w400$/,'=w800'); im.hidden=false; } else im.hidden=true; });
+    t.querySelector('.gcount').textContent = list.length===1 ? 'תכשיט אחד' : `${list.length} תכשיטים`;
+    t.querySelector('.names').innerHTML = list.slice(0,6).map(p=>p.name).join(' · ');
+  });
+  if(DATA.failed) say('לא הצלחתי לטעון את התכשיטים. נסו לרענן את הדף.');
+}
+fillHome();
 addEventListener('hashchange', route);
 route();
 renderBag();
 addEventListener('load',refreshMotion);
+setTimeout(refreshMotion,300);
+} // end boot
 </script>
 
 </body>
