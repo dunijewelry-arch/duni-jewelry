@@ -421,7 +421,7 @@ function importSheet(list){
     <div class="sheet-body">
       ${needUpdate()?UPDATE_NOTE:''}
       <p class="hint" style="margin:0">נמצאו ${list.length} תכשיטים בקובץ: ${fresh.length} חדשים${old.length?`, ${old.length} כבר קיימים באתר`:''}. אחרי הייבוא אפשר לפתוח כל אחד ולתקן.</p>
-      ${old.length?`<label class="switch"><span>לעדכן את ${old.length} הקיימים לפי הקובץ</span><input type="checkbox" id="impUpd" checked></label><p class="hint" style="margin:0">מעדכן שם, תיאור, מחיר, קטגוריה, קולקציה ומקום. תמונה קיימת נשארת, ואם אין לתכשיט תמונה היא מתווספת מהקובץ.</p>`:''}
+      ${old.length?`<label class="switch"><span>לעדכן את ${old.length} הקיימים לפי הקובץ</span><input type="checkbox" id="impUpd" checked></label><p class="hint" style="margin:0">מעדכן שם, תיאור, מחיר, קטגוריה, קולקציה ומקום.</p><label class="switch"><span>להחליף גם את התמונות בתמונות מהקובץ</span><input type="checkbox" id="impPh"></label>`:''}
       <label class="switch"><span>להציג באתר מיד</span><input type="checkbox" id="impVis"></label>
       <p class="hint" style="margin:0">כשהמתג כבוי, התכשיטים נכנסים מוסתרים. בודקים אותם, ומדליקים ״מוצג באתר״ בכל אחד.</p>
       <ul class="rows">${list.map(x=>`<li><div class="row" style="cursor:default">
@@ -434,13 +434,13 @@ function importSheet(list){
   const close=()=>{ sh.hidden=true; sh.innerHTML=''; document.body.style.overflow=''; };
   $('#shX').onclick=close;
   $('#impGo').onclick=async()=>{
-    const vis=$('#impVis').checked, upd=$('#impUpd')?$('#impUpd').checked:false; let done=0, last=null; const fails=[];
+    const vis=$('#impVis').checked, upd=$('#impUpd')?$('#impUpd').checked:false, repPh=$('#impPh')?$('#impPh').checked:false; let done=0, last=null; const fails=[];
     const todo=fresh.concat(upd?old:[]); if(!todo.length){ say('אין מה לייבא.'); return; }
     for(const x of todo){
       busy(`מייבאת ${done+1} מתוך ${todo.length}…`);
       try{
         const ex=D.items.find(i=>key(i.name)===key(x.name));
-        let photo=ex&&ex.photo?ex.photo:'';
+        let photo=ex&&ex.photo&&!(repPh&&x.photo)?ex.photo:'';
         if(!photo){ if(/^data:image\//.test(x.photo||'')){ const u=await api('upload',{data:x.photo,name:x.name||x.he}); photo=u.photo; } else if(x.photo) photo=String(x.photo); }
         const item={ id:ex?ex.id:'', name:x.name||'', jp:x.jp||'', he:x.he||'', mean:x.mean||'', cat:CAT[x.cat]?x.cat:'rings', g:G[x.g]?x.g:'her',
           price:Number(x.price)||0, qty:Number(x.qty)>=0?Number(x.qty):1, sizes:x.sizes||'', lead:x.lead||'', story:x.story||'', made:x.made||'', photo,

@@ -423,6 +423,7 @@ html.ov-open{overflow:hidden}
 .gal-grid figure{margin:0}
 .gal-grid .ph-img{aspect-ratio:4/5;background:var(--paper-2);position:relative;overflow:hidden}
 .gal-grid .ph-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gal-grid .piece-img img{object-fit:contain;padding:10%;filter:drop-shadow(0 18px 20px rgba(40,34,26,.18))}
 .gal-grid figcaption{font-size:.85rem;margin-top:8px;color:var(--ink-2)}
 .gal-empty{grid-column:1/-1;border:1px dashed var(--line);padding:42px 20px;text-align:center;color:var(--ink-2);line-height:1.7}
 
@@ -1251,7 +1252,7 @@ function mountGender(g, cat){
 const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
 
 /* ---------- gallery (added from the admin page) ---------- */
-const GALLERY = (DATA.gallery||[]).map(g=>({img:photoURL(g.photo,900), title:esc(g.title), kind:g.kind}));
+const GALLERY = (DATA.gallery||[]).map(g=>({img:photoURL(g.photo,900), title:esc(g.title), kind:g.kind, piece:('col' in g)}));
 const GKINDS = [['all','הכל'],['custom','עיצובים אישיים'],['stall','דוכנים']];
 let galKind='all';
 function renderGallery(){
@@ -1259,7 +1260,7 @@ function renderGallery(){
   tabs.innerHTML = GKINDS.map(([k,t])=>`<a href="#gallery" data-gk="${k}" ${k===galKind?'aria-current="page"':''}>${t}<sup>${k==='all'?GALLERY.length:GALLERY.filter(g=>g.kind===k).length}</sup></a>`).join('');
   tabs.querySelectorAll('[data-gk]').forEach(a=>a.onclick=e=>{ e.preventDefault(); galKind=a.dataset.gk; renderGallery(); });
   const list = GALLERY.filter(g=>galKind==='all'||g.kind===galKind);
-  grid.innerHTML = list.length ? list.map(g=>`<figure><div class="ph-img"><img src="${g.img}" alt="${g.title}" loading="lazy"></div><figcaption>${g.title}</figcaption></figure>`).join('')
+  grid.innerHTML = list.length ? list.map(g=>`<figure><div class="ph-img${g.piece?' piece-img':''}"><img src="${g.img}" alt="${g.title}" loading="lazy"></div><figcaption>${g.title}</figcaption></figure>`).join('')
     : `<p class="gal-empty">העבודות הראשונות יעלו לכאן בקרוב.<br>בינתיים אפשר לראות מה קורה בסטודיו באינסטגרם ${'<a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>'}.</p>`;
 }
 renderGallery();
