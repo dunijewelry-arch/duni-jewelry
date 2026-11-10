@@ -433,7 +433,7 @@ html.ov-open{overflow:hidden}
 .gal-grid{display:flex;gap:clamp(14px,2.4vw,34px);align-items:flex-start}
 .gal-grid .gcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:clamp(26px,4vw,54px)}
 .gal-grid .gcol:nth-child(even){padding-top:clamp(40px,7vw,110px)}
-.gal-grid figure{margin:0;cursor:zoom-in;position:relative}
+.gal-grid figure{margin:0;cursor:pointer;position:relative}
 .gal-grid .ph-img{position:relative;overflow:hidden;background:var(--paper-2);aspect-ratio:var(--ar,4/5)}
 .gal-grid .ph-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.1,1)}
 .gal-grid .piece-img{background:radial-gradient(ellipse at 50% 58%,rgba(255,255,255,.55),transparent 62%),var(--paper-2)}
@@ -466,6 +466,16 @@ html.ov-open{overflow:hidden}
   .a11y-btn{width:2.6rem;height:2.6rem}
   .a11y-btn svg{width:1.3rem;height:1.3rem}
 }
+
+/* a gallery piece's own page */
+.gpdp .g-status{display:grid;gap:4px;border:1px solid var(--line);padding:14px 16px;margin:18px 0 6px;line-height:1.6;font-size:.92rem}
+.gpdp .g-status b{font-weight:500;font-size:1rem}
+.gpdp .g-status span{color:var(--ink-2)}
+.gpdp .pdp-actions{flex-wrap:wrap}
+.gpdp .pdp-actions .btn{text-decoration:none;white-space:nowrap}
+@media (max-width:760px){.gpdp .pdp-actions{display:grid;grid-template-columns:1fr;gap:10px}.gpdp .pdp-actions .btn{width:100%;justify-content:center}}
+.pdp-stage.photo>img:not([alt=""]){object-fit:cover;width:100%;height:100%;inset:0;position:absolute;filter:none}
+.card .stage.photo img{object-fit:cover;width:100%;height:100%;filter:none}
 
 /* accessibility */
 .a11y-btn{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:75;width:3.1rem;height:3.1rem;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
@@ -1292,7 +1302,12 @@ function mountGender(g, cat){
 const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
 
 /* ---------- gallery (added from the admin page) ---------- */
-const GALLERY = (DATA.gallery||[]).map(g=>({img:photoURL(g.photo,900), title:esc(g.title), kind:g.kind, piece:('col' in g)}));
+const GALLERY = (DATA.gallery||[]).map(g=>{
+  const t = v => esc(String(v==null?'':v).trim());
+  return { id:String(g.id||''), img:photoURL(g.photo,900), big:photoURL(g.photo,1600), title:t(g.title), kind:g.kind==='stall'?'stall':'custom',
+    piece:('col' in g), name:t(g.name), jp:t(g.jp), he:t(g.he||g.title), cat:CAT[g.cat]?g.cat:'', lead:t(g.lead), made:t(g.made),
+    story:String(g.story||'').split(/\n\s*\n/).map(x=>t(x)).filter(Boolean) };
+}).filter(g=>g.id);
 const GKINDS = [['all','הכל'],['custom','עיצובים אישיים'],['stall','דוכנים']];
 let galKind='all';
 function renderGallery(){
@@ -1307,21 +1322,64 @@ function renderGallery(){
 }
 renderGallery();
 let galW=innerWidth; addEventListener('resize',()=>{ const b=w=>w>=1180?4:w>=760?3:2; if(b(innerWidth)!==b(galW)){ galW=innerWidth; renderGallery(); } });
-// tap a gallery piece to see it large
+// tap a gallery piece to open its page
 (function(){
-  const lb=document.createElement('div'); lb.className='gal-lb'; lb.hidden=true; lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true'); lb.setAttribute('aria-label','גלריה');
-  lb.innerHTML=`<div class="lb-top"><span id="lbNo"></span><button type="button" data-lb="x" aria-label="סגירה">×</button></div><div class="lb-img" id="lbImg"><img alt=""></div><div class="lb-cap"><b id="lbT"></b><span class="lb-nav"><button type="button" data-lb="1" aria-label="הקודם">→</button><button type="button" data-lb="-1" aria-label="הבא">←</button></span></div>`;
-  document.body.appendChild(lb);
-  let cur=[], at=0;
-  const show=()=>{ const g=cur[at]; if(!g) return; const box=lb.querySelector('#lbImg'); box.className='lb-img'+(g.piece?' cutout':''); box.querySelector('img').src=g.img.replace(/=w\d+$/,'=w1600'); box.querySelector('img').alt=g.title; lb.querySelector('#lbT').innerHTML=g.title; lb.querySelector('#lbNo').textContent=`${String(at+1).padStart(2,'0')} / ${String(cur.length).padStart(2,'0')}`; };
-  const close=()=>{ lb.hidden=true; document.documentElement.style.overflow=''; };
   const grid=document.getElementById('galGrid'); if(!grid) return;
-  const open=i=>{ cur=GALLERY.filter(g=>galKind==='all'||g.kind===galKind); at=i; show(); lb.hidden=false; document.documentElement.style.overflow='hidden'; lb.querySelector('[data-lb="x"]').focus(); };
-  grid.addEventListener('click',e=>{ const f=e.target.closest('[data-gi]'); if(f) open(+f.dataset.gi); });
-  grid.addEventListener('keydown',e=>{ const f=e.target.closest('[data-gi]'); if(f && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); open(+f.dataset.gi); } });
-  lb.addEventListener('click',e=>{ const b=e.target.closest('[data-lb]'); if(!b){ if(e.target===lb) close(); return; } if(b.dataset.lb==='x') return close(); at=(at+Number(b.dataset.lb)+cur.length)%cur.length; show(); });
-  document.addEventListener('keydown',e=>{ if(lb.hidden) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft'){ at=(at+1)%cur.length; show(); } if(e.key==='ArrowRight'){ at=(at-1+cur.length)%cur.length; show(); } });
+  const go=f=>{ const g=GALLERY.filter(x=>galKind==='all'||x.kind===galKind)[+f.dataset.gi]; if(g) location.hash='g-'+encodeURIComponent(g.id); };
+  grid.addEventListener('click',e=>{ const f=e.target.closest('[data-gi]'); if(f) go(f); });
+  grid.addEventListener('keydown',e=>{ const f=e.target.closest('[data-gi]'); if(f && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); go(f); } });
 })();
+const gTitle = g => g.name ? `${g.name}` : g.title;
+function galleryPieceHTML(g){
+  const inTab = GALLERY.filter(x=>galKind==='all'||x.kind===galKind), L = inTab.includes(g) ? inTab : GALLERY;
+  const i=L.indexOf(g), prev=L[(i-1+L.length)%L.length], next=L[(i+1)%L.length];
+  const custom = g.kind!=='stall', catHe = g.cat ? CAT[g.cat][0] : '';
+  const kindHe = custom ? 'עיצוב אישי' : 'נוצר לדוכנים';
+  const heName = [catHe, g.name ? g.he : ''].filter(Boolean).join(' ');
+  const others = GALLERY.filter(x=>x!==g).sort((a,b)=>(b.kind===g.kind)-(a.kind===g.kind)).slice(0,4);
+  const wa = 'https://wa.me/972584120104?text=' + encodeURIComponent(T.custom_wa||'');
+  return `<article class="pdp gpdp">
+    <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#gallery">גלריה</a><span aria-hidden="true">/</span><span aria-current="page">${heName||g.title}</span></nav>
+    <div class="pdp-top">
+      <div class="pdp-stage${g.piece?'':' photo'}" id="pdpStage"><span class="tag"><img src="assets/star.png" alt="">${kindHe}</span><img src="${g.big}" alt="${g.title}">${g.jp?`<span class="jp jp-big" lang="ja" aria-hidden="true">${g.jp}</span>`:''}
+        <div class="spec" aria-hidden="true"><div class="h"><span>${custom?'one of one':'stall piece'}</span><span>${gTitle(g)}</span></div><dl>${g.jp?`<dt>שם</dt><dd>${g.jp} · ${g.name}</dd>`:''}<dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd>${catHe?`<dt>סוג</dt><dd>${catHe}</dd>`:''}<dt>${custom?'יחידות':'איפה'}</dt><dd>${custom?'אחת בעולם':'רק בדוכן'}</dd></dl></div></div>
+      <div class="pdp-info">
+        <div class="eyebrow">${catHe?catHe+' · ':''}${kindHe} · כסף 925 · עבודת יד</div>
+        ${g.name?`<h1 lang="en">${g.name}${g.jp?`<span class="jp" lang="ja">${g.jp}</span>`:''}</h1><div class="heb-name">${heName}</div>`:`<h1>${g.title}</h1>`}
+        <div class="g-status"><b>${custom?'תכשיט אחד בעולם':'נמכר רק בדוכנים'}</b><span>${custom
+          ? 'עוצב יחד, מאפס, בשביל מי שהוא שלו. הוא לא יימכר שוב, והוא כאן כדי לראות, לא כדי לקנות.'
+          : 'נוצר במיוחד לדוכנים של Duni ונמכר רק שם. הוא כאן כדי לראות, לא כדי לקנות.'}</span></div>
+        ${g.lead?`<p class="lead">${g.lead}</p>`:''}
+        <div class="pdp-actions">${custom
+          ? `<a class="btn" href="${wa}" target="_blank" rel="noopener">לעיצוב אישי משלך <img src="assets/star.png" alt=""></a>`
+          : `<a class="btn" href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener">איפה הדוכן הבא? <img src="assets/star.png" alt=""></a>`}
+          <a class="btn ghost" href="${custom?'#custom':'#for'}">${custom?'איך זה עובד':'לקולקציה באתר'}</a></div>
+        <div>
+          <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li>${g.made?`<li>${g.made}</li>`:''}<li>${custom?'נעשה פעם אחת, לפי עיצוב שיצרנו יחד':'נעשה בכמות קטנה, רק לדוכנים'}</li></ul></div></details>
+          ${custom?`<details><summary>איך עובד עיצוב אישי</summary><div class="body">מתחילים משיחה: אבן, צורה, מילה או סיפור. מעצבים יחד מאפס, ואני מכינה את התכשיט רק בשבילך. <a href="#custom">לכל השלבים</a></div></details>`
+            :`<details><summary>איפה הדוכנים</summary><div class="body">את המקומות והתאריכים של הדוכנים הקרובים אני מפרסמת באינסטגרם ${TOK.instagram}.</div></details>`}
+        </div>
+      </div>
+    </div>
+    ${g.story.length?`<section class="pdp-story" aria-labelledby="gstH">
+      <h2 id="gstH"><small lang="en">the story${g.name?' of '+g.name:''}</small>הסיפור${g.name?' של '+g.he:''}</h2>
+      <div>${g.story.map(t=>`<p>${t}</p>`).join('')}<div class="by"><img src="assets/star.png" alt="">עוצב ונעשה ביד ב-Duni</div></div>
+    </section>`:''}
+    ${others.length?`<section class="related" aria-labelledby="grelH">
+      <h2 id="grelH">עוד מהגלריה<small lang="en">gallery</small></h2>
+      <div class="grid">${others.map(x=>`<div class="cw"><a class="card" href="#g-${encodeURIComponent(x.id)}"><div class="stage${x.piece?'':' photo'}"><img src="${x.img}" alt="${x.title}" loading="lazy"></div>
+        <div class="meta"><span>${x.name?`<span class="nm" lang="en">${x.name}</span>${x.jp?`<span class="jp" lang="ja">${x.jp}</span>`:''}<span class="heb">${x.cat?CAT[x.cat][0]+' ':''}${x.he}</span>`:`<span class="heb" style="font-size:.95rem;color:var(--ink)">${x.title}</span>`}</span><span class="pr" style="font-size:.72rem;color:var(--ink-2)">${x.kind==='stall'?'דוכנים':'עיצוב אישי'}</span></div></a></div>`).join('')}</div>
+    </section>`:''}
+    ${L.length>1?`<nav class="pager" aria-label="הקודם והבא בגלריה"><a href="#g-${encodeURIComponent(prev.id)}">→ ${prev.he||prev.title}</a><a href="#g-${encodeURIComponent(next.id)}">${next.he||next.title} ←</a></nav>`:''}
+  </article>`;
+}
+function mountGalleryPiece(g){
+  const v=$('#v-product'); v.innerHTML=OVBAR+galleryPieceHTML(g);
+  const st=v.querySelector('#pdpStage'), im=st.querySelector(':scope > img:not([alt=""])') || st.querySelector('img:last-of-type');
+  st.addEventListener('pointermove',e=>{ if(A.still||!im) return; const r=st.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; im.style.transform=`rotateY(${x*14}deg) rotateX(${-y*10}deg)`; });
+  st.addEventListener('pointerleave',()=>{ if(im) im.style.transform=''; });
+  document.title = `${g.name||g.he||g.title} · Duni`;
+}
 
 /* ---------- policy pages ---------- */
 /* ---------- texts: defaults in texts.js, edits from the admin page ---------- */
@@ -1435,13 +1493,14 @@ function route(){
   if(!menu.hidden && menu.classList.contains('on')) closeMenu(false);
   const h = decodeURIComponent(location.hash.slice(1));
   const prod = h.startsWith('p-') && byName(h.slice(2));
-  if(prod || DOCS[h]){
+  const gal = h.startsWith('g-') && GALLERY.find(g=>g.id===h.slice(2));
+  if(prod || gal || DOCS[h]){
     const fresh = !currentView;
     if(fresh) baseRoute('home', true);
     if(sheetOpen()) ovDepth++; else ovDepth = fresh ? 0 : 1;
     closing=false;
-    if(prod) mountProduct(prod); else mountDoc(h);
-    openSheet(prod?'product':'doc');
+    if(prod) mountProduct(prod); else if(gal) mountGalleryPiece(gal); else mountDoc(h);
+    openSheet(prod||gal?'product':'doc');
     return;
   }
   const wasSheet = sheetOpen();

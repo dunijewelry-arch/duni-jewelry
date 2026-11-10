@@ -179,7 +179,8 @@ function doGet() {
     ok: true, open: Date.now() >= ts,
     settings: { openTs: ts, hold: s.hold_until, wait: Number(s.wait_hours) || 24, ship: Number(s.ship) || 0, hero: s.hero },
     items: items.filter(i => i.visible && i.place === 'shop').map(strip_),
-    gallery: items.filter(i => i.visible && i.place !== 'shop').map(i => ({ id: i.id, photo: i.photo, title: i.he || i.name, kind: i.place, col: i.col }))
+    gallery: items.filter(i => i.visible && i.place !== 'shop').map(i => ({ id: i.id, photo: i.photo, title: i.he || i.name, kind: i.place, col: i.col,
+      name: i.name, jp: i.jp, he: i.he, cat: i.cat, lead: i.lead, story: i.story, made: i.made }))
       .concat(gallery_().map(strip_)),
     texts: texts_(),
     stock: publicStock_(stock_(items, resRows_())),
