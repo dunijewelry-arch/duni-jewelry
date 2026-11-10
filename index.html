@@ -1176,7 +1176,7 @@ function renderBag(){
   // over the import VAT exemption: the customer pays 18% VAT to Israel Post when the parcel arrives
   const vat = sum>0 && sum+SHIP > VAT_FREE_ILS;
   $('#vatNote').hidden = !vat;
-  if(vat) $('#vatNote').textContent = `שימי לב: ההזמנה מעל ${VAT_FREE_USD}$ (כ-${VAT_FREE_ILS} ₪ כולל משלוח), ולכן בקבלת החבילה יתווסף מע״מ יבוא של 18%, שמשולם לדואר ישראל.`;
+  if(vat) $('#vatNote').textContent = `שימי לב: ההזמנה מעל כ-${VAT_FREE_ILS} ₪ כולל משלוח (${VAT_FREE_USD}$; הסכום המדויק נקבע לפי שער הדולר באותו זמן), ולכן בקבלת החבילה יתווסף מע״מ יבוא של 18%, שמשולם לדואר ישראל.`;
   $('#resBox').hidden = !bag.length;
   $('#bagList').querySelectorAll('.rm').forEach(b=>b.onclick=()=>{bag.splice(+b.dataset.i,1);saveBag();renderBag();});
   $('#bagList').querySelectorAll('[data-dq]').forEach(b=>b.onclick=()=>{const it=bag[+b.dataset.dq]; if(it.qty>1){it.qty--;saveBag();renderBag();}});
@@ -1255,7 +1255,7 @@ function productHTML(p){
           <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li>${p.made?`<li>${p.made}</li>`:''}<li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li></ul></div></details>
           ${sz.guide?`<details><summary>מדריך מידות</summary><div class="body">מודדים את ההיקף של האצבע במילימטרים, והמספר הוא המידה. אם יש ספק, עדיף לבחור מידה אחת למעלה. <button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">למדריך המדידה המלא</button><div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר (מ״מ)</th><th scope="col">US בערך</th></tr></thead><tbody>${RING_SIZES.map(([s,d,u])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td><td>${u}</td></tr>`).join('')}</tbody></table></div></div></details>`:''}
           <details><summary>שמירה וניקוי</summary><div class="body">כסף משנה גוון עם הזמן במגע עם אוויר ולחות. מורידים לפני מקלחת, ים, בריכה ושימוש בחומרי ניקוי, שומרים במקום יבש ומבריקים מדי פעם עם מטלית לניקוי כסף. <a href="#care">למדריך המלא</a></div></details>
-          <details><summary>משלוח והחזרות</summary><div class="body">כל תכשיט מוכן בהזמנה. זמן הכנה: 4 ימי עסקים, ואחריו משלוח של כ-2–3 שבועות עם מספר מעקב. בהזמנה מעל ${VAT_FREE_USD}$ יתווסף מע״מ יבוא בקבלת החבילה. אפשר לבטל עסקה לפי חוק הגנת הצרכן. <a href="#shipping">משלוחים והחזרות</a> · <a href="#cancel">מדיניות ביטולים</a></div></details>
+          <details><summary>משלוח והחזרות</summary><div class="body">כל תכשיט מוכן בהזמנה. זמן הכנה: 4 ימי עסקים, ואחריו משלוח של כ-2–3 שבועות עם מספר מעקב. בהזמנה מעל כ-${VAT_FREE_ILS} ₪ (${VAT_FREE_USD}$, לפי שער הדולר) יתווסף מע״מ יבוא בקבלת החבילה. אפשר לבטל עסקה לפי חוק הגנת הצרכן. <a href="#shipping">משלוחים והחזרות</a> · <a href="#cancel">מדיניות ביטולים</a></div></details>
         </div>
       </div>
     </div>
