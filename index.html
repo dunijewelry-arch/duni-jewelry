@@ -450,7 +450,7 @@ html.ov-open{overflow:hidden}
 .gal-lb button{background:none;border:0;font-size:1.6rem;line-height:1;padding:8px;cursor:pointer;color:var(--ink)}
 .gal-lb .lb-img{position:relative;min-height:0}
 .gal-lb .lb-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.gal-lb .lb-img.piece img{filter:drop-shadow(0 30px 30px rgba(40,34,26,.22));padding:6%}
+.gal-lb .lb-img.cutout img{filter:drop-shadow(0 30px 30px rgba(40,34,26,.22));padding:6%}
 .gal-lb .lb-cap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:12px}
 .gal-lb .lb-cap b{font-weight:400;font-size:1.1rem}
 .gal-lb .lb-nav{display:flex;gap:6px}
@@ -1313,7 +1313,7 @@ let galW=innerWidth; addEventListener('resize',()=>{ const b=w=>w>=1180?4:w>=760
   lb.innerHTML=`<div class="lb-top"><span id="lbNo"></span><button type="button" data-lb="x" aria-label="סגירה">×</button></div><div class="lb-img" id="lbImg"><img alt=""></div><div class="lb-cap"><b id="lbT"></b><span class="lb-nav"><button type="button" data-lb="1" aria-label="הקודם">→</button><button type="button" data-lb="-1" aria-label="הבא">←</button></span></div>`;
   document.body.appendChild(lb);
   let cur=[], at=0;
-  const show=()=>{ const g=cur[at]; if(!g) return; const box=lb.querySelector('#lbImg'); box.className='lb-img'+(g.piece?' piece':''); box.querySelector('img').src=g.img.replace(/=w\d+$/,'=w1600'); box.querySelector('img').alt=g.title; lb.querySelector('#lbT').innerHTML=g.title; lb.querySelector('#lbNo').textContent=`${String(at+1).padStart(2,'0')} / ${String(cur.length).padStart(2,'0')}`; };
+  const show=()=>{ const g=cur[at]; if(!g) return; const box=lb.querySelector('#lbImg'); box.className='lb-img'+(g.piece?' cutout':''); box.querySelector('img').src=g.img.replace(/=w\d+$/,'=w1600'); box.querySelector('img').alt=g.title; lb.querySelector('#lbT').innerHTML=g.title; lb.querySelector('#lbNo').textContent=`${String(at+1).padStart(2,'0')} / ${String(cur.length).padStart(2,'0')}`; };
   const close=()=>{ lb.hidden=true; document.documentElement.style.overflow=''; };
   const grid=document.getElementById('galGrid'); if(!grid) return;
   const open=i=>{ cur=GALLERY.filter(g=>galKind==='all'||g.kind===galKind); at=i; show(); lb.hidden=false; document.documentElement.style.overflow='hidden'; lb.querySelector('[data-lb="x"]').focus(); };
