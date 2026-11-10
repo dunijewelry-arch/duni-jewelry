@@ -1191,6 +1191,10 @@ let lastFocus=null;
 function openBag(){ lastFocus=document.activeElement; $('#resDone').hidden=true; $('#bagList').hidden=false; renderBag(); $('#drawer').hidden=false; $('#drawerX').focus(); loadStock().then(renderBag); }
 function closeBag(){ $('#drawer').hidden=true; lastFocus&&lastFocus.focus(); }
 $('#bagBtn').onclick=openBag; $('#drawerX').onclick=closeBag; $('#drawerScrim').onclick=closeBag;
+// a link inside the reservations window (like "תנאי השריון") opens its page under the window,
+// so step the window aside while the page is open and bring it back, form and all, when the page closes
+let bagBack = '';
+$('#drawer').addEventListener('click',e=>{ const a=e.target.closest('a[href^="#"]'); if(!a) return; bagBack=decodeURIComponent(a.getAttribute('href').slice(1)); $('#drawer').hidden=true; });
 $('#resForm').addEventListener('submit', e=>{
   e.preventDefault();
   const err=$('#resErr'); err.textContent='';
@@ -1500,6 +1504,7 @@ function closeSheet(){
 function route(){
   if(!menu.hidden && menu.classList.contains('on')) closeMenu(false);
   const h = decodeURIComponent(location.hash.slice(1));
+  if(bagBack && h!==bagBack){ bagBack=''; $('#drawer').hidden=false; setTimeout(()=>$('#drawerX').focus(),0); }
   const prod = h.startsWith('p-') && byName(h.slice(2));
   const gal = h.startsWith('g-') && GALLERY.find(g=>g.id===h.slice(2));
   if(prod || gal || DOCS[h]){
