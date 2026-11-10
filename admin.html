@@ -192,7 +192,7 @@ main{padding-block:22px 120px}
     <p class="logo">Duni</p>
     <h1>ניהול האתר</h1>
     <p class="hint" id="notConnected" hidden style="text-align:center">דף הניהול עוד לא מחובר לגיליון. אחרי שתקימי את הגיליון ותשלחי לי את הכתובת שלו, הוא יעבוד.</p>
-    <label class="field"><span>סיסמה</span><input type="password" id="pw" autocomplete="current-password" required></label>
+    <label class="field"><span>סיסמה</span><input type="password" id="pw" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" dir="ltr" required></label>
     <label class="switch"><span>לזכור אותי בטלפון הזה</span><input type="checkbox" id="remember" checked></label>
     <div class="err" id="loginErr" role="alert"></div>
     <button class="btn" type="submit" id="loginBtn">כניסה</button>
@@ -304,7 +304,7 @@ $('#logout').onclick=logout;
 $('#loginForm').addEventListener('submit', e=>{
   e.preventDefault(); const err=$('#loginErr'); err.textContent='';
   if(!API){ err.textContent='דף הניהול עוד לא מחובר לגיליון.'; return; }
-  PW=$('#pw').value; if(!PW){ err.textContent='צריך לכתוב סיסמה.'; return; }
+  PW=$('#pw').value.replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\u00a0]/g,'').trim(); if(!PW){ err.textContent='צריך לכתוב סיסמה.'; return; }
   $('#loginBtn').disabled=true;
   api('login').then(d=>{
     try{ ($('#remember').checked?localStorage:sessionStorage).setItem('duni-admin-pw',PW); }catch(e){}
