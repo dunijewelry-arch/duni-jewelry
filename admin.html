@@ -681,7 +681,7 @@ function renderSettings(){
       <div class="two"><label class="field"><span>תאריך פתיחת המכירה</span><input type="date" id="sDate" value="${esc(od)}"></label><label class="field"><span>שעה (שעון ישראל)</span><input type="time" id="sTime" value="${esc(ot)}"></label></div>
       <label class="field"><span>עד איזו שעה השריון שמור ביום הפתיחה</span><input type="time" id="sHold" value="${esc(s.hold_until||'18:00')}"></label>
       <label class="field"><span>כמה שעות יש למי שברשימת ההמתנה</span><input type="number" inputmode="numeric" min="1" id="sWait" value="${esc(s.wait_hours||'24')}"></label>
-      <label class="field"><span>מחיר משלוח (₪)</span><input type="number" inputmode="numeric" min="0" id="sShip" value="${esc(s.ship||'25')}"></label>
+      <label class="field"><span>מחיר משלוח (₪)</span><input type="number" inputmode="numeric" min="0" id="sShip" value="${esc(s.ship||'35')}"></label>
       <label class="field"><span>התכשיט שבפתיחת האתר</span><select id="sHero"><option value="">הטבעת הראשונה ברשימה</option>${D.items.map(i=>`<option value="${esc(i.id)}" ${s.hero===i.id?'selected':''}>${esc(i.he||i.name)}</option>`).join('')}</select><span class="help">מופיע גדול במרכז, ובחלק של העיצוב האישי.</span></label>
       <p class="hint" style="margin:0">התאריך, השעות ומחיר המשלוח מתעדכנים לבד בכל האתר: בספירה לאחור, בתנאי השריון, במשלוחים ובמייל ללקוחות.</p>
       <div class="err" id="sErr" role="alert"></div>

@@ -379,6 +379,7 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .qty button{width:40px;height:40px;font-size:1.1rem}
 .qty output{min-width:28px;text-align:center}
 .res-note{font-size:.85rem;color:var(--ink-2);line-height:1.6;margin:0}
+.vat-note{margin-top:10px;color:var(--ink);border-inline-start:2px solid var(--ink);padding-inline-start:10px}
 .res-form{display:grid;gap:12px}
 .res-form label{display:grid;gap:5px;font-size:.85rem}
 .res-form input[type=text],.res-form input[type=tel],.res-form input[type=email]{font:inherit;font-size:1rem;padding:11px 12px;border:1px solid var(--line);background:#fff8;border-radius:6px;color:var(--ink)}
@@ -886,6 +887,7 @@ html.ov-open{overflow:hidden}
     <ul class="bag-list" id="bagList"></ul>
     <div id="resBox">
       <div class="bag-tot"><span>סה״כ משוער</span><span id="bagTot">₪0</span></div>
+      <p class="res-note vat-note" id="vatNote" hidden></p>
       <p class="res-note" style="margin-top:8px">לא משלמים עכשיו. <span id="shipNote"></span></p>
       <form class="res-form" id="resForm" novalidate style="margin-top:16px">
         <label>שם מלא<input type="text" id="rName" autocomplete="name" required></label>
@@ -963,7 +965,9 @@ const esc = v => String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
    Pieces, gallery and settings come from the Google Sheet (apps-script/Code.gs), edited on admin.html.
    Until config.js has the sheet's address, the site shows the sample pieces above. */
 const API_URL = (window.DUNI_API || '').trim();
-const DEFAULT_SETTINGS = {openTs: Date.parse('2027-02-01T00:00:00+02:00'), hold:'18:00', wait:24, ship:25, hero:''};
+const DEFAULT_SETTINGS = {openTs: Date.parse('2027-02-01T00:00:00+02:00'), hold:'18:00', wait:24, ship:35, hero:''};
+// Israel's import VAT exemption: parcels up to $75 (item + shipping). ~₪3.17 per $ in Nov 2026, so about ₪238; kept a little lower to be safe.
+const VAT_FREE_USD = 75, VAT_FREE_ILS = 235;
 function loadData(){
   if(!API_URL) return Promise.resolve({settings:DEFAULT_SETTINGS, items:SAMPLE, gallery:[], stock:null});
   let cached=null; try{ cached=JSON.parse(localStorage.getItem('duni-data')||'null'); }catch(e){}
@@ -1169,6 +1173,10 @@ function renderBag(){
   $('#bagList').innerHTML = bag.length ? bag.map((it,i)=>{const p=P.find(x=>x.id===it.id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he}${isWait(it)?'<span class="wl-tag">רשימת המתנה</span>':''}</div><div style="font-size:.8rem;color:var(--ink-2)">מידה: ${it.size}</div><div class="lq"><span class="qty"><button type="button" data-dq="${i}" aria-label="פחות">−</button><output>${it.qty}</output><button type="button" data-iq="${i}" aria-label="עוד">+</button></span><button class="rm" type="button" data-i="${i}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price*it.qty)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שוריינו תכשיטים. בוחרים תכשיט בקולקציה ולוחצים "לשריין מראש".</li>';
   const sum = bag.reduce((s,it)=>s+P.find(x=>x.id===it.id).price*it.qty,0);
   $('#bagTot').textContent = sum ? `${ils(sum)} + ${ils(SHIP)} משלוח` : ils(0);
+  // over the import VAT exemption: the customer pays 18% VAT to Israel Post when the parcel arrives
+  const vat = sum>0 && sum+SHIP > VAT_FREE_ILS;
+  $('#vatNote').hidden = !vat;
+  if(vat) $('#vatNote').textContent = `שימי לב: ההזמנה מעל ${VAT_FREE_USD}$ (כ-${VAT_FREE_ILS} ₪ כולל משלוח), ולכן בקבלת החבילה יתווסף מע״מ יבוא של 18%, שמשולם לדואר ישראל.`;
   $('#resBox').hidden = !bag.length;
   $('#bagList').querySelectorAll('.rm').forEach(b=>b.onclick=()=>{bag.splice(+b.dataset.i,1);saveBag();renderBag();});
   $('#bagList').querySelectorAll('[data-dq]').forEach(b=>b.onclick=()=>{const it=bag[+b.dataset.dq]; if(it.qty>1){it.qty--;saveBag();renderBag();}});
@@ -1247,7 +1255,7 @@ function productHTML(p){
           <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li>${p.made?`<li>${p.made}</li>`:''}<li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li></ul></div></details>
           ${sz.guide?`<details><summary>מדריך מידות</summary><div class="body">מודדים את ההיקף של האצבע במילימטרים, והמספר הוא המידה. אם יש ספק, עדיף לבחור מידה אחת למעלה. <button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">למדריך המדידה המלא</button><div class="tblwrap"><table class="size-table"><thead><tr><th scope="col">מידה</th><th scope="col">היקף (מ״מ)</th><th scope="col">קוטר (מ״מ)</th><th scope="col">US בערך</th></tr></thead><tbody>${RING_SIZES.map(([s,d,u])=>`<tr><td>${s}</td><td>${s}</td><td>${d}</td><td>${u}</td></tr>`).join('')}</tbody></table></div></div></details>`:''}
           <details><summary>שמירה וניקוי</summary><div class="body">כסף משנה גוון עם הזמן במגע עם אוויר ולחות. מורידים לפני מקלחת, ים, בריכה ושימוש בחומרי ניקוי, שומרים במקום יבש ומבריקים מדי פעם עם מטלית לניקוי כסף. <a href="#care">למדריך המלא</a></div></details>
-          <details><summary>משלוח והחזרות</summary><div class="body">כל תכשיט מוכן בהזמנה. זמן הכנה ומשלוח: <span class="ph">ימי עסקים</span>. אפשר לבטל עסקה לפי חוק הגנת הצרכן. <a href="#shipping">משלוחים והחזרות</a> · <a href="#cancel">מדיניות ביטולים</a></div></details>
+          <details><summary>משלוח והחזרות</summary><div class="body">כל תכשיט מוכן בהזמנה. זמן הכנה: <span class="ph">ימי עסקים</span>, ואחריו משלוח של כ-2–3 שבועות עם מספר מעקב. בהזמנה מעל ${VAT_FREE_USD}$ יתווסף מע״מ יבוא בקבלת החבילה. אפשר לבטל עסקה לפי חוק הגנת הצרכן. <a href="#shipping">משלוחים והחזרות</a> · <a href="#cancel">מדיניות ביטולים</a></div></details>
         </div>
       </div>
     </div>
@@ -1532,7 +1540,7 @@ function fillHome(){
   else { $('#heroRing').hidden=true; $('#customImg').hidden=true; }
   $('#openWhen').textContent = `${OPEN_LONG} · ${OPEN_TIME} שעון ישראל`;
   applyTexts();
-  $('#shipNote').textContent = `משלוח לכל הארץ: ${SHIP} ₪. ביום הפתיחה אשלח לך קישור אישי לרכישה.`;
+  $('#shipNote').textContent = `משלוח לכל הארץ: ${SHIP} ₪, כ-2–3 שבועות עם מספר מעקב. ביום הפתיחה אשלח לך קישור אישי לרכישה.`;
   document.querySelectorAll('.g-tile').forEach(t=>{
     const g=t.dataset.g, list=P.filter(p=>p.g===g||p.g==='both');
     t.querySelectorAll('.gi').forEach((im,k)=>{ const p=list[k]; if(p){ im.src=thumb(p.id); im.hidden=false; } else im.hidden=true; });
