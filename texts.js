@@ -51,13 +51,6 @@ window.DUNI_TEXTS = [
   "def": "אני רוצה להחזיר לתכשיט את מה שהלך לאיבוד בדרך: את היד, את הזמן ואת האופי. ליצור משהו שונה, תכשיט שמרגיש כמו יצירה ולא כמו מוצר."
  },
  {
-  "key": "vision_en",
-  "group": "החזון",
-  "label": "השורה באנגלית",
-  "kind": "line",
-  "def": "Duni exists to bring something different into design and art: jewelry that feels like a piece of work, not a product. Small things carry big energy."
- },
- {
   "key": "p1_title",
   "group": "החזון",
   "label": "עיקרון 1: כותרת",
