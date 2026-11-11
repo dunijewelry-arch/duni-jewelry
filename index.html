@@ -414,6 +414,8 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 #v-product .pdp{padding-top:24px;padding-bottom:60px}
 @media (min-width:861px){#v-product .pdp-stage{top:80px}}
 #v-doc .doc{padding-top:30px}
+.pol-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;padding:22px var(--gut-r) calc(88px + env(safe-area-inset-bottom,0px)) var(--gut);border-top:1px solid var(--line);font-size:.75rem;color:var(--ink-2)}
+.pol-row a{color:inherit;text-decoration:none}.pol-row a:hover,.pol-row a:focus-visible{text-decoration:underline;color:var(--ink)}
 html.ov-open{overflow:hidden}
 .doc .back{white-space:nowrap}
 
@@ -921,8 +923,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111046"></script>
-<script src="texts.js?v=202611111046"></script>
+<script src="config.js?v=202611111049"></script>
+<script src="texts.js?v=202611111049"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1275,7 +1277,7 @@ function productHTML(p){
   </article>`;
 }
 function mountProduct(p){
-  const v=$('#v-product'); v.innerHTML=OVBAR+productHTML(p);
+  const v=$('#v-product'); v.innerHTML=OVBAR+productHTML(p)+POLICY_ROW;
   let size = v.querySelectorAll('#sizes button').length===1 ? v.querySelector('#sizes button').textContent : null;
   v.querySelectorAll('#sizes button').forEach(b=>b.onclick=()=>{size=b.textContent;v.querySelectorAll('#sizes button').forEach(x=>x.setAttribute('aria-pressed',x===b));});
   let qty=1; const qOut=v.querySelector('#qOut');
@@ -1311,6 +1313,8 @@ function mountGender(g, cat){
   syncWish();
 }
 
+// the info & policy links, small, at the bottom of every page that opens over the site
+const POLICY_ROW = `<nav class="pol-row" aria-label="מידע ומדיניות"><a href="#reserve">תנאי השריון</a><a href="#shipping">משלוחים והחזרות</a><a href="#cancel">מדיניות ביטולים</a><a href="#privacy">מדיניות פרטיות</a><a href="#terms">תקנון האתר</a><a href="#accessibility">הצהרת נגישות</a></nav>`;
 const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
 
 /* ---------- gallery (added from the admin page) ---------- */
@@ -1386,7 +1390,7 @@ function galleryPieceHTML(g){
   </article>`;
 }
 function mountGalleryPiece(g){
-  const v=$('#v-product'); v.innerHTML=OVBAR+galleryPieceHTML(g);
+  const v=$('#v-product'); v.innerHTML=OVBAR+galleryPieceHTML(g)+POLICY_ROW;
   const st=v.querySelector('#pdpStage'), im=st.querySelector(':scope > img:not([alt=""])') || st.querySelector('img:last-of-type');
   st.addEventListener('pointermove',e=>{ if(A.still||!im) return; const r=st.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; im.style.transform=`rotateY(${x*14}deg) rotateX(${-y*10}deg)`; });
   st.addEventListener('pointerleave',()=>{ if(im) im.style.transform=''; });
@@ -1436,7 +1440,7 @@ const DOCS = {};
 Object.entries(window.DUNI_DOCS||{}).forEach(([k,d])=>DOCS[k]={t:d.t, en:d.en, noDate:d.noDate, get b(){ return mdBlock(T['doc_'+k]); }});
 function mountDoc(k){
   const d=DOCS[k];
-  $('#v-doc').innerHTML=OVBAR+`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div>${d.noDate?'':`<div class="upd">${UPDATED}</div>`}<div class="doc-body${k==='about'?' about':''}">${d.b}</div><button class="btn ghost back" type="button" data-ov-close>חזרה לאתר <img src="assets/star.png" alt=""></button></div></article>`;
+  $('#v-doc').innerHTML=OVBAR+`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div>${d.noDate?'':`<div class="upd">${UPDATED}</div>`}<div class="doc-body${k==='about'?' about':''}">${d.b}</div><button class="btn ghost back" type="button" data-ov-close>חזרה לאתר <img src="assets/star.png" alt=""></button></div></article>`+POLICY_ROW;
   document.title = `${d.t} · Duni`;
 }
 
