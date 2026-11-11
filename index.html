@@ -199,7 +199,10 @@ dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
 .meas .step{font-size:.8rem;color:var(--ink-2);letter-spacing:.04em}
 .meas .step b{color:var(--ink);font-weight:500}
 .meas-stage{display:grid;place-items:center;min-height:var(--stage,340px);background:var(--paper-2);border-radius:14px;overflow:hidden;touch-action:manipulation}
-.card-box{border:2px solid var(--ink);border-radius:calc(var(--ppm,3.78px)*3.2);background:rgba(255,255,255,.35);position:relative}
+.coin-c{border:2px solid var(--ink);border-radius:50%;background:rgba(255,255,255,.35)}
+.coin-pick{display:flex;flex-wrap:wrap;gap:8px}
+.coin-pick button{border:1px solid var(--ink);border-radius:99px;padding:8px 16px;font-size:.9rem}
+.coin-pick button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .ring-c{border:1.5px solid var(--ink);border-radius:50%;position:relative}
 .ring-c::before,.ring-c::after{content:"";position:absolute;background:var(--ink);opacity:.35}
 .ring-c::before{left:50%;top:-14px;bottom:-14px;width:1px}
@@ -947,8 +950,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111054"></script>
-<script src="texts.js?v=202611111054"></script>
+<script src="config.js?v=202611111059"></script>
+<script src="texts.js?v=202611111059"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1166,24 +1169,27 @@ function openSizeGuide(){
 $('#sizeDlgX').onclick=()=>sizeDlg.close();
 
 /* ---------- measuring a ring on the screen ----------
-   1. calibrate: a bank card (53.98 × 85.60 mm, held upright) is matched on the screen, so we know how many px a mm is here
+   1. calibrate: a coin (Israeli coins, known diameters) is matched on the screen, so we know how many px a mm is here
    2. measure: a ring is laid on the screen and the circle is matched to its inside edge; the circumference in mm is the EU size */
 const measDlg = $('#measDlg');
-const CARD_W = 53.98, CARD_H = 85.60;
-let PPM = 96/25.4, measD = 16.6, measPick = null;
+const COINS = [['10 ₪',23],['5 ₪',24],['2 ₪',21.6],['1 ₪',18]]; // diameters in mm
+let PPM = 96/25.4, measD = 16.6, measPick = null, coin = 0;
 try{ const v=parseFloat(localStorage.getItem('duni-ppm')); if(v>1.5 && v<9) PPM=v; }catch(e){}
 const SIZE_LIST = RING_SIZES.map(r=>r[0]);
 function measCalib(){
   const b=$('#measBody');
   b.innerHTML=`<p class="step"><b>שלב 1 מתוך 2</b> · כיול המסך</p>
-    <p>מניחים על המסך כרטיס אשראי (או כל כרטיס בגודל כזה) לאורך, ומזיזים את הפס עד שהמסגרת בגודל הכרטיס בדיוק. ככה האתר יודע כמה גדול מילימטר על המסך שלך.</p>
-    <div class="meas-stage" id="calStage"><div class="card-box" id="cardBox" aria-hidden="true"></div></div>
-    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="8" step="0.005" aria-label="גודל הכרטיס על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
-    <p style="font-size:.85rem;color:var(--ink-2)">אין כרטיס? אפשר עם סרגל: הקו הזה צריך להיות 5 ס״מ בדיוק.<span class="ruler" id="ruler" aria-hidden="true"></span></p>
-    <div class="acts"><button type="button" class="btn" id="calOk">הכרטיס מתאים, להמשך</button></div>`;
+    <p>בוחרים מטבע, מניחים אותו על העיגול, ומזיזים את הפס עד שהעיגול בגודל המטבע בדיוק. ככה האתר יודע כמה גדול מילימטר על המסך שלך.</p>
+    <div class="coin-pick" role="group" aria-label="איזה מטבע">${COINS.map((c,i)=>`<button type="button" data-coin="${i}" aria-pressed="${i===coin}">${c[0]}</button>`).join('')}</div>
+    <div class="meas-stage" id="calStage"><div class="coin-c" id="coinC" aria-hidden="true"></div></div>
+    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="8" step="0.005" aria-label="גודל המטבע על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
+    <p style="font-size:.85rem;color:var(--ink-2)">אין מטבע? אפשר עם סרגל: הקו הזה צריך להיות 5 ס״מ בדיוק.<span class="ruler" id="ruler" aria-hidden="true"></span></p>
+    <div class="acts"><button type="button" class="btn" id="calOk">המטבע מתאים, להמשך</button></div>`;
   const r=$('#calR'); r.value=PPM;
-  const draw=()=>{ PPM=+r.value; $('#cardBox').style.cssText=`width:${CARD_W*PPM}px;height:${CARD_H*PPM}px;--ppm:${PPM}px`;
-    $('#ruler').style.width=(50*PPM)+'px'; $('#calStage').style.setProperty('--stage',(CARD_H*PPM+40)+'px'); };
+  const draw=()=>{ PPM=+r.value; const px=COINS[coin][1]*PPM;
+    $('#coinC').style.cssText=`width:${px}px;height:${px}px`;
+    $('#ruler').style.width=(50*PPM)+'px'; $('#calStage').style.setProperty('--stage',(26*PPM+60)+'px'); };
+  b.querySelectorAll('[data-coin]').forEach(x=>x.onclick=()=>{ coin=+x.dataset.coin; b.querySelectorAll('[data-coin]').forEach(y=>y.setAttribute('aria-pressed',y===x)); draw(); });
   r.oninput=draw;
   $('#calMinus').onclick=()=>{ r.value=+r.value-0.02; draw(); };
   $('#calPlus').onclick=()=>{ r.value=+r.value+0.02; draw(); };
