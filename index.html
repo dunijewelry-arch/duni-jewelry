@@ -964,8 +964,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111124"></script>
-<script src="texts.js?v=202611111124"></script>
+<script src="config.js?v=202611111128"></script>
+<script src="texts.js?v=202611111128"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1188,23 +1188,26 @@ $('#sizeDlgX').onclick=()=>sizeDlg.close();
 const measDlg = $('#measDlg');
 const COINS = [['10 ₪',23],['5 ₪',24],['2 ₪',21.6],['1 ₪',18]]; // diameters in mm
 // first guess before calibrating: phones show about 6 css px per mm, computers about 3.8
-let PPM = matchMedia('(pointer:coarse)').matches ? 6 : 96/25.4, measD = 16.6, measPick = null, coin = 0;
+let PPM = matchMedia('(pointer:coarse)').matches ? 6 : 96/25.4, measD = 16.6, measPick = null, coin = 0, coinOther = 0;
+const coinMM = () => coin==='other' ? (coinOther>5 && coinOther<50 ? coinOther : 23) : COINS[coin][1];
 try{ const v=parseFloat(localStorage.getItem('duni-ppm2')); if(v>1.5 && v<12) PPM=v; }catch(e){}
 const SIZE_LIST = RING_SIZES.map(r=>r[0]);
 function measCalib(){
   const b=$('#measBody');
   b.innerHTML=`<p class="step"><b>שלב 1 מתוך 2</b> · כיול המסך</p>
     <p>בוחרים מטבע ומניחים אותו על העיגול. מזיזים את הפס עד שהקו של העיגול מתחבא בדיוק מתחת לשפה של המטבע: לא בולט מסביב, ולא נראה בתוך המטבע. ככה האתר יודע כמה גדול מילימטר על המסך שלך.</p>
-    <div class="coin-pick" role="group" aria-label="איזה מטבע">${COINS.map((c,i)=>`<button type="button" data-coin="${i}" aria-pressed="${i===coin}">${c[0]}</button>`).join('')}</div>
+    <div class="coin-pick" role="group" aria-label="איזה מטבע">${COINS.map((c,i)=>`<button type="button" data-coin="${i}" aria-pressed="${i===coin}">${c[0]}</button>`).join('')}<button type="button" data-coin="other" aria-pressed="${coin==='other'}">מטבע אחר</button></div>
+    <label id="coinOtherL" ${coin==='other'?'':'hidden'} style="font-size:.9rem">קוטר המטבע במ״מ <input type="text" inputmode="decimal" id="coinOther" value="${coinOther||''}" dir="ltr" style="width:6em;margin-inline-start:8px;border:1px solid var(--line);padding:8px 10px;border-radius:8px;background:#fff8;font:inherit"></label>
     <div class="meas-stage" id="calStage"><div class="coin-c" id="coinC" aria-hidden="true"></div></div>
     <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="11" step="0.005" aria-label="גודל המטבע על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
     <p style="font-size:.85rem;color:var(--ink-2)">אין מטבע? אפשר עם סרגל: הקו הזה צריך להיות 5 ס״מ בדיוק.<span class="ruler" id="ruler" aria-hidden="true"></span></p>
     <div class="acts"><button type="button" class="btn" id="calOk">המטבע מתאים, להמשך</button></div>`;
   const r=$('#calR'); r.value=PPM;
-  const draw=()=>{ PPM=+r.value; const px=COINS[coin][1]*PPM;
+  const draw=()=>{ PPM=+r.value; const px=coinMM()*PPM;
     $('#coinC').style.cssText=`width:${px}px;height:${px}px`;
     $('#ruler').style.width=(50*PPM)+'px'; $('#calStage').style.setProperty('--stage',(26*PPM+60)+'px'); };
-  b.querySelectorAll('[data-coin]').forEach(x=>x.onclick=()=>{ coin=+x.dataset.coin; b.querySelectorAll('[data-coin]').forEach(y=>y.setAttribute('aria-pressed',y===x)); draw(); });
+  b.querySelectorAll('[data-coin]').forEach(x=>x.onclick=()=>{ coin = x.dataset.coin==='other' ? 'other' : +x.dataset.coin; b.querySelectorAll('[data-coin]').forEach(y=>y.setAttribute('aria-pressed',y===x)); $('#coinOtherL').hidden = coin!=='other'; if(coin==='other') $('#coinOther').focus(); draw(); });
+  $('#coinOther').oninput=e=>{ coinOther=parseFloat(String(e.target.value).replace(',','.'))||0; draw(); };
   r.oninput=draw;
   $('#calMinus').onclick=()=>{ r.value=+r.value-0.02; draw(); };
   $('#calPlus').onclick=()=>{ r.value=+r.value+0.02; draw(); };
@@ -1229,7 +1232,7 @@ function measRing(){
     const rec=SIZE_LIST.find(x=>x>=eu);
     const inRange = circ>=SIZE_LIST[0]-1.5 && circ<=SIZE_LIST[SIZE_LIST.length-1]+0.5;
     $('#mOut').innerHTML = inRange
-      ? `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${rec}</b>${eu!==rec?`<span>המדידה יצאה בין המידות (${eu}), ולכן המידה הקרובה למעלה</span>`:''}`
+      ? `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${rec}</b><span>בערך מידה ${RING_SIZES.find(x=>x[0]===rec)[2]} בשיטה האמריקאית</span>${eu!==rec?`<span>המדידה יצאה בין המידות (${eu}), ולכן המידה הקרובה למעלה</span>`:''}`
       : `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${eu}</b><span>${circ>70||circ<38?'זה נראה לא סביר. כנראה הכיול לא מדויק: כדאי לכייל שוב עם המטבע, ולוודא שהעיגול בגודל המטבע בדיוק.':'המידה הזו לא נמצאת כרגע באתר. אפשר לכתוב לי בוואטסאפ ונמצא פתרון.'}</span>`;
     const pick=$('#mPickWrap');
     if(measPick && inRange && measPick.querySelector(`button[data-s="${rec}"]`)){
