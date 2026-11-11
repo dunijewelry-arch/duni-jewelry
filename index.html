@@ -964,8 +964,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111117"></script>
-<script src="texts.js?v=202611111117"></script>
+<script src="config.js?v=202611111119"></script>
+<script src="texts.js?v=202611111119"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1187,8 +1187,9 @@ $('#sizeDlgX').onclick=()=>sizeDlg.close();
    2. measure: a ring is laid on the screen and the circle is matched to its inside edge; the circumference in mm is the EU size */
 const measDlg = $('#measDlg');
 const COINS = [['10 ₪',23],['5 ₪',24],['2 ₪',21.6],['1 ₪',18]]; // diameters in mm
-let PPM = 96/25.4, measD = 16.6, measPick = null, coin = 0;
-try{ const v=parseFloat(localStorage.getItem('duni-ppm')); if(v>1.5 && v<9) PPM=v; }catch(e){}
+// first guess before calibrating: phones show about 6 css px per mm, computers about 3.8
+let PPM = matchMedia('(pointer:coarse)').matches ? 6 : 96/25.4, measD = 16.6, measPick = null, coin = 0;
+try{ const v=parseFloat(localStorage.getItem('duni-ppm2')); if(v>1.5 && v<12) PPM=v; }catch(e){}
 const SIZE_LIST = RING_SIZES.map(r=>r[0]);
 function measCalib(){
   const b=$('#measBody');
@@ -1196,7 +1197,7 @@ function measCalib(){
     <p>בוחרים מטבע, מניחים אותו על העיגול, ומזיזים את הפס עד שהעיגול בגודל המטבע בדיוק. ככה האתר יודע כמה גדול מילימטר על המסך שלך.</p>
     <div class="coin-pick" role="group" aria-label="איזה מטבע">${COINS.map((c,i)=>`<button type="button" data-coin="${i}" aria-pressed="${i===coin}">${c[0]}</button>`).join('')}</div>
     <div class="meas-stage" id="calStage"><div class="coin-c" id="coinC" aria-hidden="true"></div></div>
-    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="8" step="0.005" aria-label="גודל המטבע על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
+    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="11" step="0.005" aria-label="גודל המטבע על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
     <p style="font-size:.85rem;color:var(--ink-2)">אין מטבע? אפשר עם סרגל: הקו הזה צריך להיות 5 ס״מ בדיוק.<span class="ruler" id="ruler" aria-hidden="true"></span></p>
     <div class="acts"><button type="button" class="btn" id="calOk">המטבע מתאים, להמשך</button></div>`;
   const r=$('#calR'); r.value=PPM;
@@ -1207,7 +1208,7 @@ function measCalib(){
   r.oninput=draw;
   $('#calMinus').onclick=()=>{ r.value=+r.value-0.02; draw(); };
   $('#calPlus').onclick=()=>{ r.value=+r.value+0.02; draw(); };
-  $('#calOk').onclick=()=>{ try{ localStorage.setItem('duni-ppm',String(PPM)); }catch(e){} measRing(); };
+  $('#calOk').onclick=()=>{ try{ localStorage.setItem('duni-ppm2',String(PPM)); }catch(e){} measRing(); };
   draw();
 }
 function measRing(){
@@ -1229,7 +1230,7 @@ function measRing(){
     const inRange = circ>=SIZE_LIST[0]-1.5 && circ<=SIZE_LIST[SIZE_LIST.length-1]+0.5;
     $('#mOut').innerHTML = inRange
       ? `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${rec}</b>${eu!==rec?`<span>המדידה יצאה בין המידות (${eu}), ולכן המידה הקרובה למעלה</span>`:''}`
-      : `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${eu}</b><span>המידה הזו לא נמצאת כרגע באתר. אפשר לכתוב לי בוואטסאפ ונמצא פתרון.</span>`;
+      : `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${eu}</b><span>${circ>70||circ<38?'זה נראה לא סביר. כנראה הכיול לא מדויק: כדאי לכייל שוב עם המטבע, ולוודא שהעיגול בגודל המטבע בדיוק.':'המידה הזו לא נמצאת כרגע באתר. אפשר לכתוב לי בוואטסאפ ונמצא פתרון.'}</span>`;
     const pick=$('#mPickWrap');
     if(measPick && inRange && measPick.querySelector(`button[data-s="${rec}"]`)){
       pick.innerHTML=`<button type="button" class="btn" id="mPick">לבחור מידה ${rec}</button>`;
@@ -1249,8 +1250,7 @@ function openMeasure(fromPage){
   if(measPick) measPick.querySelectorAll('button').forEach(x=>x.dataset.s=x.textContent.trim());
   if(sizeDlg.open) sizeDlg.close();
   measDlg.showModal();
-  let saved=false; try{ saved=!!localStorage.getItem('duni-ppm'); }catch(e){}
-  saved ? measRing() : measCalib();
+  measCalib();
   $('#measX').focus();
 }
 $('#measX').onclick=()=>measDlg.close();
