@@ -965,8 +965,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111111"></script>
-<script src="texts.js?v=202611111111"></script>
+<script src="config.js?v=202611111113"></script>
+<script src="texts.js?v=202611111113"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1265,11 +1265,11 @@ function openBuilder(){
   const chips = (name, list, multi) => `<div class="chips" role="group" data-name="${name}" data-multi="${multi?1:''}">${list.map(v=>`<button type="button" aria-pressed="false">${esc(v)}</button>`).join('')}</div>`;
   $('#cbForm').innerHTML = `
     <p>כמה בחירות קטנות ורעיון במילים שלך. בסוף זה נפתח אצלך בוואטסאפ כהודעה אליי, ואפשר לצרף שם תמונת השראה או סקיצה. אחר כך נדבר ונעצב יחד.</p>
-    <fieldset><legend><b>01</b>איזה תכשיט?</legend>${chips('type',cbList('cb_types'))}</fieldset>
-    <fieldset><legend><b>02</b>צורה וסגנון<small>אפשר לבחור כמה</small></legend>${chips('shape',cbList('cb_shapes'),true)}</fieldset>
+    <fieldset><legend><b>01</b>איזה תכשיט?</legend><input type="text" id="cbType" placeholder="למשל: טבעת, שרשרת עם תליון, עגיל אחד..."></fieldset>
+    <fieldset><legend><b>02</b>צורה וסגנון</legend><input type="text" id="cbShape" placeholder="למשל: אורגני, עדין, עם קווים חדים, בהשראת גלים..."></fieldset>
     <fieldset><legend><b>03</b>טקסטורה<small>אפשר לבחור כמה</small></legend>${chips('texture',cbList('cb_textures'),true)}</fieldset>
     <fieldset><legend><b>04</b>אבן</legend>${chips('stone',cbList('cb_stones'))}</fieldset>
-    <fieldset id="cbSizeF" hidden><legend><b>05</b>מידה<small>לא חובה</small></legend><div class="chips" role="group" data-name="size">${RING_SIZES.map(r=>`<button type="button" aria-pressed="false">${r[0]}</button>`).join('')}<button type="button" aria-pressed="false">עוד לא יודעת</button></div><button type="button" class="link-btn" data-measure style="justify-self:start">למדוד טבעת על המסך</button></fieldset>
+    <fieldset id="cbSizeF"><legend><b>05</b>מידה<small>רק לטבעת, לא חובה</small></legend><div class="chips" role="group" data-name="size">${RING_SIZES.map(r=>`<button type="button" aria-pressed="false">${r[0]}</button>`).join('')}<button type="button" aria-pressed="false">עוד לא יודעת</button></div><button type="button" class="link-btn" data-measure style="justify-self:start">למדוד טבעת על המסך</button></fieldset>
     <fieldset><legend><b>06</b>הרעיון במילים שלך</legend><textarea id="cbIdea" placeholder="מה את רואה בראש? צורה, מילה, זיכרון, אבן, תמונה שראית, למי זה מיועד..."></textarea></fieldset>
     <fieldset><legend><b>07</b>שם</legend><input type="text" id="cbName" autocomplete="name"></fieldset>
     <p class="err" id="cbErr" hidden></p>
@@ -1279,20 +1279,19 @@ function openBuilder(){
     const on = b.getAttribute('aria-pressed')!=='true';
     if(!g.dataset.multi) g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
     b.setAttribute('aria-pressed', on);
-    if(g.dataset.name==='type') $('#cbSizeF').hidden = !(on && /טבעת/.test(b.textContent));
   }));
   cbDlg.showModal(); $('#cbX').focus();
 }
 const cbPicked = n => Array.from($('#cbForm').querySelectorAll(`.chips[data-name="${n}"] [aria-pressed="true"]`)).map(b=>b.textContent);
 $('#cbForm').addEventListener('submit',e=>{
   e.preventDefault();
-  const type=cbPicked('type'), idea=$('#cbIdea').value.trim();
-  if(!type.length && !idea){ $('#cbErr').textContent='כדאי לבחור לפחות סוג תכשיט או לכתוב רעיון.'; $('#cbErr').hidden=false; return; }
+  const type=$('#cbType').value.trim(), idea=$('#cbIdea').value.trim();
+  if(!type && !idea){ $('#cbErr').textContent='כדאי לבחור לפחות סוג תכשיט או לכתוב רעיון.'; $('#cbErr').hidden=false; return; }
   const line=(t,v)=>v&&v.length?`${t}: ${[].concat(v).join(', ')}`:'';
   const name=$('#cbName').value.trim();
   const msg=[ `היי עדן${name?`, כאן ${name}`:''}. אני רוצה להתחיל עיצוב אישי ✦\n`,
-    line('תכשיט',type), line('צורה וסגנון',cbPicked('shape')), line('טקסטורה',cbPicked('texture')), line('אבן',cbPicked('stone')),
-    $('#cbSizeF').hidden?'':line('מידה',cbPicked('size')), idea?`\nהרעיון:\n${idea}`:'' ].filter(x=>x!=='').join('\n');
+    line('תכשיט',type), line('צורה וסגנון',$('#cbShape').value.trim()), line('טקסטורה',cbPicked('texture')), line('אבן',cbPicked('stone')),
+    line('מידה',cbPicked('size')), idea?`\nהרעיון:\n${idea}`:'' ].filter(x=>x!=='').join('\n');
   open('https://wa.me/972584120104?text='+encodeURIComponent(msg),'_blank');
   cbDlg.close();
 });
