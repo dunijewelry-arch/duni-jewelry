@@ -639,7 +639,7 @@ html.ov-open{overflow:hidden}
     <a href="#home" aria-label="Duni, חזרה לעמוד הבית"><img class="mark" src="assets/logo.png" alt="Duni"></a>
   </div>
   <nav aria-label="ניווט ראשי"><a href="#launch">שריון מראש</a><a href="#her">נשים</a><a href="#him">גברים</a><a href="#vision">החזון</a><a href="#custom">בהזמנה אישית</a><a href="#sizing">מידות</a></nav>
-  <div class="hdr-end"><span class="clock" lang="en" aria-hidden="true">local time<br>tlv <span id="clock">--:--</span></span><button class="bag wishb" id="wishBtn" type="button" aria-haspopup="dialog" aria-label="רשימת המשאלות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>(<span id="wishN">0</span>)</button><button class="bag" id="bagBtn" type="button" aria-haspopup="dialog">שריונים (<span id="bagN">0</span>)</button></div>
+  <div class="hdr-end"><span class="clock" lang="en" aria-hidden="true">local time<br>tlv <span id="clock">--:--</span></span><button class="bag wishb" id="wishBtn" type="button" aria-haspopup="dialog" aria-label="פריטים שאהבתי"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>(<span id="wishN">0</span>)</button><button class="bag" id="bagBtn" type="button" aria-haspopup="dialog">שריונים (<span id="bagN">0</span>)</button></div>
 </header>
 
 <nav class="stabs" id="stabs" aria-label="מעבר מהיר בין חלקי האתר">
@@ -870,7 +870,7 @@ html.ov-open{overflow:hidden}
 <div class="drawer" id="wishDrawer" hidden role="dialog" aria-modal="true" aria-labelledby="wishH">
   <div class="scrim" id="wishScrim"></div>
   <div class="panel">
-    <h2 id="wishH">רשימת המשאלות <button class="x" type="button" id="wishX" aria-label="סגירת רשימת המשאלות">×</button></h2>
+    <h2 id="wishH">פריטים שאהבתי <button class="x" type="button" id="wishX" aria-label="סגירת פריטים שאהבתי">×</button></h2>
     <ul class="bag-list wish-list" id="wishList"></ul>
   </div>
 </div>
@@ -921,8 +921,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611101859"></script>
-<script src="texts.js?v=202611101859"></script>
+<script src="config.js?v=202611111031"></script>
+<script src="texts.js?v=202611111031"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1054,7 +1054,7 @@ const chunk = words.map(w=>`<span>${w}<img src="assets/star.png" alt=""></span>`
 $('#marq').innerHTML = ['תכשיטים בעבודת יד','small things carry big energy','手作りのジュエリー'].map(w=>`<span>${w}</span>`).join('<img src="assets/star.png" alt="">');
 
 const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.7 1.2 5.1 3 1.4-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>';
-const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} ברשימת המשאלות">${HEART}</button>`;
+const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} בפריטים שאהבתי">${HEART}</button>`;
 const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="${plink(p)}">
   <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" ${cls==='card'?'loading="lazy"':''}></div>
   <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
@@ -1112,8 +1112,8 @@ function syncWish(){
 }
 function toggleWish(id, btn){
   const p=P.find(x=>x.id===id); const i=wish.indexOf(id);
-  if(i>=0){ wish.splice(i,1); say(`${CAT[p.cat][0]} ${p.he} הוסרה מרשימת המשאלות`); }
-  else { wish.push(id); say(`${CAT[p.cat][0]} ${p.he} נשמרה ברשימת המשאלות`); if(btn&&!A.still){ btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); } }
+  if(i>=0){ wish.splice(i,1); say(`${CAT[p.cat][0]} ${p.he} הוסרה מפריטים שאהבתי`); }
+  else { wish.push(id); say(`${CAT[p.cat][0]} ${p.he} נשמרה בפריטים שאהבתי`); if(btn&&!A.still){ btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); } }
   saveWish(); syncWish();
 }
 document.addEventListener('click', e=>{
@@ -1253,7 +1253,7 @@ function productHTML(p){
         <div><div class="sizes-l"><span id="sizeL">מידה</span>${sz.guide?'<button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">איך מודדים אצבע?</button>':''}</div>
           <div class="sizes" id="sizes" role="group" aria-labelledby="sizeL" style="margin-top:8px">${sizes.map(s=>`<button type="button" aria-pressed="${sizes.length===1}">${s}</button>`).join('')}</div></div>
         <div><span class="sizes-l" id="qtyL">כמות</span><div style="margin-top:8px"><span class="qty" role="group" aria-labelledby="qtyL"><button type="button" id="qMinus" aria-label="פחות">−</button><output id="qOut">1</output><button type="button" id="qPlus" aria-label="עוד">+</button></span></div></div>
-        <div class="pdp-actions"><button class="btn" type="button" id="addBag"><span id="addBagT">לשריין מראש</span> <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה ברשימת המשאלות">${HEART}<span class="wl">לשמור</span></button></div>
+        <div class="pdp-actions"><button class="btn" type="button" id="addBag"><span id="addBagT">לשריין מראש</span> <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה בפריטים שאהבתי">${HEART}<span class="wl">לשמור</span></button></div>
         <div class="assure"><div><b>עבודת יד</b>כל תכשיט מיוצר בנפרד</div><div><b>כסף 925</b>כסף סטרלינג</div></div>
         <div>
           <details open><summary>פרטים וחומרים</summary><div class="body"><ul><li>כסף סטרלינג 925</li>${p.made?`<li>${p.made}</li>`:''}<li>כל תכשיט שונה מעט מהתמונה, וזה חלק מהעבודה בעבודת יד</li></ul></div></details>
