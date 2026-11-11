@@ -193,6 +193,25 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* size guide dialog */
 dialog.size-dlg{border:0;padding:0;background:var(--paper);color:var(--ink);width:min(1040px,calc(100vw - 24px));max-height:calc(100svh - 24px);overflow:auto}
 dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
+/* measuring a ring on the screen */
+.meas{padding:18px 20px 28px;display:grid;gap:14px;max-width:560px;margin:0 auto}
+.meas p{margin:0;line-height:1.6}
+.meas .step{font-size:.8rem;color:var(--ink-2);letter-spacing:.04em}
+.meas .step b{color:var(--ink);font-weight:500}
+.meas-stage{display:grid;place-items:center;min-height:var(--stage,340px);background:var(--paper-2);border-radius:14px;overflow:hidden;touch-action:manipulation}
+.card-box{border:2px solid var(--ink);border-radius:calc(var(--ppm,3.78px)*3.2);background:rgba(255,255,255,.35);position:relative}
+.ring-c{border:1.5px solid var(--ink);border-radius:50%;position:relative}
+.ring-c::before,.ring-c::after{content:"";position:absolute;background:var(--ink);opacity:.35}
+.ring-c::before{left:50%;top:-14px;bottom:-14px;width:1px}
+.ring-c::after{top:50%;left:-14px;right:-14px;height:1px}
+.meas-ctl{display:flex;align-items:center;gap:12px}
+.meas-ctl input{flex:1;accent-color:var(--ink);height:32px}
+.meas-ctl button{width:44px;height:44px;border:1px solid var(--ink);border-radius:50%;font-size:1.3rem;line-height:1;flex:none}
+.meas .ruler{display:block;height:10px;margin-top:8px;border:1.5px solid var(--ink);border-top:0}
+.meas-out{border:1px solid var(--ink);padding:14px 16px;text-align:center;font-family:var(--f-ui)}
+.meas-out b{display:block;font-size:2rem;font-weight:400;line-height:1.2}
+.meas-out span{display:block;font-size:.85rem;color:var(--ink-2)}
+.meas .acts{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
 .size-dlg .head{position:sticky;top:0;z-index:2;background:var(--paper);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
 .size-dlg .head h2{margin:0;font-weight:400;font-size:1.3rem}
 .size-dlg .head .x{font-size:1.6rem;line-height:1;padding:4px 10px}
@@ -796,6 +815,7 @@ html.ov-open{overflow:hidden}
         <text x="160" y="16" text-anchor="middle" font-size="13" fill="currentColor" font-family="Heebo, sans-serif">היקף = המידה</text>
         <text x="160" y="238" text-anchor="middle" font-size="11" fill="currentColor" font-family="Jost, sans-serif" letter-spacing="2">EU 52 = 52 MM</text>
       </svg>
+      <p style="margin:18px 0 0"><button type="button" class="btn ghost" data-measure>יש לך טבעת? למדוד אותה על המסך</button></p>
       <ol class="steps">
         <li><b>01</b><div><strong>פס נייר</strong><span>כורכים פס נייר דק סביב בסיס האצבע ומסמנים בעט איפה הוא נפגש.</span></div></li>
         <li><b>02</b><div><strong>מודדים בסרגל</strong><span>פורשים את הפס ומודדים את האורך במילימטרים. זו המידה.</span></div></li>
@@ -877,6 +897,10 @@ html.ov-open{overflow:hidden}
   </div>
 </div>
 
+<dialog class="size-dlg" id="measDlg" aria-labelledby="measH">
+  <div class="head"><h2 id="measH">מודדים טבעת על המסך</h2><button class="x" type="button" id="measX" aria-label="סגירת המדידה">×</button></div>
+  <div class="meas" id="measBody"></div>
+</dialog>
 <dialog class="size-dlg" id="sizeDlg" aria-labelledby="sizeDlgH">
   <div class="head"><h2 id="sizeDlgH">איך מודדים אצבע</h2><button class="x" type="button" id="sizeDlgX" aria-label="סגירת מדריך המידות">×</button></div>
   <div id="sizeDlgBody"></div>
@@ -923,8 +947,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111049"></script>
-<script src="texts.js?v=202611111049"></script>
+<script src="config.js?v=202611111054"></script>
+<script src="texts.js?v=202611111054"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1140,6 +1164,78 @@ function openSizeGuide(){
   sizeDlg.showModal(); $('#sizeDlgX').focus();
 }
 $('#sizeDlgX').onclick=()=>sizeDlg.close();
+
+/* ---------- measuring a ring on the screen ----------
+   1. calibrate: a bank card (53.98 × 85.60 mm, held upright) is matched on the screen, so we know how many px a mm is here
+   2. measure: a ring is laid on the screen and the circle is matched to its inside edge; the circumference in mm is the EU size */
+const measDlg = $('#measDlg');
+const CARD_W = 53.98, CARD_H = 85.60;
+let PPM = 96/25.4, measD = 16.6, measPick = null;
+try{ const v=parseFloat(localStorage.getItem('duni-ppm')); if(v>1.5 && v<9) PPM=v; }catch(e){}
+const SIZE_LIST = RING_SIZES.map(r=>r[0]);
+function measCalib(){
+  const b=$('#measBody');
+  b.innerHTML=`<p class="step"><b>שלב 1 מתוך 2</b> · כיול המסך</p>
+    <p>מניחים על המסך כרטיס אשראי (או כל כרטיס בגודל כזה) לאורך, ומזיזים את הפס עד שהמסגרת בגודל הכרטיס בדיוק. ככה האתר יודע כמה גדול מילימטר על המסך שלך.</p>
+    <div class="meas-stage" id="calStage"><div class="card-box" id="cardBox" aria-hidden="true"></div></div>
+    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="8" step="0.005" aria-label="גודל הכרטיס על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
+    <p style="font-size:.85rem;color:var(--ink-2)">אין כרטיס? אפשר עם סרגל: הקו הזה צריך להיות 5 ס״מ בדיוק.<span class="ruler" id="ruler" aria-hidden="true"></span></p>
+    <div class="acts"><button type="button" class="btn" id="calOk">הכרטיס מתאים, להמשך</button></div>`;
+  const r=$('#calR'); r.value=PPM;
+  const draw=()=>{ PPM=+r.value; $('#cardBox').style.cssText=`width:${CARD_W*PPM}px;height:${CARD_H*PPM}px;--ppm:${PPM}px`;
+    $('#ruler').style.width=(50*PPM)+'px'; $('#calStage').style.setProperty('--stage',(CARD_H*PPM+40)+'px'); };
+  r.oninput=draw;
+  $('#calMinus').onclick=()=>{ r.value=+r.value-0.02; draw(); };
+  $('#calPlus').onclick=()=>{ r.value=+r.value+0.02; draw(); };
+  $('#calOk').onclick=()=>{ try{ localStorage.setItem('duni-ppm',String(PPM)); }catch(e){} measRing(); };
+  draw();
+}
+function measRing(){
+  const b=$('#measBody');
+  b.innerHTML=`<p class="step"><b>שלב 2 מתוך 2</b> · מדידת הטבעת</p>
+    <p>מניחים על המסך טבעת שמתאימה לך, באמצע העיגול, ומגדילים או מקטינים עד שהקו נוגע בדיוק בדופן הפנימית של הטבעת.</p>
+    <div class="meas-stage" id="ringStage"><div class="ring-c" id="ringC" aria-hidden="true"></div></div>
+    <div class="meas-ctl"><button type="button" id="mMinus" aria-label="להקטין">−</button><input type="range" id="mR" min="13" max="21" step="0.05" aria-label="קוטר פנימי של הטבעת"><button type="button" id="mPlus" aria-label="להגדיל">+</button></div>
+    <div class="meas-out" id="mOut" aria-live="polite"></div>
+    <div class="acts"><span id="mPickWrap"></span><button type="button" class="link-btn" id="mRecal">לכייל שוב</button></div>
+    <p style="font-size:.8rem;color:var(--ink-2)">המדידה על המסך היא הערכה. אם יש ספק, עדיף לבחור מידה אחת למעלה.</p>`;
+  const r=$('#mR'); r.value=measD;
+  const draw=()=>{
+    measD=+r.value; const px=measD*PPM;
+    $('#ringC').style.cssText=`width:${px}px;height:${px}px`;
+    $('#ringStage').style.setProperty('--stage',(21*PPM+60)+'px');
+    const circ=Math.PI*measD, eu=Math.round(circ);
+    const rec=SIZE_LIST.find(x=>x>=eu);
+    const inRange = circ>=SIZE_LIST[0]-1.5 && circ<=SIZE_LIST[SIZE_LIST.length-1]+0.5;
+    $('#mOut').innerHTML = inRange
+      ? `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${rec}</b>${eu!==rec?`<span>המדידה יצאה בין המידות (${eu}), ולכן המידה הקרובה למעלה</span>`:''}`
+      : `<span>קוטר ${measD.toFixed(1)} מ״מ · היקף ${circ.toFixed(1)} מ״מ</span><b>מידה ${eu}</b><span>המידה הזו לא נמצאת כרגע באתר. אפשר לכתוב לי בוואטסאפ ונמצא פתרון.</span>`;
+    const pick=$('#mPickWrap');
+    if(measPick && inRange && measPick.querySelector(`button[data-s="${rec}"]`)){
+      pick.innerHTML=`<button type="button" class="btn" id="mPick">לבחור מידה ${rec}</button>`;
+      $('#mPick').onclick=()=>{ measPick.querySelector(`button[data-s="${rec}"]`).click(); measDlg.close(); say(`נבחרה מידה ${rec}`); };
+    } else pick.innerHTML='';
+  };
+  r.oninput=draw;
+  $('#mMinus').onclick=()=>{ r.value=+r.value-0.1; draw(); };
+  $('#mPlus').onclick=()=>{ r.value=+r.value+0.1; draw(); };
+  $('#mRecal').onclick=measCalib;
+  draw();
+}
+function openMeasure(fromPage){
+  // opened from a ring's page: the result can pick the size there
+  const sizes = fromPage ? $('#v-product #sizes') : null;
+  measPick = sizes && sizes.querySelector('button') ? sizes : null;
+  if(measPick) measPick.querySelectorAll('button').forEach(x=>x.dataset.s=x.textContent.trim());
+  if(sizeDlg.open) sizeDlg.close();
+  measDlg.showModal();
+  let saved=false; try{ saved=!!localStorage.getItem('duni-ppm'); }catch(e){}
+  saved ? measRing() : measCalib();
+  $('#measX').focus();
+}
+$('#measX').onclick=()=>measDlg.close();
+measDlg.addEventListener('click',e=>{ if(e.target===measDlg) measDlg.close(); });
+document.addEventListener('click',e=>{ const m=e.target.closest('[data-measure]'); if(m){ e.preventDefault(); openMeasure(!!m.closest('#v-product') || (sizeDlg.open && !$('#v-product').hidden)); } });
 sizeDlg.addEventListener('click',e=>{ if(e.target===sizeDlg) sizeDlg.close(); });
 
 /* ---------- side tabs ---------- */
@@ -1252,7 +1348,7 @@ function productHTML(p){
         <div class="pr">${ils(p.price)}</div><div id="pdpStock">${stockHTML(p)}</div>
         <p class="lead">${p.lead}</p>
         <p class="res-note">מכירה נפתחת ${OPEN_DAY} · ${OPEN_TIME} · עוד <span class="cd-mini" dir="rtl"></span>. לא משלמים עכשיו.</p>
-        <div><div class="sizes-l"><span id="sizeL">מידה</span>${sz.guide?'<button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">איך מודדים אצבע?</button>':''}</div>
+        <div><div class="sizes-l"><span id="sizeL">מידה</span>${sz.guide?'<span><button type="button" class="link-btn" data-sizeguide aria-haspopup="dialog">איך מודדים אצבע?</button> · <button type="button" class="link-btn" data-measure aria-haspopup="dialog">למדוד טבעת על המסך</button></span>':''}</div>
           <div class="sizes" id="sizes" role="group" aria-labelledby="sizeL" style="margin-top:8px">${sizes.map(s=>`<button type="button" aria-pressed="${sizes.length===1}">${s}</button>`).join('')}</div></div>
         <div><span class="sizes-l" id="qtyL">כמות</span><div style="margin-top:8px"><span class="qty" role="group" aria-labelledby="qtyL"><button type="button" id="qMinus" aria-label="פחות">−</button><output id="qOut">1</output><button type="button" id="qPlus" aria-label="עוד">+</button></span></div></div>
         <div class="pdp-actions"><button class="btn" type="button" id="addBag"><span id="addBagT">לשריין מראש</span> <img src="assets/star.png" alt=""></button><button class="wish-btn" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירה בפריטים שאהבתי">${HEART}<span class="wl">לשמור</span></button></div>
@@ -1541,7 +1637,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('[data-ov-close]')){ e.preventDefault(); closeSheet(); }
   else if(e.target.closest('[data-open-bag]')){ openBag(); }
 });
-addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open) closeSheet(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open && !$('#measDlg').open) closeSheet(); });
 $('#skipLink').onclick = e=>{ e.preventDefault(); $('#main').focus(); };
 function fillHome(){
   if(HERO){ $('#heroImg').src=src(HERO.id); $('#heroImg').alt=`${CAT[HERO.cat][0]} ${HERO.he}`; $('#customImg').src=src(HERO.id);
