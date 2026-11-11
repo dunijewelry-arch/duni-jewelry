@@ -200,9 +200,20 @@ dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
 .meas .step b{color:var(--ink);font-weight:500}
 .meas-stage{display:grid;place-items:center;min-height:var(--stage,340px);background:var(--paper-2);border-radius:14px;overflow:hidden;touch-action:manipulation}
 .coin-c{border:2px solid var(--ink);border-radius:50%;background:rgba(255,255,255,.35)}
-.coin-pick{display:flex;flex-wrap:wrap;gap:8px}
-.coin-pick button{border:1px solid var(--ink);border-radius:99px;padding:8px 16px;font-size:.9rem}
-.coin-pick button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.coin-pick,.chips{display:flex;flex-wrap:wrap;gap:8px}
+.coin-pick button,.chips button{border:1px solid var(--ink);border-radius:99px;padding:8px 16px;font-size:.9rem}
+.coin-pick button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+/* design builder */
+.cb{padding:18px 20px 28px;display:grid;gap:22px;max-width:620px;margin:0 auto}
+.cb p{margin:0;line-height:1.6}
+.cb fieldset{border:0;margin:0;padding:0;display:grid;gap:10px}
+.cb legend{padding:0;margin-bottom:10px;font-size:.95rem}
+.cb legend b{font-family:var(--f-ui);font-weight:400;color:var(--ink-2);margin-inline-end:8px}
+.cb legend small{color:var(--ink-2);font-size:.8rem;margin-inline-start:6px}
+.cb textarea,.cb input[type=text]{width:100%;border:1px solid var(--line);background:#fff8;padding:12px 14px;font:inherit;border-radius:8px;color:var(--ink)}
+.cb textarea{min-height:120px;resize:vertical}
+.cb .note{font-size:.85rem;color:var(--ink-2)}
+.cb .err{color:#8a2a1f;font-size:.85rem}
 .ring-c{border:1.5px solid var(--ink);border-radius:50%;position:relative}
 .ring-c::before,.ring-c::after{content:"";position:absolute;background:var(--ink);opacity:.35}
 .ring-c::before{left:50%;top:-14px;bottom:-14px;width:1px}
@@ -900,6 +911,10 @@ html.ov-open{overflow:hidden}
   </div>
 </div>
 
+<dialog class="size-dlg" id="cbDlg" aria-labelledby="cbH">
+  <div class="head"><h2 id="cbH">מתחילים עיצוב אישי</h2><button class="x" type="button" id="cbX" aria-label="סגירה">×</button></div>
+  <form class="cb" id="cbForm" novalidate></form>
+</dialog>
 <dialog class="size-dlg" id="measDlg" aria-labelledby="measH">
   <div class="head"><h2 id="measH">מודדים טבעת על המסך</h2><button class="x" type="button" id="measX" aria-label="סגירת המדידה">×</button></div>
   <div class="meas" id="measBody"></div>
@@ -950,8 +965,8 @@ html.ov-open{overflow:hidden}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="config.js?v=202611111059"></script>
-<script src="texts.js?v=202611111059"></script>
+<script src="config.js?v=202611111111"></script>
+<script src="texts.js?v=202611111111"></script>
 <script>
 const $ = s => document.querySelector(s);
 const SAMPLE = [
@@ -1240,6 +1255,49 @@ function openMeasure(fromPage){
   $('#measX').focus();
 }
 $('#measX').onclick=()=>measDlg.close();
+
+/* ---------- design builder: the first step of a custom piece ----------
+   the customer picks from Eden's own options (editable on the admin page), describes the idea,
+   and the whole brief opens in WhatsApp, where she can also attach an inspiration photo */
+const cbDlg = $('#cbDlg');
+const cbList = k => String(T[k]||'').split(/[,،]/).map(x=>x.trim()).filter(Boolean);
+function openBuilder(){
+  const chips = (name, list, multi) => `<div class="chips" role="group" data-name="${name}" data-multi="${multi?1:''}">${list.map(v=>`<button type="button" aria-pressed="false">${esc(v)}</button>`).join('')}</div>`;
+  $('#cbForm').innerHTML = `
+    <p>כמה בחירות קטנות ורעיון במילים שלך. בסוף זה נפתח אצלך בוואטסאפ כהודעה אליי, ואפשר לצרף שם תמונת השראה או סקיצה. אחר כך נדבר ונעצב יחד.</p>
+    <fieldset><legend><b>01</b>איזה תכשיט?</legend>${chips('type',cbList('cb_types'))}</fieldset>
+    <fieldset><legend><b>02</b>צורה וסגנון<small>אפשר לבחור כמה</small></legend>${chips('shape',cbList('cb_shapes'),true)}</fieldset>
+    <fieldset><legend><b>03</b>טקסטורה<small>אפשר לבחור כמה</small></legend>${chips('texture',cbList('cb_textures'),true)}</fieldset>
+    <fieldset><legend><b>04</b>אבן</legend>${chips('stone',cbList('cb_stones'))}</fieldset>
+    <fieldset id="cbSizeF" hidden><legend><b>05</b>מידה<small>לא חובה</small></legend><div class="chips" role="group" data-name="size">${RING_SIZES.map(r=>`<button type="button" aria-pressed="false">${r[0]}</button>`).join('')}<button type="button" aria-pressed="false">עוד לא יודעת</button></div><button type="button" class="link-btn" data-measure style="justify-self:start">למדוד טבעת על המסך</button></fieldset>
+    <fieldset><legend><b>06</b>הרעיון במילים שלך</legend><textarea id="cbIdea" placeholder="מה את רואה בראש? צורה, מילה, זיכרון, אבן, תמונה שראית, למי זה מיועד..."></textarea></fieldset>
+    <fieldset><legend><b>07</b>שם</legend><input type="text" id="cbName" autocomplete="name"></fieldset>
+    <p class="err" id="cbErr" hidden></p>
+    <div><button class="btn" type="submit">לשלוח לעדן בוואטסאפ <img src="assets/star.png" alt=""></button></div>
+    <p class="note">את תמונת ההשראה מצרפים בוואטסאפ, אחרי שההודעה נפתחת. הבחירות כאן הן נקודת התחלה, והעיצוב עצמו נעשה יחד בפגישת הייעוץ.</p>`;
+  $('#cbForm').querySelectorAll('.chips').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const on = b.getAttribute('aria-pressed')!=='true';
+    if(!g.dataset.multi) g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed', on);
+    if(g.dataset.name==='type') $('#cbSizeF').hidden = !(on && /טבעת/.test(b.textContent));
+  }));
+  cbDlg.showModal(); $('#cbX').focus();
+}
+const cbPicked = n => Array.from($('#cbForm').querySelectorAll(`.chips[data-name="${n}"] [aria-pressed="true"]`)).map(b=>b.textContent);
+$('#cbForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const type=cbPicked('type'), idea=$('#cbIdea').value.trim();
+  if(!type.length && !idea){ $('#cbErr').textContent='כדאי לבחור לפחות סוג תכשיט או לכתוב רעיון.'; $('#cbErr').hidden=false; return; }
+  const line=(t,v)=>v&&v.length?`${t}: ${[].concat(v).join(', ')}`:'';
+  const name=$('#cbName').value.trim();
+  const msg=[ `היי עדן${name?`, כאן ${name}`:''}. אני רוצה להתחיל עיצוב אישי ✦\n`,
+    line('תכשיט',type), line('צורה וסגנון',cbPicked('shape')), line('טקסטורה',cbPicked('texture')), line('אבן',cbPicked('stone')),
+    $('#cbSizeF').hidden?'':line('מידה',cbPicked('size')), idea?`\nהרעיון:\n${idea}`:'' ].filter(x=>x!=='').join('\n');
+  open('https://wa.me/972584120104?text='+encodeURIComponent(msg),'_blank');
+  cbDlg.close();
+});
+$('#cbX').onclick=()=>cbDlg.close();
+cbDlg.addEventListener('click',e=>{ if(e.target===cbDlg) cbDlg.close(); });
 measDlg.addEventListener('click',e=>{ if(e.target===measDlg) measDlg.close(); });
 document.addEventListener('click',e=>{ const m=e.target.closest('[data-measure]'); if(m){ e.preventDefault(); openMeasure(!!m.closest('#v-product') || (sizeDlg.open && !$('#v-product').hidden)); } });
 sizeDlg.addEventListener('click',e=>{ if(e.target===sizeDlg) sizeDlg.close(); });
@@ -1324,7 +1382,7 @@ $('#resForm').addEventListener('submit', e=>{
     }).catch(()=>{ err.textContent='אין חיבור כרגע. נסי שוב בעוד רגע.'; })
     .finally(()=>{ btn.disabled=false; btn.firstChild.textContent='שליחת השריון '; });
 });
-$('#customBtn').onclick=e=>{e.preventDefault();open('https://wa.me/972584120104?text='+encodeURIComponent(T.custom_wa||''),'_blank');};
+$('#customBtn').onclick=e=>{e.preventDefault();openBuilder();};
 const toast=$('#toast'); let tt;
 function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2400);}
 
@@ -1643,7 +1701,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('[data-ov-close]')){ e.preventDefault(); closeSheet(); }
   else if(e.target.closest('[data-open-bag]')){ openBag(); }
 });
-addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open && !$('#measDlg').open) closeSheet(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open && !$('#measDlg').open && !$('#cbDlg').open) closeSheet(); });
 $('#skipLink').onclick = e=>{ e.preventDefault(); $('#main').focus(); };
 function fillHome(){
   if(HERO){ $('#heroImg').src=src(HERO.id); $('#heroImg').alt=`${CAT[HERO.cat][0]} ${HERO.he}`; $('#customImg').src=src(HERO.id);
