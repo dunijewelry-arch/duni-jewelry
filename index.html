@@ -754,6 +754,17 @@ html.ov-open{overflow:hidden}
 .rcpt .btn{width:100%;justify-content:center;margin-top:16px}
 :root.still .rcpt,:root.still .tray-it{transition:none}
 @media (prefers-reduced-motion:reduce){.rcpt,.tray-it{transition:none}}
+
+/* coupon */
+.cpn{margin-top:14px;font-size:.85rem}
+.cpn-open{background:none;border:0;padding:6px 0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:inherit;font-size:.85rem}
+.cpn-row{display:flex;gap:8px;margin-top:6px}
+.cpn-row input{flex:1;min-width:0;font:inherit;font-size:.95rem;padding:10px 12px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:0;text-transform:lowercase}
+.cpn-row button{font:inherit;font-size:.85rem;padding:0 16px;min-height:44px;border:1px solid var(--ink);background:none;color:var(--ink);cursor:pointer}
+.cpn-msg{margin:6px 0 0;font-size:.8rem;color:var(--ink-2)}
+.cpn-on{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.cpn-on b{font-weight:500;font-family:var(--f-ui);letter-spacing:.1em;text-transform:uppercase}
+.cpn-on button{background:none;border:0;padding:6px;color:var(--ink-2);text-decoration:underline;cursor:pointer;font:inherit;font-size:.8rem}
 </style>
 </head>
 <body>
@@ -1024,6 +1035,7 @@ html.ov-open{overflow:hidden}
     <div id="resBox">
       <div class="bag-tot"><span>סה״כ משוער</span><span id="bagTot">₪0</span></div>
       <p class="res-note vat-note" id="vatNote" hidden></p>
+      <div class="cpn" id="cpn"></div>
       <p class="res-note" style="margin-top:8px">לא משלמים עכשיו. <span id="shipNote"></span></p>
       <form class="res-form" id="resForm" novalidate style="margin-top:16px">
         <label>שם מלא<input type="text" id="rName" autocomplete="name" required></label>
@@ -1425,13 +1437,30 @@ let bag = []; // [{id,size,qty}]
 try{ bag = JSON.parse(localStorage.getItem('duni-res')||'[]').filter(it=>P.some(p=>p.id===it.id)); }catch(e){}
 function saveBag(){ try{ localStorage.setItem('duni-res', JSON.stringify(bag)); }catch(e){} }
 function isWait(it){ const s=stockOf(P.find(x=>x.id===it.id)); return s ? s.left<=0 : false; }
+const CPN_HASH = 2087863500;
+const cpnHash = c => { let h=5381; for(const ch of String(c).trim().toLowerCase()) h=((h*33)^ch.charCodeAt(0))>>>0; return h; };
+let coupon = ''; try { const c=localStorage.getItem('duni-cpn')||''; if(cpnHash(c)===CPN_HASH) coupon=c; } catch(e){}
+let cpnOpen = false;
+const shipNow = () => coupon ? 0 : SHIP;
+function renderCoupon(){
+  const box=$('#cpn'); if(!box) return;
+  if(coupon){ box.innerHTML=`<div class="cpn-on"><span>קוד קופון <b lang="en">${coupon}</b> · דמי המשלוח (${ils(SHIP)}) יוחזרו לך</span><button type="button" id="cpnRm">הסרה</button></div>`;
+    $('#cpnRm').onclick=()=>{ coupon=''; try{localStorage.removeItem('duni-cpn')}catch(e){} renderBag(); }; return; }
+  if(!cpnOpen){ box.innerHTML='<button type="button" class="cpn-open" id="cpnOpen">יש לי קוד קופון</button>'; $('#cpnOpen').onclick=()=>{ cpnOpen=true; renderCoupon(); $('#cpnIn').focus(); }; return; }
+  box.innerHTML=`<label for="cpnIn" class="sr">קוד קופון</label><div class="cpn-row"><input id="cpnIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="קוד קופון"><button type="button" id="cpnGo">הפעלה</button></div><p class="cpn-msg" id="cpnMsg" role="status"></p>`;
+  const go=()=>{ const v=$('#cpnIn').value.trim().toLowerCase(); if(!v) return;
+    if(cpnHash(v)===CPN_HASH){ coupon=v; try{localStorage.setItem('duni-cpn',v)}catch(e){} renderBag(); }
+    else $('#cpnMsg').textContent='הקוד הזה לא מוכר. כדאי לבדוק שהוא נכתב נכון.'; };
+  $('#cpnGo').onclick=go; $('#cpnIn').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+}
 function renderBag(){
   $('#bagN').textContent = bag.reduce((n,it)=>n+it.qty,0); document.querySelectorAll('.bagN2').forEach(e=>e.textContent=$('#bagN').textContent);
   $('#bagList').innerHTML = bag.length ? bag.map((it,i)=>{const p=P.find(x=>x.id===it.id);return `<li><img src="${src(p.id)}" alt=""><div><div>${CAT[p.cat][0]} ${p.he}${isWait(it)?'<span class="wl-tag">רשימת המתנה</span>':''}</div><div style="font-size:.8rem;color:var(--ink-2)">מידה: ${it.size}</div><div class="lq"><span class="qty"><button type="button" data-dq="${i}" aria-label="פחות">−</button><output>${it.qty}</output><button type="button" data-iq="${i}" aria-label="עוד">+</button></span><button class="rm" type="button" data-i="${i}">הסרה</button></div></div><span style="font-family:var(--f-ui)">${ils(p.price*it.qty)}</span></li>`}).join('') : '<li style="display:block;border:0;color:var(--ink-2)">עוד לא שוריינו תכשיטים. בוחרים תכשיט בקולקציה ולוחצים "לשריין מראש".</li>';
   const sum = bag.reduce((s,it)=>s+P.find(x=>x.id===it.id).price*it.qty,0);
-  $('#bagTot').textContent = sum ? `${ils(sum)} + ${ils(SHIP)} משלוח` : ils(0);
+  $('#bagTot').textContent = sum ? (coupon ? `${ils(sum)} + ${ils(SHIP)} משלוח − ${ils(SHIP)} קופון` : `${ils(sum)} + ${ils(SHIP)} משלוח`) : ils(0);
+  renderCoupon();
   // over the import VAT exemption: the customer pays 18% VAT to Israel Post when the parcel arrives
-  const vat = sum>0 && sum+SHIP > VAT_FREE_ILS;
+  const vat = sum>0 && sum+shipNow() > VAT_FREE_ILS;
   $('#vatNote').hidden = !vat;
   if(vat) $('#vatNote').textContent = `שימי לב: ההזמנה מעל כ-${VAT_FREE_ILS} ₪ כולל משלוח (${VAT_FREE_USD}$; הסכום המדויק נקבע לפי שער הדולר באותו זמן), ולכן בקבלת החבילה יתווסף מע״מ יבוא של 18%, שמשולם לדואר ישראל.`;
   $('#resBox').hidden = !bag.length;
@@ -1464,7 +1493,7 @@ $('#resForm').addEventListener('submit', e=>{
   if(!API_URL){ err.textContent='השריון עוד לא מחובר. נסו שוב בקרוב.'; return; }
   const btn=$('#checkout'); btn.disabled=true; btn.firstChild.textContent='שולחת… ';
   const sent = bag.map(it=>({...it}));
-  (API_URL ? fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,phone,email,consent:true,website:$('#rWeb').value,lines:bag})}).then(r=>r.json())
+  (API_URL ? fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,phone,email,consent:true,website:$('#rWeb').value,lines:bag,coupon})}).then(r=>r.json())
     : Promise.reject(new Error('no api'))).then(d=>{
       if(!d.ok){ err.textContent = d.error==='closed' ? 'השריון המוקדם נסגר' : 'משהו לא עבר. בדקי את הפרטים ונסי שוב.'; return; }
       const got=d.lines.filter(l=>l.reserved), wait=d.lines.filter(l=>l.waitlisted);
@@ -1494,7 +1523,7 @@ function printReceipt(d, sent, name){
     return `<li><span>${l.name}${l.size&&l.size!=='—'?' · '+l.size:''} ×${n}${l.waitlisted?'<br><span class="sub">ברשימת ההמתנה</span>':''}</span><span>${p?ils(p.price*n):''}</span></li>`; }).join('');
   const sum = sent.reduce((t,it)=>{ const p=P.find(x=>x.id===it.id); return t+(p?p.price*it.qty:0); },0);
   $('#rcptPaper').innerHTML = `<img class="logo" src="assets/logo.png" alt="Duni"><div class="k" lang="en">pre-order receipt</div><div class="ttl" id="rcptT">אישור שריון${name?' · '+name.split(' ')[0]:''}</div><hr><ul>${rows}</ul><hr>
-    <ul><li><span>סה״כ משוער</span><span>${ils(sum)}</span></li><li class="sub"><span>משלוח</span><span>${ils(SHIP)}</span></li></ul><hr>
+    <ul><li><span>סה״כ משוער</span><span>${ils(sum+shipNow())}</span></li><li class="sub"><span>משלוח</span><span>${ils(SHIP)}</span></li>${coupon?`<li class="sub"><span>קופון <span lang="en">${coupon.toUpperCase()}</span></span><span>−${ils(SHIP)}</span></li>`:''}</ul><hr>
     <p style="margin:0">ביום הפתיחה, ${OPEN_DAY} ב-${OPEN_TIME}, אשלח לך לוואטסאפ קישור אישי לרכישה. השריון שמור עד <b style="font-weight:500">${HOLD}</b> באותו יום. לא משלמים עכשיו.</p>
     <div class="bar" aria-hidden="true"></div><div class="code" lang="en">${d.code}</div>
     <button class="btn" type="button" id="rcptX">סגירה <img src="assets/star.png" alt=""></button>`;

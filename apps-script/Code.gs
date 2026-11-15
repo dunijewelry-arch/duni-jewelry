@@ -32,6 +32,8 @@ const ITEM_COLS = [
 const PLACES = ['shop', 'custom', 'stall'];
 const VERSION = 2;
 const GAL_COLS = [['id', 'id'], ['photo', 'תמונה'], ['title', 'כותרת'], ['kind', 'סוג'], ['added', 'נוסף בתאריך']];
+// coupon codes, checked here on the server. ship = the customer gets the shipping fee back
+const COUPONS = { isuf: { ship: true, note: 'קופון ISUF: החזר דמי משלוח' } };
 const RES_HEAD = ['תאריך', 'קוד', 'שם', 'טלפון', 'מייל', 'id פריט', 'פריט', 'מידה', 'כמות', 'סטטוס', 'מקום בתור', 'הערות'];
 const SETTINGS_DEFAULT = [
   ['open_at', '2027-02-01 00:00', 'פתיחת המכירה (שעון ישראל)'],
@@ -208,6 +210,8 @@ function reserve_(d) {
   if (Date.now() >= openTs_(s)) return json_({ ok: false, error: 'closed' });
   const name = clean_(d.name, 80), phone = clean_(d.phone, 30), email = clean_(d.email, 120);
   const lines = Array.isArray(d.lines) ? d.lines.slice(0, 40) : [];
+  const cpnKey = clean_(d.coupon, 30).toLowerCase(), cpn = COUPONS[cpnKey] ? cpnKey : '';
+  const cpnNote = cpn ? COUPONS[cpn].note + ' (' + (Number(s.ship) || 0) + ' ₪)' : '';
   if (!name || !/\d{9,}/.test(phone.replace(/\D/g, '')) || !lines.length || !d.consent) return json_({ ok: false, error: 'missing' });
 
   const lock = LockService.getScriptLock();
@@ -222,23 +226,23 @@ function reserve_(d) {
       const x = st[it.id];
       const got = Math.min(q, x.left), wait = q - got, size = clean_(l.size, 20);
       const label = it.he || it.name;
-      if (got) { sh.appendRow([now, code, name, "'" + phone, email, it.id, label, size, got, RESERVED, '', '']); x.left -= got; }
-      if (wait) { x.waiting += wait; sh.appendRow([now, code, name, "'" + phone, email, it.id, label, size, wait, WAITLIST, x.waiting, '']); }
+      if (got) { sh.appendRow([now, code, name, "'" + phone, email, it.id, label, size, got, RESERVED, '', cpnNote]); x.left -= got; }
+      if (wait) { x.waiting += wait; sh.appendRow([now, code, name, "'" + phone, email, it.id, label, size, wait, WAITLIST, x.waiting, cpnNote]); }
       result.push({ id: it.id, name: label, size: size, reserved: got, waitlisted: wait });
     });
     if (!result.length) return json_({ ok: false, error: 'missing' });
     clearCache_();
-    notify_(s, code, name, phone, email, result);
-    return json_({ ok: true, code: code, lines: result });
+    notify_(s, code, name, phone, email, result, cpnNote);
+    return json_({ ok: true, code: code, lines: result, coupon: cpn });
   } finally { lock.releaseLock(); }
 }
 
-function notify_(s, code, name, phone, email, lines) {
+function notify_(s, code, name, phone, email, lines, cpnNote) {
   const list = lines.map(l => `• ${l.name}${l.size ? ' (' + l.size + ')' : ''}` +
     (l.reserved ? ` – שוריין ×${l.reserved}` : '') + (l.waitlisted ? ` – ברשימת המתנה ×${l.waitlisted}` : '')).join('\n');
   try {
     MailApp.sendEmail({ to: OWNER_EMAIL, subject: `שריון חדש ${code} · ${name}`,
-      body: `שם: ${name}\nטלפון: ${phone}\nמייל: ${email || '-'}\nקוד: ${code}\n\n${list}\n\nהכל שמור בגיליון "${SH.res}" ובדף הניהול.` });
+      body: `שם: ${name}\nטלפון: ${phone}\nמייל: ${email || '-'}\nקוד: ${code}\n${cpnNote ? cpnNote + '\n' : ''}\n${list}\n\nהכל שמור בגיליון "${SH.res}" ובדף הניהול.` });
   } catch (e) {}
   if (email && /@/.test(email)) {
     const open = new Date(openTs_(s));
@@ -246,6 +250,7 @@ function notify_(s, code, name, phone, email, lines) {
     try {
       MailApp.sendEmail({ to: email, replyTo: OWNER_EMAIL, name: 'Duni', subject: `השריון שלך ב-Duni · ${code}`,
         body: `היי ${name},\n\nתודה! קיבלתי את השריון שלך:\n\n${list}\n\n` +
+          (cpnNote ? `קוד הקופון נקלט: דמי המשלוח יוחזרו לך.\n\n` : '') +
           `המכירה נפתחת ב-${day} בשעה ${time} (שעון ישראל). אשלח לך בוואטסאפ קישור אישי לרכישה.\n` +
           `התכשיטים ששוריינו שמורים לך עד ${s.hold_until} באותו יום. אחר כך הם עוברים לבאות ברשימת ההמתנה.\n` +
           `מי שברשימת ההמתנה תקבל הודעה אם תכשיט משתחרר, ויהיו לה ${s.wait_hours} שעות לרכוש אותו.\n\n` +
