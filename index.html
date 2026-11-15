@@ -661,6 +661,99 @@ html.ov-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   .marq-track,.custom .ring-stage::after,.scroll-cue::after{animation:none}
 }
+
+/* ===== preview changes: spinning ring, tray, gallery rails, printed receipt ===== */
+.hero{touch-action:pan-y}
+.hero .logo-wrap{z-index:3}
+.hero .hero-ring,#orbits,#burstCopy{display:none!important}
+#spin{position:absolute;inset:0;z-index:auto;pointer-events:none}
+.spin-it{position:absolute;left:0;top:0;display:block;pointer-events:auto;cursor:grab;will-change:transform,opacity;-webkit-tap-highlight-color:transparent}
+.spin-it img{width:100%;height:auto;display:block;pointer-events:none;filter:drop-shadow(0 16px 18px rgba(40,34,26,.22));user-select:none;-webkit-user-drag:none}
+.spin-it:focus-visible{outline-offset:2px}
+.hero.dragging .spin-it{cursor:grabbing}
+.spin-cap{position:absolute;left:50%;transform:translateX(-50%);z-index:5;text-align:center;text-decoration:none;white-space:nowrap;transition:opacity .6s;line-height:1.5}
+.spin-cap .nm{font-family:var(--f-ui);letter-spacing:.3em;text-transform:lowercase;font-size:.72rem;color:var(--ink-2);display:block}
+.spin-cap .jp{font-size:1.05rem;margin-inline-end:.5em}
+.spin-cap .heb{font-size:.9rem;font-weight:400}
+.spin-cap .pr{font-family:var(--f-ui);font-size:.8rem;color:var(--ink-2);margin-inline-start:.6em}
+.spin-hint{position:absolute;left:50%;transform:translateX(-50%);z-index:5;font-size:.72rem;color:var(--ink-2);white-space:nowrap;transition:opacity .6s}
+
+.vt{display:inline-flex;gap:18px;margin:0 0 26px;font-size:.85rem}
+.vt button{background:none;border:0;padding:6px 0;color:var(--ink-2);border-bottom:1px solid transparent;cursor:pointer;font:inherit;font-size:.85rem}
+.vt button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.vt{gap:6px}
+.vt button{width:44px;height:44px;display:grid;place-items:center;padding:0}
+.vt button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.4}
+.tray{position:relative;margin-bottom:40px}
+.tray-stage{position:relative;height:min(46svh,480px);min-height:320px;overflow:hidden;touch-action:pan-y}
+.tray-stage::after{content:"";position:absolute;left:6%;right:6%;bottom:8%;height:15%;background:var(--paper-2);border-radius:6px;box-shadow:inset 0 3px 14px rgba(40,34,26,.13);z-index:0}
+.tray-it{position:absolute;left:50%;top:45%;width:min(56vw,340px);height:80%;display:block;z-index:1;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .7s,filter .7s;-webkit-tap-highlight-color:transparent}
+.tray-it img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 22px 24px rgba(40,34,26,.24));pointer-events:none;user-select:none;-webkit-user-drag:none}
+.tray-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:620px;margin:0 auto}
+.tray-arr{width:52px;height:52px;flex:0 0 auto;border:1px solid var(--ink);border-radius:50%;background:none;display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:background .25s,color .25s}
+.tray-arr:hover{background:var(--ink);color:var(--paper)}
+.tray-arr svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4}
+.tray-meta{text-align:center;text-decoration:none;min-width:0}
+.tray-meta .nm{font-family:var(--f-ui);letter-spacing:.3em;text-transform:lowercase;font-size:.75rem;color:var(--ink-2);display:block}
+.tray-meta .t{font-size:1.15rem;font-weight:400}
+.tray-meta .jp{margin-inline-end:.45em}
+.tray-meta .pr{display:block;font-family:var(--f-ui);font-size:.85rem;color:var(--ink-2)}
+.tray-meta .stock{margin-top:4px}
+.tray-hint{text-align:center;font-size:.75rem;color:var(--ink-2);margin:14px 0 0}
+.tmodes{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 18px;padding:10px 12px;border:1px dashed var(--line);font-size:.78rem;color:var(--ink-2)}
+.tmodes span{flex-basis:100%}
+.tmodes button{font:inherit;font-size:.82rem;background:none;border:1px solid var(--ink);color:var(--ink);border-radius:99px;padding:6px 14px;min-height:36px;cursor:pointer}
+.tmodes button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.vit,.strip{display:none}
+.tray[data-mode="vitrine"] .tray-stage{display:none}
+.tray[data-mode="vitrine"] .vit{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;background:#1d1b19;padding:10px;border-radius:6px;box-shadow:inset 0 2px 18px rgba(0,0,0,.5);max-width:620px;margin:0 auto 22px}
+.vit-c{aspect-ratio:1;background:#282522;border:0;border-radius:4px;box-shadow:inset 0 3px 10px rgba(0,0,0,.55);padding:12%;cursor:pointer;transition:background .4s,transform .4s,box-shadow .4s}
+.vit-c img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45));transition:transform .4s}
+.vit-c:hover img{transform:scale(1.06)}
+.vit-c[aria-pressed="true"]{background:var(--paper);box-shadow:0 10px 24px rgba(0,0,0,.45);transform:translateY(-3px)}
+.vit-c[aria-pressed="true"] img{filter:drop-shadow(0 10px 12px rgba(40,34,26,.25))}
+.tray[data-mode="fan"] .tray-stage::after,.tray[data-mode="stack"] .tray-stage::after,.tray[data-mode="strip"] .tray-stage::after{display:none}
+.tray[data-mode="fan"] .tray-it{top:40%;width:min(44vw,280px);height:62%;transform-origin:50% 120%}
+.tray[data-mode="stack"] .tray-it{top:48%;width:min(66vw,340px);height:82%;background:#f3f1ec;border-radius:6px;padding:7%;box-shadow:0 14px 30px rgba(40,34,26,.16)}
+.tray[data-mode="strip"] .tray-it{top:50%;height:94%}
+.tray[data-mode="strip"] .strip{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:10px 2px 14px;border-top:1px solid var(--line);margin-bottom:10px}
+.strip::-webkit-scrollbar{display:none}
+.strip-c{flex:0 0 70px;height:70px;background:var(--paper-2);border:1px solid transparent;border-radius:4px;padding:8px;cursor:pointer}
+.strip-c img{width:100%;height:100%;object-fit:contain}
+.strip-c[aria-pressed="true"]{border-color:var(--ink)}
+
+.gal-grid.rails{display:block}
+.g-rail{margin-bottom:clamp(34px,5vw,60px)}
+.g-rail-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.g-rail-h h3{margin:0;font-weight:400;font-size:1.15rem;letter-spacing:.04em}
+.g-rail-h h3 sup{font-family:var(--f-ui);font-size:.65rem;color:var(--ink-2);margin-inline-start:4px}
+.g-rail-nav{display:flex;gap:6px}
+.g-rail-nav button{width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:none;cursor:pointer;display:grid;place-items:center;color:var(--ink)}
+.g-rail-nav button:hover{border-color:var(--ink)}
+.g-rail-nav svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.4}
+.g-track{display:flex;gap:clamp(14px,2vw,26px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px;overscroll-behavior-x:contain}
+.g-track::-webkit-scrollbar{display:none}
+.g-track figure{flex:0 0 min(62vw,300px);scroll-snap-align:start;margin:0}
+@media (max-width:760px){.g-rail-nav{display:none}}
+
+.rcpt{position:fixed;top:0;left:50%;width:min(92vw,380px);z-index:120;transform:translate(-50%,-102%);transition:transform 1.4s cubic-bezier(.22,.9,.28,1);filter:drop-shadow(0 22px 34px rgba(23,22,21,.28))}
+.rcpt.on{transform:translate(-50%,0)}
+.rcpt[hidden]{display:none}
+.rcpt .paper{background:#f6f4ef;padding:calc(26px + env(safe-area-inset-top,0px)) 24px 20px;font-size:.9rem;line-height:1.6}
+.rcpt .edge{height:12px;background:radial-gradient(circle at 7px 12px,transparent 6px,#f6f4ef 6.5px) 0 0/14px 12px repeat-x}
+.rcpt .logo{width:76px;margin:0 auto}
+.rcpt .k{text-align:center;font-family:var(--f-ui);letter-spacing:.3em;font-size:.65rem;color:var(--ink-2);margin-top:8px}
+.rcpt .ttl{text-align:center;font-size:1.05rem;font-weight:400}
+.rcpt hr{border:0;border-top:1px dashed rgba(23,22,21,.35);margin:14px 0}
+.rcpt ul{list-style:none;margin:0;padding:0}
+.rcpt li{display:flex;justify-content:space-between;gap:10px}
+.rcpt li span:last-child{font-family:var(--f-ui);white-space:nowrap}
+.rcpt .sub{color:var(--ink-2);font-size:.78rem}
+.rcpt .bar{height:40px;margin-top:16px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 8px,var(--ink) 8px 11px,transparent 11px 12px)}
+.rcpt .code{text-align:center;font-family:var(--f-ui);letter-spacing:.3em;font-size:.72rem;color:var(--ink-2);margin-top:6px}
+.rcpt .btn{width:100%;justify-content:center;margin-top:16px}
+:root.still .rcpt,:root.still .tray-it{transition:none}
+@media (prefers-reduced-motion:reduce){.rcpt,.tray-it{transition:none}}
 </style>
 </head>
 <body>
@@ -960,6 +1053,7 @@ html.ov-open{overflow:hidden}
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="rcpt" id="rcpt" hidden role="dialog" aria-modal="false" aria-labelledby="rcptT"><div class="paper" id="rcptPaper"></div><div class="edge" aria-hidden="true"></div></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1315,7 +1409,7 @@ function updateTabs(){
   if(currentView==='home') tabLinks.forEach(a=>{ const r=document.getElementById(a.dataset.sec).getBoundingClientRect(); if(r.top<=mid && r.bottom>mid) cur=a.dataset.sec; });
   tabLinks.forEach(a=>{ const on=a.dataset.sec===cur; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); });
   // keep the opening clean on phones: the tab shows once the hero has scrolled away
-  const pinLen = ctx ? innerHeight*(innerWidth<760?.55:.8) : 0;   // how long the hero stays pinned while motion is on
+  const pinLen = 0;   // how long the hero stays pinned while motion is on
   const onHero = currentView==='home' && scrollY < pinLen + mid;
   $('#stabs').classList.toggle('hero', onHero);
   if(onHero && !stabsL.hidden && !wideTabs.matches){ stabsL.hidden=true; stabsT.setAttribute('aria-expanded','false'); }
@@ -1369,8 +1463,9 @@ $('#resForm').addEventListener('submit', e=>{
   if(Date.now()>=OPEN_AT){ err.textContent='השריון המוקדם נסגר, המכירה כבר פתוחה'; return; }
   if(!API_URL){ err.textContent='השריון עוד לא מחובר. נסו שוב בקרוב.'; return; }
   const btn=$('#checkout'); btn.disabled=true; btn.firstChild.textContent='שולחת… ';
-  fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,phone,email,consent:true,website:$('#rWeb').value,lines:bag})})
-    .then(r=>r.json()).then(d=>{
+  const sent = bag.map(it=>({...it}));
+  (API_URL ? fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name,phone,email,consent:true,website:$('#rWeb').value,lines:bag})}).then(r=>r.json())
+    : Promise.reject(new Error('no api'))).then(d=>{
       if(!d.ok){ err.textContent = d.error==='closed' ? 'השריון המוקדם נסגר' : 'משהו לא עבר. בדקי את הפרטים ונסי שוב.'; return; }
       const got=d.lines.filter(l=>l.reserved), wait=d.lines.filter(l=>l.waitlisted);
       const li=(l,n)=>`<li>${l.name}${l.size?' · '+l.size:''} ×${n}</li>`;
@@ -1380,11 +1475,33 @@ $('#resForm').addEventListener('submit', e=>{
         <div>הקוד שלך<div class="code">${d.code}</div></div>
         <p class="res-note">ב-${OPEN_DAY} ב-${OPEN_TIME} אשלח לך לוואטסאפ קישור אישי לרכישה. השריון שמור עד ${HOLD} באותו יום.${email?' אישור נשלח גם למייל.':''}</p>`;
       bag=[]; saveBag(); renderBag(); $('#bagList').hidden=true; $('#resDone').hidden=false; $('#resForm').reset(); loadStock();
+      printReceipt(d, sent, name);
     }).catch(()=>{ err.textContent='אין חיבור כרגע. נסי שוב בעוד רגע.'; })
     .finally(()=>{ btn.disabled=false; btn.firstChild.textContent='שליחת השריון '; });
 });
 $('#customBtn').onclick=e=>{e.preventDefault();openBuilder();};
 const toast=$('#toast'); let tt;
+// preview only: answer a reservation the way the sheet does
+function demoReserve(lines){
+  return { ok:true, code:'DN-'+Math.random().toString(36).slice(2,6).toUpperCase(),
+    lines: lines.map(it=>{ const p=P.find(x=>x.id===it.id), s=stockOf(p), left=s?s.left:it.qty, got=Math.min(it.qty,Math.max(0,left));
+      return { id:it.id, name:`${CAT[p.cat][0]} ${p.he}`, size:it.size, reserved:got, waitlisted:it.qty-got }; }) };
+}
+// the receipt prints down from the top of the screen
+function printReceipt(d, sent, name){
+  const r=$('#rcpt'); if(!r) return;
+  const rows = d.lines.map(l=>{ const p=P.find(x=>x.id===l.id); const n=(l.reserved||0)+(l.waitlisted||0);
+    return `<li><span>${l.name}${l.size&&l.size!=='—'?' · '+l.size:''} ×${n}${l.waitlisted?'<br><span class="sub">ברשימת ההמתנה</span>':''}</span><span>${p?ils(p.price*n):''}</span></li>`; }).join('');
+  const sum = sent.reduce((t,it)=>{ const p=P.find(x=>x.id===it.id); return t+(p?p.price*it.qty:0); },0);
+  $('#rcptPaper').innerHTML = `<img class="logo" src="assets/logo.png" alt="Duni"><div class="k" lang="en">pre-order receipt</div><div class="ttl" id="rcptT">אישור שריון${name?' · '+name.split(' ')[0]:''}</div><hr><ul>${rows}</ul><hr>
+    <ul><li><span>סה״כ משוער</span><span>${ils(sum)}</span></li><li class="sub"><span>משלוח</span><span>${ils(SHIP)}</span></li></ul><hr>
+    <p style="margin:0">ביום הפתיחה, ${OPEN_DAY} ב-${OPEN_TIME}, אשלח לך לוואטסאפ קישור אישי לרכישה. השריון שמור עד <b style="font-weight:500">${HOLD}</b> באותו יום. לא משלמים עכשיו.</p>
+    <div class="bar" aria-hidden="true"></div><div class="code" lang="en">${d.code}</div>
+    <button class="btn" type="button" id="rcptX">סגירה <img src="assets/star.png" alt=""></button>`;
+  r.hidden=false; r.classList.remove('on'); void r.offsetWidth;
+  requestAnimationFrame(()=>r.classList.add('on'));
+  $('#rcptX').onclick=()=>{ r.classList.remove('on'); setTimeout(()=>{ r.hidden=true; },A.still?0:900); };
+}
 function say(t){toast.textContent=t;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),2400);}
 
 /* ---------- product page ---------- */
@@ -1463,13 +1580,61 @@ function refreshPdpStock(){
 
 /* ---------- her / him pages ---------- */
 const GCATS = [['','הכל'],['rings','טבעות'],['necks','שרשראות'],['wrists','צמידים'],['ears','עגילים']];
+const TMODES = [['vitrine','ויטרינה'],['fan','מניפה'],['strip','פס תצוגה'],['stack','ערימה']];
+const THINT = {vitrine:'בוחרים תכשיט מהמגש · לחיצה נוספת עליו פותחת אותו',fan:'החצים או החלקה מסובבים את המניפה · לחיצה על התכשיט שבמרכז פותחת אותו',strip:'בוחרים מהפס למטה · לחיצה על התכשיט הגדול פותחת אותו',stack:'החלקה או החצים מעבירים את התכשיט העליון לסוף הערימה · לחיצה עליו פותחת אותו'};
+let gView='tray', trayIdx=0, trayKey='', trayMode='strip';
+function mountTray(list){
+  const key=list.map(p=>p.id).join(','); if(key!==trayKey){ trayKey=key; trayIdx=0; }
+  const v=$('#v-gender'), tray=$('#tray'), its=[...v.querySelectorAll('.tray-it')], cells=[...v.querySelectorAll('.vit-c')], thumbs=[...v.querySelectorAll('.strip-c')], meta=$('#trayMeta');
+  v.querySelectorAll('[data-vt]').forEach(b=>b.onclick=()=>{ gView=b.dataset.vt; v.querySelectorAll('[data-vt]').forEach(x=>x.setAttribute('aria-pressed',x===b)); tray.hidden=gView!=='tray'; $('#gGrid').hidden=gView!=='grid'; if(gView==='tray') lay(); if(window.ScrollTrigger) ScrollTrigger.refresh(); });
+  v.querySelectorAll('[data-tm]').forEach(b=>b.onclick=()=>{ trayMode=b.dataset.tm; tray.dataset.mode=trayMode; v.querySelectorAll('[data-tm]').forEach(x=>x.setAttribute('aria-pressed',x===b)); lay(); });
+  const lay=()=>{
+    const m=trayMode, W=($('#trayStage').clientWidth||360), w=its[0].offsetWidth||300, n=list.length;
+    its.forEach((a,i)=>{ let d=i-trayIdx; const ad=Math.abs(d); let tf='', op=1, z=10-ad, fl='';
+      if(m==='fan'){ const th=-d*.34, R=Math.max(W*.95,320);
+        tf=`translate(-50%,-50%) translate(${(Math.sin(th)*R*.62).toFixed(1)}px,${((1-Math.cos(th))*R*.55).toFixed(1)}px) rotate(${(th*57.3*.9).toFixed(1)}deg) scale(${d?.56:1})`;
+        op= ad>3?0:d?.8:1; fl= d?'saturate(.85)':''; }
+      else if(m==='stack'){ const k=(i-trayIdx+n)%n; z=100-k;
+        tf=`translate(-50%,-50%) translate(${-k*9}px,${k*12}px) rotate(${k?(k%2?3:-3)*Math.min(k,2):0}deg) scale(${1-k*.05})`;
+        op=k>3?0:1; fl=k?'brightness(.97)':''; d=k; }
+      else if(m==='strip'){ tf=`translate(-50%,-50%) scale(${d?.9:1})`; op=d?0:1; }
+      a.style.transform=tf; a.style.opacity=op; a.style.zIndex=z; a.style.filter=fl;
+      a.style.pointerEvents = (m==='strip'&&d) || op===0 ? 'none' : ''; a.tabIndex = d?-1:0; a.setAttribute('aria-hidden', d?'true':'false'); });
+    cells.forEach((c,i)=>c.setAttribute('aria-pressed', i===trayIdx));
+    thumbs.forEach((c,i)=>c.setAttribute('aria-pressed', i===trayIdx));
+    const sel=thumbs[trayIdx]; if(m==='strip'&&sel){ const st=$('#strip'); st.scrollTo({left: sel.offsetLeft - st.clientWidth/2 + sel.offsetWidth/2, behavior: A.still?'auto':'smooth'}); }
+    const p=list[trayIdx];
+    meta.href=plink(p);
+    meta.innerHTML=`<span class="nm" lang="en">${p.name}</span><span class="t"><span class="jp" lang="ja">${p.jp}</span>${CAT[p.cat][0]} ${p.he}</span><span class="pr">${ils(p.price)} · ${trayIdx+1}/${list.length}</span><div data-stock="${p.id}">${stockHTML(p)}</div>`;
+    $('#trayHint').textContent=THINT[m];
+  };
+  const go=n=>{ trayIdx=(n+list.length)%list.length; lay(); };
+  $('#trayNext').onclick=()=>go(trayIdx+1); $('#trayPrev').onclick=()=>go(trayIdx-1);
+  cells.forEach((c,i)=>c.onclick=()=>{ if(i===trayIdx) location.hash=plink(list[i]).slice(1); else go(i); });
+  thumbs.forEach((c,i)=>c.onclick=()=>go(i));
+  let sx=null, moved=false;
+  its.forEach((a,i)=>a.addEventListener('click',e=>{ if(i!==trayIdx || moved){ e.preventDefault(); if(!moved) go(i); } }));
+  const st=$('#trayStage');
+  st.addEventListener('pointerdown',e=>{ sx=e.clientX; moved=false; });
+  st.addEventListener('pointermove',e=>{ if(sx==null) return; const dx=e.clientX-sx; if(Math.abs(dx)>40){ moved=true; go(trayIdx+(dx<0?1:-1)); sx=e.clientX; } });
+  addEventListener('pointerup',()=>{ sx=null; setTimeout(()=>{ moved=false; },0); });
+  lay(); addEventListener('resize',()=>{ if($('#tray')&&!$('#tray').hidden) lay(); });
+}
 function mountGender(g, cat){
   const all = P.filter(p=>p.g===g||p.g==='both'), list = cat ? all.filter(p=>p.cat===cat) : all;
   $('#v-gender').innerHTML = `<section class="gpage" aria-labelledby="gH">
     <h1 id="gH"><small lang="en">${g==='her'?'for her':'for him'}</small>${g==='her'?'נשים':'גברים'}</h1>
     <nav class="cats" aria-label="סוגי תכשיטים">${GCATS.map(([c,t])=>`<a href="#${g}${c?'-'+c:''}" ${c===cat?'aria-current="page"':''}>${t}<sup>${c?all.filter(p=>p.cat===c).length:all.length}</sup></a>`).join('')}</nav>
-    ${list.length?`<div class="grid">${list.map(p=>cardHTML(p)).join('')}</div>`:'<p class="empty">עוד אין כאן תכשיטים. בקרוב.</p>'}
+    ${list.length?`<div class="vt" role="group" aria-label="תצוגה"><button type="button" data-vt="tray" aria-pressed="${gView==='tray'}" aria-label="תצוגת פס" title="תצוגת פס"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="12" rx="1"/><rect x="3" y="18" width="4" height="3" rx=".5"/><rect x="10" y="18" width="4" height="3" rx=".5"/><rect x="17" y="18" width="4" height="3" rx=".5"/></svg></button><button type="button" data-vt="grid" aria-pressed="${gView==='grid'}" aria-label="תצוגת רשת" title="תצוגת רשת"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg></button></div>
+    <div class="tray" id="tray" data-mode="${trayMode}" ${gView==='tray'?'':'hidden'}>
+      <div class="vit" id="vit">${list.map((p,i)=>`<button type="button" class="vit-c" data-vi="${i}" aria-label="${CAT[p.cat][0]} ${p.he}"><img src="${thumb(p.id)}" alt="" draggable="false"></button>`).join('')}</div>
+      <div class="tray-stage" id="trayStage">${list.map((p,i)=>`<a class="tray-it" href="${plink(p)}" data-ti="${i}" draggable="false"><img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" draggable="false"></a>`).join('')}</div>
+      <div class="strip" id="strip">${list.map((p,i)=>`<button type="button" class="strip-c" data-si="${i}" aria-label="${CAT[p.cat][0]} ${p.he}"><img src="${thumb(p.id)}" alt="" draggable="false"></button>`).join('')}</div>
+      <div class="tray-bar"><button class="tray-arr" type="button" id="trayPrev" aria-label="התכשיט הקודם"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button><a class="tray-meta" id="trayMeta" href="#"></a><button class="tray-arr" type="button" id="trayNext" aria-label="התכשיט הבא"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+      <p class="tray-hint" id="trayHint"></p></div>
+    <div class="grid" id="gGrid" ${gView==='grid'?'':'hidden'}>${list.map(p=>cardHTML(p)).join('')}</div>`:'<p class="empty">עוד אין כאן תכשיטים. בקרוב.</p>'}
   </section>`;
+  if(list.length) mountTray(list);
   document.title = `${g==='her'?'נשים':'גברים'} · Duni`;
   syncWish();
 }
@@ -1492,8 +1657,16 @@ function renderGallery(){
   tabs.innerHTML = GKINDS.map(([k,t])=>`<a href="#gallery" data-gk="${k}" ${k===galKind?'aria-current="page"':''}>${t}<sup>${k==='all'?GALLERY.length:GALLERY.filter(g=>g.kind===k).length}</sup></a>`).join('');
   tabs.querySelectorAll('[data-gk]').forEach(a=>a.onclick=e=>{ e.preventDefault(); galKind=a.dataset.gk; renderGallery(); });
   const list = GALLERY.filter(g=>galKind==='all'||g.kind===galKind);
-  const nc = innerWidth>=1180?4:innerWidth>=760?3:2;
   const fig = (g,i)=>`<figure tabindex="0" data-gi="${i}" class="r${[0,1,2,0,3][i%5]}">`;
+  grid.classList.add('rails');
+  const order = Object.keys(CAT).concat(['']);
+  const groups = order.map(c=>[c, list.map((g,i)=>[g,i]).filter(([g])=>(g.cat||'')===c)]).filter(([c,a])=>a.length);
+  const ARW = d=>`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+  grid.innerHTML = list.length ? groups.map(([c,a],ri)=>`<section class="g-rail" aria-label="${c?CAT[c][1]:'עוד'}"><div class="g-rail-h"><h3>${c?CAT[c][1]:'עוד'}<sup>${a.length}</sup></h3><div class="g-rail-nav"><button type="button" data-rail="${ri}" data-dir="-1" aria-label="הקודם">${ARW('M9 6l6 6-6 6')}</button><button type="button" data-rail="${ri}" data-dir="1" aria-label="הבא">${ARW('M15 6l-6 6 6 6')}</button></div></div><div class="g-track" id="gTrack${ri}">${a.map(([g,i])=>fig(g,i)+`<div class="ph-img${g.piece?' piece-img':''}"><span class="no">${String(i+1).padStart(2,'0')}</span><span class="kd" lang="en">${g.kind==='stall'?'stall piece':'one of one'}</span><img src="${g.img}" alt="${g.title}" loading="lazy"></div><figcaption>${g.title}<span>${g.kind==='stall'?'דוכנים':'עיצוב אישי'}</span></figcaption></figure>`).join('')}</div></section>`).join('')
+    : `<p class="gal-empty">העבודות הראשונות יעלו לכאן בקרוב.<br>בינתיים אפשר לראות מה קורה בסטודיו באינסטגרם ${'<a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>'}.</p>`;
+  grid.querySelectorAll('[data-rail]').forEach(b=>b.onclick=()=>{ const t=$('#gTrack'+b.dataset.rail), f=t.firstElementChild; t.scrollBy({left:-(+b.dataset.dir)*((f?f.offsetWidth:280)+24)*2,behavior:A.still?'auto':'smooth'}); });
+  return;
+  const nc = 0;
   grid.innerHTML = list.length ? `${Array.from({length:nc},(_,c)=>`<div class="gcol">${list.map((g,i)=>[g,i]).filter(([g,i])=>i%nc===c).map(([g,i])=>fig(g,i)+`<div class="ph-img${g.piece?' piece-img':''}"><span class="no">${String(i+1).padStart(2,'0')}</span><span class="kd" lang="en">${g.kind==='stall'?'stall piece':'one of one'}</span><img src="${g.img}" alt="${g.title}" loading="lazy"></div><figcaption>${g.title}<span>${g.kind==='stall'?'דוכנים':'עיצוב אישי'}</span></figcaption></figure>`).join('')}</div>`).join('')}`
     : `<p class="gal-empty">העבודות הראשונות יעלו לכאן בקרוב.<br>בינתיים אפשר לראות מה קורה בסטודיו באינסטגרם ${'<a href="https://www.instagram.com/duni.co.il/" target="_blank" rel="noopener" lang="en" dir="ltr">@duni.co.il</a>'}.</p>`;
 }
@@ -1613,7 +1786,50 @@ const SPOTS_M = [[-.74,-.62],[.74,-.62],[-.78,-.22],[.78,-.22],[-.78,.18],[.78,.
 const ROT = [-14,8,-6,12,6,-10,10,-8];
 const orbs = ORB.map(p=>{ const d=document.createElement('div'); d.className='piece orbit'; d.innerHTML=`<img src="${thumb(p.id)}" alt="" decoding="async">`; $('#orbits').appendChild(d); return d; });
 let ctx=null;
+/* the ring: pieces orbit the logo; drag to spin it, tap a piece to open it */
+const SPIN = (()=>{ const pick=[], cats=Object.keys(CAT); let k=0;
+  while(pick.length<Math.min(8,P.length) && k<P.length*4){ const c=cats[k%cats.length], g=k%2?'him':'her';
+    const p=P.find(x=>!pick.includes(x)&&x.cat===c&&x.g===g)||P.find(x=>!pick.includes(x)&&x.cat===c); if(p) pick.push(p); k++; }
+  P.forEach(p=>{ if(pick.length<Math.min(8,P.length) && !pick.includes(p)) pick.push(p); }); return pick; })();
+const hero=$('#hero'), spinEl=document.createElement('div'); spinEl.id='spin'; hero.appendChild(spinEl);
+const spinIts = SPIN.map(p=>{ const a=document.createElement('a'); a.className='spin-it'; a.draggable=false; a.href=plink(p); a.setAttribute('aria-label',`${CAT[p.cat][0]} ${p.he}`); a.innerHTML=`<img src="${thumb(p.id)}" alt="" draggable="false">`; spinEl.appendChild(a); return a; });
+const spinCap=document.createElement('a'); spinCap.className='spin-cap'; spinCap.setAttribute('aria-live','polite'); hero.appendChild(spinCap);
+const spinHint=document.createElement('div'); spinHint.className='spin-hint'; spinHint.textContent='גררי כדי לסובב · לחיצה על תכשיט פותחת אותו'; hero.appendChild(spinHint);
+let sAng=0, sDrag=null, sMoved=false, sFront=-1, sT0=performance.now(), sLast=performance.now(), sVis=true;
+new IntersectionObserver(es=>{ sVis=es[0].isIntersecting; },{threshold:0}).observe(hero);
+hero.addEventListener('pointerdown',e=>{ if(e.button) return; sDrag={x:e.clientX,a:sAng}; sMoved=false; });
+addEventListener('pointermove',e=>{ if(!sDrag) return; const dx=e.clientX-sDrag.x; if(Math.abs(dx)>6){ sMoved=true; hero.classList.add('dragging'); } sAng=sDrag.a+dx*.008; });
+addEventListener('pointerup',()=>{ if(!sDrag) return; sDrag=null; hero.classList.remove('dragging'); setTimeout(()=>{ sMoved=false; },0); });
+spinIts.forEach(a=>a.addEventListener('click',e=>{ if(sMoved) e.preventDefault(); }));
+function spinFrame(t){
+  requestAnimationFrame(spinFrame);
+  const dt=Math.min(64,t-sLast); sLast=t;
+  if(!sVis || currentView!=='home') return;
+  if(!sDrag && !A.still) sAng+=dt*.00018;
+  const W=hero.clientWidth, H=hero.clientHeight, m=W<760;
+  const cx=W/2, cy=H*(m?.38:.45), rx=m?W*.36:Math.min(W*.4,580), ry=m?H*.19:H*.25;
+  const size=m?Math.min(W*.22,104):Math.min(W*.085,150);
+  const intro=A.still?1:Math.min(1,Math.max(0,(t-sT0-900)/1200));
+  let best=-2, bi=0;
+  spinIts.forEach((a,i)=>{
+    const ang=sAng+i*2*Math.PI/spinIts.length, z=Math.cos(ang), k=(z+1)/2;
+    const x=cx+Math.sin(ang)*rx*(.4+.6*intro), y=cy+z*ry*(.4+.6*intro);
+    if(z>best){ best=z; bi=i; }
+    a.style.width=size+'px';
+    a.style.transform=`translate(${(x-size/2).toFixed(1)}px,${(y-size/2).toFixed(1)}px) scale(${(.5+.62*k).toFixed(3)})`;
+    a.style.opacity=((.3+.7*k)*intro).toFixed(2);
+    a.style.zIndex = k>.5 ? 4+Math.round(k*10) : 1+Math.round(k*2);
+    a.style.filter = k<.5 ? `blur(${((.5-k)*3).toFixed(1)}px)` : '';
+    a.tabIndex = i===bi ? 0 : -1;
+  });
+  spinCap.style.top=(cy+ry+size*.62+6)+'px'; spinCap.style.opacity=intro;
+  spinHint.style.top=(cy+ry+size*.62+68)+'px'; spinHint.style.opacity=intro*.9;
+  if(bi!==sFront){ sFront=bi; const p=SPIN[bi]; spinCap.href=plink(p);
+    spinCap.innerHTML=`<span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span><span class="pr">${ils(p.price)}</span>`; }
+}
+requestAnimationFrame(spinFrame);
 function startMotion(){
+  sT0=performance.now();
   if(!window.gsap || A.still){ $('#burstCopy').style.opacity=0; orbs.forEach(o=>o.style.opacity=0); return; }
   gsap.registerPlugin(ScrollTrigger);
   const ring=$('#heroRing');
@@ -1621,14 +1837,12 @@ function startMotion(){
   ctx = gsap.context(()=>{
     gsap.set([ring,...orbs],{xPercent:-50,yPercent:-50});
     gsap.from('#logoWrap img',{opacity:0,y:24,duration:1.4,ease:'power3.out'});
-    gsap.from(ring,{opacity:0,scale:.7,rotation:-50,duration:2,ease:'expo.out',delay:.15});
-    gsap.to(ring.firstElementChild,{y:-12,rotation:3,duration:3.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
 
     const tall = ()=> innerWidth/innerHeight < 1.15;
     const spot = i => (tall()?SPOTS_M:SPOTS_D)[i];
     const sizeOrbs = ()=>{ const W=innerWidth,H=innerHeight; const w = tall()? Math.min(.21*W,.15*H,160) : Math.min(.125*W,.21*H,160); orbs.forEach(o=>o.style.width=w+'px'); };
     sizeOrbs(); ScrollTrigger.addEventListener('refreshInit', sizeOrbs);
-    const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#hero',start:'top top',end:()=>'+='+(innerWidth<760?55:80)+'%',pin:true,scrub:true,invalidateOnRefresh:true}});
+    if(false){ const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#hero',start:'top top',end:()=>'+='+(innerWidth<760?55:80)+'%',pin:true,scrub:true,invalidateOnRefresh:true}});
     tl.fromTo('#logoWrap',{opacity:1,scale:1},{opacity:0,scale:.9,duration:.35,immediateRender:false},0)
       .fromTo('.corner,#heroTag,#hud',{opacity:1},{opacity:0,duration:.2,immediateRender:false},0)
       .fromTo(ring,{y:0,rotation:0,scale:1},{y:()=>-innerHeight*(innerWidth<760?.06:.11),rotation:18,scale:innerWidth<760?.7:.68,duration:.7,ease:'power1.inOut',immediateRender:false},0);
@@ -1638,7 +1852,7 @@ function startMotion(){
          y:()=>spot(i)[1]*innerHeight*.42,
          scale:1,opacity:1,rotation:ROT[i],duration:.55,ease:'power2.out'},.12+i*.03);
     });
-    tl.fromTo('#burstCopy',{opacity:0},{opacity:1,duration:.25,immediateRender:false},.55).to({}, {duration:.25});
+    tl.fromTo('#burstCopy',{opacity:0},{opacity:1,duration:.25,immediateRender:false},.55).to({}, {duration:.25}); }
 
     gsap.utils.toArray('#grid .card').forEach(c=>gsap.from(c,{y:36,duration:.9,ease:'power3.out',scrollTrigger:{trigger:c,start:'top 94%',once:true}}));
     gsap.to('.custom .ring-stage img',{rotation:18,ease:'none',scrollTrigger:{trigger:'.custom',start:'top bottom',end:'bottom top',scrub:true}});
