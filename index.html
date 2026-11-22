@@ -2624,34 +2624,29 @@ function buildAbout(){
   const P=ps.filter(e=>e.tagName==='P'), H=ps.filter(e=>e.tagName==='H2');
   const split=(el)=>{ const b=el.querySelector('b'); const head=b?b.textContent.replace(/\.\s*$/,''):''; const rest=b?el.innerHTML.replace(b.outerHTML,'').trim():el.innerHTML; return [head,rest]; };
   const ways=[[P[3],['mado','yama','kanazuchi'],'#her','לקולקציה'],[P[4],['hone','awa','en'],'#custom','להתחיל עיצוב'],[P[5],['tsuta','ori','sabi'],'#gallery','לגלריה']];
-  art.classList.add('about-v2','pf');
+  art.classList.add('about-v2','ach');
   const hello=(P[0]?P[0].textContent:'').trim();
-  const T=(w,red)=>`<h2 class="pf-t" lang="en"><span class="r">${w.slice(0,red)}</span>${w.slice(red)}</h2>`;
-  const ph=(id,c='')=>`<div class="pf-ph ${c}"><img src="assets/pieces/${id}.webp" alt="" loading="lazy"></div>`;
+  const G=t=>`<h2 class="ach-gl" lang="en">${t}</h2>`;
+  const fl=(id,st)=>`<img class="ach-fl" src="assets/pieces/${id}.webp" alt="" loading="lazy" style="${st}">`;
+  const C=(tl,jp,n,en)=>`<div class="ach-tl sp" lang="en">${tl}<span class="dash"></span></div><div class="ach-tr jp" lang="ja" aria-hidden="true">${jp}</div><div class="ach-bl"><span class="jp" lang="ja" aria-hidden="true">${jp}</span><span class="dash"></span><span class="sp" lang="en">${n} · ${en}</span></div><img class="ach-br" src="assets/star.png" alt="">`;
   art.innerHTML=`
-  <div class="pf-desk">
-    <section class="pf-s pf-cover"><div class="pf-vl"></div>
-      <div class="pf-cv-t">${T('about me.',2)}<div class="vj"><span class="vjp" lang="ja" aria-hidden="true">手作り</span><div class="vjc"><p class="pf-sub">${hello}</p></div></div><span class="pf-yr" lang="en">duni — handmade silver</span></div>
-      ${ph('mado','pf-cv-ph')}</section>
-    <section class="pf-s pf-two">
-      <div class="pf-col">${T('the mess.',3)}<div class="pf-cols"><p>${txt(P[1])}</p><p>${txt(P[2])}</p></div><div class="pf-hl"></div></div>
-      <div class="pf-ghost" aria-hidden="true">בלאגן</div>
-      <div class="pf-grid g3">${ph('hone','a')}${ph('awa','b')}${ph('obi','c')}</div>
-      <div class="pf-foot" lang="en"><span>studio notes</span><span>01</span></div></section>
-    <section class="pf-s pf-how">
-      <div class="pf-head">${T('how it works.',3)}<div class="vj"><span class="vjp" lang="ja" aria-hidden="true">工房</span><div class="vjc"><p class="pf-sub">${H[0]?H[0].textContent:''}</p></div></div><div class="pf-hl"></div></div>
-      <div class="pf-ways">${ways.map(([p,im,href,go],i)=>{ const [h,r]=p?split(p):['','']; return `<div class="pf-way" data-href="${href}">${ph(im[0])}<div class="pf-n" lang="en">0${i+1}</div><h3>${h}</h3><p>${r}</p><a href="${href}">${go} ←</a></div>`; }).join('')}</div>
-      <div class="pf-foot" lang="en"><span>how it works</span><span>02</span></div></section>
-    <section class="pf-s pf-why">
-      <div class="pf-vt" lang="en"><span>why <b>so.</b></span></div>
-      <div class="pf-col"><div class="vj"><span class="vjp" lang="ja" aria-hidden="true">情熱</span><div class="vjc"><p class="pf-sub big">${H[1]?H[1].textContent:''}</p><div class="pf-cols one"><p>${txt(P[6])}</p></div></div></div></div>
-      <div class="pf-grid g2">${ph('kawa','a')}${ph('tsuchime-cuff','b')}</div>
-      <div class="pf-foot" lang="en"><span>why</span><span>03</span></div></section>
-    <section class="pf-s pf-end ab-sign" id="abSign">${T('thank you.',2)}<div class="sig"><img src="assets/logo.png" alt="Duni"></div></section>
-  </div>
+  <section class="ach-ch">${C('small things<br>carry<br>big energy','手作り','01','about me')}
+    ${fl('mado','top:20%;right:15%;--r:-12deg')}${fl('awa','bottom:20%;left:17%;--r:10deg')}
+    <div class="ach-c">${G('ABOUT<br>ME.')}<p class="ach-sub">${hello}</p><p class="sp ach-yr" lang="en">duni — handmade silver</p></div></section>
+  <section class="ach-ch">${C('studio<br>notes','混沌','02','the mess')}
+    ${fl('hone','top:17%;left:13%;--r:14deg')}${fl('obi','bottom:15%;right:13%;--r:-6deg')}
+    <div class="ach-c">${G('THE<br>MESS.')}<p class="ach-p">${txt(P[1])}</p><p class="ach-p">${txt(P[2])}</p></div></section>
+  <section class="ach-ch ach-how">${C('three<br>ways<br>in','工房','03','how it works')}
+    <div class="ach-c ach-wide">${G('HOW IT<br>WORKS.')}<p class="ach-sub">${H[0]?H[0].textContent:''}</p>
+    <div class="ach-ways">${ways.map(([p,im,href,go],i)=>{ const [h,r]=p?split(p):['','']; return `<div class="ach-way" data-href="${href}"><img src="assets/pieces/${im[0]}.webp" alt="" loading="lazy"><div class="n">0${i+1}</div><h3>${h}</h3><p>${r}</p><a href="${href}">${go} ←</a></div>`; }).join('')}</div></div></section>
+  <section class="ach-ch">${C('slow process<br>real materials','情熱','04','why so')}
+    ${fl('kawa','top:19%;right:12%;--r:-8deg')}${fl('tsuchime-cuff','bottom:17%;left:12%;--r:8deg')}
+    <div class="ach-c">${G('WHY<br>SO.')}<p class="ach-sub">${H[1]?H[1].textContent:''}</p><p class="ach-p">${txt(P[6])}</p></div></section>
+  <section class="ach-ch ach-end ab-sign" id="abSign">${C('thank<br>you','感謝','05','thank you')}
+    <div class="ach-c">${G('THANK<br>YOU.')}<div class="sig"><img src="assets/logo.png" alt="Duni"></div></div></section>
   <div class="ab-end"></div>`;
   if(back) art.querySelector('.ab-end').appendChild(back);
-  art.querySelectorAll('.pf-way').forEach(w=>w.addEventListener('click',e=>{ if(!e.target.closest('a')) location.hash=w.dataset.href; }));
+  art.querySelectorAll('.ach-way').forEach(w=>w.addEventListener('click',e=>{ if(!e.target.closest('a')) location.hash=w.dataset.href; }));
   if(!matchMedia('(hover:hover)').matches){ const wio=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('act',e.isIntersecting)),{root:document.getElementById('v-doc'),rootMargin:'-35% 0px -35% 0px'}); art.querySelectorAll('.ab-way').forEach(w=>wio.observe(w)); }
   prepHL();
   const sg=art.querySelector('#abSign'); new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ sg.classList.add('in'); o.disconnect(); } }),{threshold:.4}).observe(sg);
@@ -2782,6 +2777,37 @@ html.on-xray .cur{opacity:0!important}
 .oo-cta{text-align:center;padding:0 0 clamp(70px,12vh,130px)}
 @media(max-width:760px){.oo-steps{grid-template-columns:1fr;gap:56px}.oo-tr{display:none}.oo-fl{width:48vw}.oo-bl,.oo-br{bottom:4vh}}
 @media (prefers-reduced-motion:reduce){.oo-fl{animation:none}}
+/* about: chapters, each one a poster like the home opening */
+.doc.ach{background:var(--paper)}
+.ach-ch{position:relative;min-height:100svh;display:grid;place-items:center;padding:clamp(110px,15vh,150px) 7vw clamp(100px,14vh,140px);border-bottom:1px solid var(--line);overflow:hidden}
+.ach-tl{position:absolute;top:calc(84px + env(safe-area-inset-top,0px));right:max(6vw,var(--gut-r));text-align:right;line-height:2;font-size:.75rem}
+.ach-tl .dash,.ach-bl .dash{display:block;width:22px;height:1px;background:var(--ink);margin:12px 0 12px auto}
+.ach-tr{position:absolute;top:calc(84px + env(safe-area-inset-top,0px));left:max(5vw,var(--gut));writing-mode:vertical-rl;font-size:1.2rem;letter-spacing:.42em}
+.ach-bl{position:absolute;bottom:6vh;right:max(6vw,var(--gut-r));text-align:right}
+.ach-bl .jp{display:block;font-size:1.45rem;letter-spacing:.1em}
+.ach-bl .sp{font-size:.7rem}
+.ach-br{position:absolute;bottom:6vh;left:max(6vw,var(--gut));width:2.1rem}
+.ach-c{position:relative;z-index:1;text-align:center;max-width:720px}
+.ach-wide{max-width:1040px}
+.doc .ach-gl{font-family:"Rubik Glitch",var(--f-anton);font-weight:400;font-size:clamp(3rem,9vw,7.6rem);line-height:.92;direction:ltr;margin:0}
+.doc .ach-sub{font-family:"Bellefair",var(--f-he);font-size:clamp(1.3rem,2.2vw,1.8rem);letter-spacing:.03em;margin:.7em 0 .5em;line-height:1.4}
+.doc .ach-p{font-family:var(--f-he);font-weight:300;font-size:1.02rem;line-height:2;margin:0 auto 1em;max-width:50ch;color:var(--ink-2)}
+.ach-yr{font-size:.72rem;color:var(--ink-2)}
+.ach-fl{position:absolute;width:clamp(70px,9vw,125px);rotate:var(--r,0deg);filter:drop-shadow(0 22px 24px rgba(40,34,26,.22)) drop-shadow(0 3px 5px rgba(40,34,26,.12));animation:achf 7s ease-in-out infinite;pointer-events:none}
+.ach-fl:nth-of-type(2n){animation-delay:-3.5s}
+@keyframes achf{50%{transform:translateY(-12px)}}
+.ach-ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4vw;text-align:right;margin-top:46px}
+.ach-way{cursor:pointer}
+.ach-way img{width:96px;height:96px;object-fit:contain;margin-bottom:14px;filter:drop-shadow(0 16px 16px rgba(40,34,26,.2));transition:transform .6s cubic-bezier(.2,1.3,.4,1)}
+.ach-way:hover img{transform:translateY(-8px) rotate(-6deg)}
+.ach-way .n{font-family:var(--f-jp);font-size:2.8rem;line-height:1}
+.doc .ach-way h3{font-family:"Bellefair",var(--f-he);font-weight:400;font-size:1.45rem;margin:12px 0 6px}
+.doc .ach-way p{font-family:var(--f-he);font-weight:300;font-size:.95rem;line-height:1.9;margin:0 0 12px;color:var(--ink-2)}
+.ach-way>a{font-family:"Suez One",var(--f-he);font-size:clamp(.95rem,1.1vw,1.08rem);color:var(--ink);padding:6px 0;display:inline-block}
+.ach-end{min-height:80svh}
+.ach-end .sig{width:min(56vw,300px);margin:26px auto 0}
+@media(max-width:760px){.ach-tr{display:none}.ach-fl{width:64px;opacity:.9}.ach-ways{grid-template-columns:1fr;gap:44px}.ach-bl,.ach-br{bottom:4vh}}
+@media (prefers-reduced-motion:reduce){.ach-fl{animation:none}}
 /* text under titles (about + custom): japanese vertical accent */
 .vj{display:flex;align-items:flex-start;gap:1.1em}
 .vjc{min-width:0;flex:1}
