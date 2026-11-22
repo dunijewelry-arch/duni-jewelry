@@ -2474,7 +2474,7 @@ setTimeout(refreshMotion,300);
 .kin-t .o{color:transparent;-webkit-text-stroke:1px var(--ink)}
 .kin-t .jp{font-family:var(--f-jp);font-size:.7em}
 .kin-t img{width:.35em;display:inline-block}
-.kin.dk{background:var(--ink);border-color:#2a2826}.kin.dk .kin-t{color:var(--silver)}.kin.dk .o{-webkit-text-stroke-color:var(--silver)}
+.kin.clouds{padding:0;height:clamp(96px,11.2vw,161px)}.kin.clouds video{display:block;width:100%;height:100%;object-fit:cover}.kin.dk{background:var(--ink);border-color:#2a2826}.kin.dk .kin-t{color:var(--silver)}.kin.dk .o{-webkit-text-stroke-color:var(--silver)}
 /* bands: open up from a slit + parallax */
 .band img,.band.duo a img{will-change:transform,clip-path}
 /* drop rail: curved shelf */
@@ -2511,7 +2511,8 @@ const kinHTML = (dk, words)=>`<div class="kin${dk?' dk':''}" aria-hidden="true">
 const W1 = `<span class="fa">HANDMADE</span><span class="fi">by hand,</span><img src="assets/star.png" alt=""><span class="jp">手作り</span><img src="assets/star.png" alt=""><span class="fm">[ silver 925 ]</span><img src="assets/star.png" alt=""><span>one of few</span><img src="assets/star.png" alt=""><span class="o">wabi-sabi</span><img src="assets/star.png" alt="">`;
 const W2 = `<span class="fa">SMALL THINGS</span><span class="fi">carry</span><span class="o">big energy</span><span class="fk">wow</span><img src="assets/star.png" alt=""><span class="jp">情熱</span><img src="assets/star.png" alt="">`;
 const man = document.querySelector('.manifesto'); if(man) man.insertAdjacentHTML('beforebegin', kinHTML(false, W1));
-const vis = document.getElementById('vision'); if(vis) vis.insertAdjacentHTML('afterend', kinHTML(true, W2));
+const vis = document.getElementById('vision'); if(vis) vis.insertAdjacentHTML('afterend', `<div class="kin dk clouds" aria-hidden="true"><video src="assets/clouds.mp4" poster="assets/clouds-poster.jpg" autoplay muted loop playsinline preload="metadata"></video></div>`);
+if(still()){ const cv=document.querySelector('.kin.clouds video'); if(cv){ cv.removeAttribute('autoplay'); cv.pause(); } }
 
 /* --- word reveal for headings --- */
 $$('#v-home h2, .launch h2').forEach(h=>{
