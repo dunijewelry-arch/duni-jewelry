@@ -1408,7 +1408,7 @@ body{overflow-x:clip}
 
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 05</span><span class="t">בהזמנה אישית<span class="sp" lang="en">one of one</span></span><a href="#custom" tabindex="-1">להתחיל</a></div>
-  <section class="oo" id="custom" aria-labelledby="customH">
+  <section class="oo cdk" id="custom" aria-labelledby="customH">
     <div class="oo-scr">
       <div class="oo-tl" lang="en"><span class="sp">made once<br>never<br>again</span><span class="dash"></span></div>
       <div class="oo-tr jp" lang="ja" title="ittenmono · תכשיט אחד ויחיד">一点物</div>
@@ -1421,7 +1421,7 @@ body{overflow-x:clip}
       <div class="oo-bl"><span class="jp" lang="ja">手作り</span><span class="dash"></span><span class="sp" lang="en">one of one</span></div>
       <img class="oo-br" src="assets/star.png" alt="">
     </div>
-    <div class="oo-steps"><div class="oo-st"><div class="ph"><img class="skimg" src="assets/sketch-kawa.jpg" alt="סקיצה בעיפרון של טבעת קאווה" loading="lazy"></div><div class="n">01</div><div class="k sp" lang="en">pencil · paper</div><h3 class="t" data-t="s1_title">מספרים לי</h3><p class="tx" data-t="s1_text">שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</p></div><div class="oo-st"><div class="ph"><img id="czWax" alt=""></div><div class="n">02</div><div class="k sp" lang="en">hand carved wax</div><h3 class="t" data-t="s2_title">מעצבים יחד</h3><p class="tx" data-t="s2_text">אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</p></div><div class="oo-st"><div class="ph"><img id="customImg" alt="תכשיט בהזמנה אישית"></div><div class="n">03</div><div class="k sp" lang="en">silver 925 · cast</div><h3 class="t" data-t="s3_title">הוא שלך</h3><p class="tx" data-t="s3_text">גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</p></div></div>
+    <div class="oo-steps cdk-s2"><div class="oo-st cdk-st"><div class="ph p0"><img class="skimg" src="assets/sketch-kawa.jpg" alt="סקיצה בעיפרון של טבעת קאווה" loading="lazy"></div><div class="n">01</div><div class="k sp" lang="en">pencil · paper</div><h3 class="t" data-t="s1_title">מספרים לי</h3><p class="tx" data-t="s1_text">שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</p></div><div class="oo-st cdk-st"><div class="ph p1"><img id="czWax" alt=""></div><div class="n">02</div><div class="k sp" lang="en">hand carved wax</div><h3 class="t" data-t="s2_title">מעצבים יחד</h3><p class="tx" data-t="s2_text">אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</p></div><div class="oo-st cdk-st"><div class="ph p2"><img id="customImg" alt="תכשיט בהזמנה אישית"></div><div class="n">03</div><div class="k sp" lang="en">silver 925 · cast</div><h3 class="t" data-t="s3_title">הוא שלך</h3><p class="tx" data-t="s3_text">גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</p></div></div>
     <div class="oo-cta"><a class="btn" href="#custom" id="customBtn"><span data-t="custom_btn">להתחיל עיצוב אישי</span> <img src="assets/star.png" alt=""></a></div>
   </section>
 
@@ -2769,15 +2769,12 @@ html.on-xray .cur{opacity:0!important}
 .oo-br{position:absolute;bottom:7vh;left:max(6vw,var(--gut));width:2.1rem}
 .oo-c{text-align:center;max-width:780px;position:relative;z-index:1}
 .oo h2{margin:0;font-weight:400}
-.oo .big{display:block;font-family:"Rubik Glitch",var(--f-anton);font-size:clamp(3.2rem,9.5vw,8.4rem);line-height:.92;direction:ltr}
+.oo .big{display:block;text-align:center;font-family:"Rubik Glitch",var(--f-anton);font-size:clamp(3.2rem,9.5vw,8.4rem);line-height:.92;direction:ltr}
 .oo-sub{font-family:"Bellefair",var(--f-he);font-size:clamp(1.3rem,2.2vw,1.8rem);letter-spacing:.03em;margin:.8em 0 .4em}
 .oo-p{font-family:var(--f-he);font-weight:300;font-size:1rem;line-height:1.95;max-width:46ch;margin:0 auto;color:var(--ink-2)}
 .oo-fl{width:min(28vw,250px);margin:30px auto 0;filter:drop-shadow(0 26px 30px rgba(40,34,26,.22)) drop-shadow(0 4px 6px rgba(40,34,26,.12));animation:oof 6s ease-in-out infinite}
 @keyframes oof{50%{transform:translateY(-10px) rotate(-2deg)}}
 .oo-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4vw;padding:clamp(70px,12vh,130px) max(8vw,var(--gut-r)) clamp(50px,8vh,90px) max(8vw,var(--gut));border-top:1px solid var(--line)}
-.oo-st .ph{background:none!important;height:150px;display:flex;align-items:flex-end;margin-bottom:18px}
-.oo-st .ph img{max-height:150px;width:auto;max-width:70%;object-fit:contain;filter:drop-shadow(0 16px 16px rgba(40,34,26,.2))}
-.oo-st .ph .skimg{width:auto!important;height:150px;max-width:80%;object-fit:contain;clip-path:none;filter:contrast(1.05)}
 .oo-st .n{font-family:var(--f-jp);font-size:3.4rem;line-height:1}
 .oo-st .k{font-size:.68rem;margin:14px 0 6px;display:block}
 .oo-st .t{font-family:"Bellefair",var(--f-he);font-weight:400;font-size:1.5rem;margin:0 0 8px}
