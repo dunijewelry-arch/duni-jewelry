@@ -1274,7 +1274,7 @@ body{overflow-x:clip}
     <div class="corner c-tr jp" lang="ja" title="tezukuri no juerī · תכשיטים בעבודת יד">手作りのジュエリー</div>
     <div class="corner c-bl"><span class="jp" lang="ja">情熱</span><span class="dash"></span><span class="he">חומרים אמיתיים<br>תהליך איטי<br>תכשיטים על-זמניים</span></div>
     <img class="corner c-br" src="assets/star.png" alt="">
-    <div class="logo-wrap" id="logoWrap"><img src="assets/logo.png" alt="Duni"></div>
+    <div class="logo-wrap" id="logoWrap"><img src="assets/logo.png" alt="Duni"><img class="logo-x" src="assets/logo-xray.webp" alt="" aria-hidden="true"><span class="logo-lens" aria-hidden="true"></span></div>
     <div class="hero-tag corner-t" id="heroTag"><span class="he">תכשיטים בעבודת יד</span><span class="sp" lang="en">hand made jewelry</span></div>
     <div class="burst-copy" id="burstCopy" aria-hidden="true"><h2>הקולקציה</h2><p class="sp" lang="en">the collection · sterling silver 925</p></div>
     <div id="orbits" aria-hidden="true"></div>
@@ -2749,6 +2749,45 @@ setTimeout(()=>{d2=true;},800);
     const go=()=>{ scrollTo(0,st.y); const vd=document.getElementById('v-doc'); if(vd&&st.d) vd.scrollTop=st.d; };
     addEventListener('load',()=>{ setTimeout(go,350); setTimeout(go,1200); });
   }
+})();
+</script>
+<!-- logo x-ray: hovering the home logo reveals "Duni" in many scripts inside the letters -->
+<style>
+.logo-wrap>img{display:block;width:100%}
+.logo-wrap>.logo-x{position:absolute;left:0;top:0;height:100%;pointer-events:none;--x:-999px;--y:-999px;--r:0px;
+  -webkit-mask-image:radial-gradient(circle var(--r) at var(--x) var(--y),#000 70%,transparent 100%);
+          mask-image:radial-gradient(circle var(--r) at var(--x) var(--y),#000 70%,transparent 100%)}
+.logo-lens{position:absolute;left:0;top:0;width:0;height:0;border-radius:50%;border:1px solid rgba(23,22,21,.35);pointer-events:none;transform:translate(-50%,-50%)}
+html.on-xray .cur{opacity:0!important}
+</style>
+<script>
+(()=>{
+  const w=document.getElementById('logoWrap'); if(!w) return;
+  const x=w.querySelector('.logo-x'), lens=w.querySelector('.logo-lens');
+  let tx=0,ty=0,cx=null,cy=null,r=0,tr=0,run=false,down=false;
+  const fineP=matchMedia('(hover:hover) and (pointer:fine)').matches;
+  function upd(e){
+    const b=w.getBoundingClientRect();
+    const inside=b.width>0 && e.clientX>=b.left && e.clientX<=b.right && e.clientY>=b.top && e.clientY<=b.bottom && getComputedStyle(w).opacity>.2;
+    const on=inside && (fineP || down || e.pointerType==='mouse');
+    document.documentElement.classList.toggle('on-xray',on);
+    if(on){ tx=e.clientX-b.left; ty=e.clientY-b.top; if(cx===null||r<1){cx=tx;cy=ty} tr=b.width*.065; } else tr=0;
+    if(!run){run=true;requestAnimationFrame(loop);}
+  }
+  function loop(){
+    if(cx===null){run=false;return}
+    cx+=(tx-cx)*.25; cy+=(ty-cy)*.25; r+=(tr-r)*.18;
+    x.style.setProperty('--x',cx+'px'); x.style.setProperty('--y',cy+'px'); x.style.setProperty('--r',r+'px');
+    lens.style.left=cx+'px'; lens.style.top=cy+'px'; lens.style.width=lens.style.height=(r*1.4)+'px';
+    if(tr===0 && r<.5){ r=0; x.style.setProperty('--r','0px'); lens.style.width=lens.style.height='0px'; run=false; return; }
+    requestAnimationFrame(loop);
+  }
+  addEventListener('pointermove',upd,{passive:true});
+  addEventListener('pointerdown',e=>{down=true;upd(e)},{passive:true});
+  addEventListener('pointerup',e=>{down=false;if(e.pointerType!=='mouse'){tr=0;document.documentElement.classList.remove('on-xray')}},{passive:true});
+  addEventListener('pointercancel',()=>{down=false;tr=0},{passive:true});
+  document.addEventListener('pointerleave',()=>{tr=0;document.documentElement.classList.remove('on-xray')});
+  addEventListener('scroll',()=>{if(tr){tr=0;document.documentElement.classList.remove('on-xray');if(!run){run=true;requestAnimationFrame(loop)}}},{passive:true});
 })();
 </script>
 </body>
