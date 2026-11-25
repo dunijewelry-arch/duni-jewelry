@@ -19,7 +19,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Heebo:wght@300;400;500&family=Shippori+Mincho:wght@400;500&family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&family=Permanent+Marker&family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Suez+One&family=Rubik+Glitch&family=Bellefair&family=Karantina:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Heebo:wght@300;400;500&family=Shippori+Mincho:wght@400;500&family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&family=Permanent+Marker&family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Suez+One&family=Rubik+Glitch&family=Bellefair&family=Karantina:wght@300;400&family=Assistant:wght@200;300&family=Varela+Round&display=swap">
 <style>
 /* Layout: one paper sheet that unfolds (RTL, Hebrew first). Pinned hero where the ring opens into the collection,
    an ink band for the latest drop with a native swipe rail, collection grid, Eden's story, custom rings.
@@ -2537,6 +2537,13 @@ setTimeout(refreshMotion,300);
 .skw{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 :root.still .cur,:root.still .cur-dot,:root.still .curtain{display:none}
 :root.still .rv .w>span,:root.still .up{transform:none!important;opacity:1!important}
+/* part 2 fonts (pre-order area) */
+.launch h2,.launch h2 .w>span{font-family:"Assistant",var(--f-he)!important;font-weight:200!important}
+.trust b{font-family:"Heebo",var(--f-he)!important;font-weight:300!important}
+.cd span{font-family:"Suez One",var(--f-he)!important;font-weight:400}
+.steps3 b{font-family:"Varela Round",var(--f-he)!important;font-weight:400!important}
+.launch .how,.steps3 p{font-family:"Heebo",var(--f-he)!important;font-weight:300!important}
+:root.rf .launch h2,:root.rf .trust b,:root.rf .cd span,:root.rf .steps3 b,:root.rf .launch .how,:root.rf .steps3 p{font-family:var(--f-he)!important}
 </style>
 <div class="cur" aria-hidden="true"><span></span></div><div class="cur-dot" aria-hidden="true"></div>
 <div class="curtain" aria-hidden="true"><img src="assets/logo.png" alt=""></div>
