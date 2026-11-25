@@ -391,9 +391,14 @@ details .body ul{margin:0;padding-inline-start:1.1em}
 .related{margin:clamp(70px,9vw,120px) 0 clamp(60px,8vw,100px)}
 .related h2{font-weight:400;font-size:1.4rem;margin:0 0 28px}
 .related h2 small{font-family:var(--f-ui);font-size:.72rem;letter-spacing:.3em;color:var(--ink-2);margin-inline-start:12px;font-weight:300}
-.related .grid{grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:30px 20px}
+.related .grid{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:34px 22px}
+.related .grid>.cw{max-width:420px;width:100%;justify-self:center}
+.related .meta,.pager{flex-wrap:wrap}
+.related .meta>span:first-child{min-width:0;overflow-wrap:anywhere}
+#v-product .pdp,#v-gallery .pdp{padding-bottom:clamp(90px,12vh,130px)}
 .pager{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-block:22px;font-size:.9rem}
-.pager a{text-decoration:none}.pager a:hover{text-decoration:underline}
+.pager a{text-decoration:none;display:flex;flex-direction:column;gap:4px;font-size:1rem}.pager a small{font-family:var(--f-ui);font-size:.68rem;letter-spacing:.2em;color:var(--ink-2)}.pager a.nx{text-align:left;align-items:flex-end}
+.pager a.pager a:hover{text-decoration:underline}
 @media (max-width:860px){.pdp-top{grid-template-columns:1fr}.pdp-stage{position:relative;top:0}.pdp-story{grid-template-columns:1fr}}
 
 /* policy pages */
@@ -2125,7 +2130,7 @@ function productHTML(p){
       <h2 id="relH">עוד מהקולקציה<small lang="en">more pieces</small></h2>
       <div class="grid">${related.map(x=>cardHTML(x)).join('')}</div>
     </section>
-    <nav class="pager" aria-label="תכשיט קודם והבא"><a href="${plink(prev)}">→ ${CAT[prev.cat][0]} ${prev.he}</a><a href="${plink(next)}">${CAT[next.cat][0]} ${next.he} ←</a></nav>
+    <nav class="pager" aria-label="תכשיט קודם והבא"><a href="${plink(prev)}"><small>הקודם</small>→ ${CAT[prev.cat][0]} ${prev.he}</a><a class="nx" href="${plink(next)}"><small>הבא</small>${CAT[next.cat][0]} ${next.he} ←</a></nav>
   </article>`;
 }
 function mountProduct(p){
