@@ -2253,10 +2253,7 @@ function galleryPieceHTML(g){
         </div>
       </div>
     </div>
-    ${g.story.length?`<section class="pdp-story" aria-labelledby="gstH">
-      <h2 id="gstH"><small lang="en">the story${g.name?' of '+g.name:''}</small>הסיפור${g.name?' של '+g.he:''}</h2>
-      <div>${g.story.map(t=>`<p>${t}</p>`).join('')}<div class="by"><img src="assets/star.png" alt="">עוצב ונעשה ביד ב-Duni</div></div>
-    </section>`:''}
+    
     ${others.length?`<section class="related" aria-labelledby="grelH">
       <h2 id="grelH">עוד מהגלריה<small lang="en">gallery</small></h2>
       <div class="grid">${others.map(x=>`<div class="cw"><a class="card" href="#g-${encodeURIComponent(x.id)}"><div class="stage${x.piece?'':' photo'}"><img src="${x.img}" alt="${x.title}" loading="lazy"></div>
@@ -2314,7 +2311,11 @@ function applyTexts(){
 }
 const UPDATED = 'עודכן לאחרונה: ' + (T.docs_updated||'');
 const DOCS = {};
-Object.entries(window.DUNI_DOCS||{}).forEach(([k,d])=>DOCS[k]={t:d.t, en:d.en, noDate:d.noDate, get b(){ return mdBlock(T['doc_'+k]); }});
+/* TEMPORARILY HIDDEN until the site opens for sale: the "כללי" section of the terms (business name / ID / address).
+   To bring it back, set HIDE_TERMS_GENERAL to false. */
+const HIDE_TERMS_GENERAL = true;
+const docSrc = k => { const v=T['doc_'+k]; return (k==='terms' && HIDE_TERMS_GENERAL && typeof v==='string') ? v.replace(/(^|\n)## כללי\n[\s\S]*?(?=\n## |$)/,'').replace(/^\s+/,'') : v; };
+Object.entries(window.DUNI_DOCS||{}).forEach(([k,d])=>DOCS[k]={t:d.t, en:d.en, noDate:d.noDate, get b(){ return mdBlock(docSrc(k)); }});
 function mountDoc(k){
   const d=DOCS[k];
   $('#v-doc').innerHTML=OVBAR+`<article class="doc"><div><h1>${d.t}</h1><div class="en" lang="en">${d.en}</div>${d.noDate?'':`<div class="upd">${UPDATED}</div>`}<div class="doc-body${k==='about'?' about':''}">${d.b}</div><button class="btn ghost back" type="button" data-ov-close>חזרה לאתר <img src="assets/star.png" alt=""></button></div></article>`+POLICY_ROW;
