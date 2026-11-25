@@ -15,6 +15,8 @@
 .pdp-arr{position:absolute;top:50%;z-index:5;width:40px;height:40px;margin-top:-20px;border-radius:50%;background:rgba(233,230,223,.92);border:1px solid var(--line);display:grid;place-items:center;font-size:1.3rem;cursor:pointer}
 .pdp-arr.l{left:12px}.pdp-arr.r{right:12px}
 .pdp-zoomhint{position:absolute;top:12px;left:12px;z-index:5;font-size:.7rem;letter-spacing:.06em;background:rgba(233,230,223,.92);padding:3px 10px;border-radius:99px;pointer-events:none}
+@media (hover:hover){.zh-t{display:none}.pdp-main{cursor:crosshair}} @media (hover:none){.zh-m{display:none}}
+.pdp-main{transition:opacity .25s,transform .35s ease-out!important}
 #lbx{position:fixed;inset:0;z-index:300;background:rgba(20,19,17,.94);display:none;overflow:hidden;touch-action:none}
 #lbx.on{display:block}
 #lbx img{position:absolute;left:50%;top:50%;max-width:94vw;max-height:88vh;transform-origin:0 0;user-select:none;-webkit-user-drag:none;cursor:zoom-in}
@@ -2099,7 +2101,7 @@ function productHTML(p){
   return `<article class="pdp">
     <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#${p.g==='him'?'him':'her'}">${p.g==='him'?'גברים':'נשים'}</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
     <div class="pdp-top">
-      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img class="pdp-main" src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><span class="pdp-zoomhint">לחיצה להגדלה</span>${p.photos.length>1?`<button type="button" class="pdp-arr l" data-pa="1" aria-label="התמונה הבאה">‹</button><button type="button" class="pdp-arr r" data-pa="-1" aria-label="התמונה הקודמת">›</button><div class="pdp-th" role="group" aria-label="תמונות">${p.photos.map((x,i)=>`<button type="button" data-ph="${i}" aria-pressed="${i===0}" aria-label="תמונה ${i+1}"><img src="${photoURL(x,400)}" alt=""></button>`).join('')}</div>`:''}<div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
+      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img class="pdp-main" src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><span class="pdp-zoomhint"><span class="zh-m">העכבר מגדיל · לחיצה למסך מלא</span><span class="zh-t">לחיצה להגדלה</span></span>${p.photos.length>1?`<button type="button" class="pdp-arr l" data-pa="1" aria-label="התמונה הבאה">‹</button><button type="button" class="pdp-arr r" data-pa="-1" aria-label="התמונה הקודמת">›</button><div class="pdp-th" role="group" aria-label="תמונות">${p.photos.map((x,i)=>`<button type="button" data-ph="${i}" aria-pressed="${i===0}" aria-label="תמונה ${i+1}"><img src="${photoURL(x,400)}" alt=""></button>`).join('')}</div>`:''}<div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
       <div class="pdp-info">
         <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':p.g==='him'?'לגברים':'לכולם'} · כסף 925 · עבודת יד</div>
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
@@ -2145,8 +2147,11 @@ function mountProduct(p){
   let sw=null; im.addEventListener('pointerdown',e=>{ sw={x:e.clientX,y:e.clientY}; });
   im.addEventListener('pointerup',e=>{ if(!sw) return; const dx=e.clientX-sw.x, dy=e.clientY-sw.y; sw=null;
     if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ if(urls.length>1) go(cur+(dx>0?1:-1)); } else if(Math.abs(dx)<8 && Math.abs(dy)<8) openLbx(urls,cur,i=>go(i)); });
-  st.addEventListener('pointermove',e=>{ if(A.still) return; const r=st.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; im.style.transform=`rotateY(${x*18}deg) rotateX(${-y*14}deg) rotate(${x*6}deg) scale(1.04)`; });
-  st.addEventListener('pointerleave',()=>im.style.transform='');
+  // with a mouse: the photo zooms in under the pointer, no click needed (touch: tap opens the full-screen viewer)
+  st.addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse' || e.target.closest('button,.spec')){ im.style.transform=''; return; }
+    const r=st.getBoundingClientRect(), x=Math.min(1,Math.max(0,(e.clientX-r.left-im.offsetLeft)/im.offsetWidth)), y=Math.min(1,Math.max(0,(e.clientY-r.top-im.offsetTop)/im.offsetHeight));
+    im.style.transformOrigin=`${(x*100).toFixed(1)}% ${(y*100).toFixed(1)}%`; im.style.transform='scale(2.4)'; });
+  st.addEventListener('pointerleave',()=>{ im.style.transform=''; });
   document.title = `${p.name} · Duni`;
   syncWish();
 }
