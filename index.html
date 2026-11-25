@@ -1831,6 +1831,7 @@ function measRing(){
   const b=$('#measBody');
   b.innerHTML=`<p class="step"><b>שלב 2 מתוך 2</b> · מדידת הטבעת</p>
     <p>מניחים על המסך טבעת שמתאימה לך, כך שהעיגול השחור יהיה באמצע החור שלה. מגדילים לאט עם ה-+, ועוצרים ברגע שהעיגול ממלא את החור ולא רואים יותר רווח בהיר בין העיגול לטבעת.</p>
+    <p style="border-inline-start:3px solid var(--ink);padding:10px 12px;background:var(--paper-2);border-radius:8px"><b>חשוב:</b> מודדים רק את החור שבתוך הטבעת. העיגול השחור צריך להגיע בדיוק עד הדופן הפנימית של הטבעת, ולא להיכנס מתחת לכסף עצמו. אם העיגול בולט מתחת לטבעת, המידה תצא גדולה מדי: מקטינים עם ה-− עד שהוא נעצר בדיוק בקצה הפנימי.</p>
     <div class="meas-stage" id="ringStage"><div class="ring-c" id="ringC" aria-hidden="true"></div></div>
     <div class="meas-ctl"><button type="button" id="mMinus" aria-label="להקטין">−</button><input type="range" id="mR" min="13" max="21" step="0.05" aria-label="קוטר פנימי של הטבעת"><button type="button" id="mPlus" aria-label="להגדיל">+</button></div>
     <div class="meas-out" id="mOut" aria-live="polite"></div>
