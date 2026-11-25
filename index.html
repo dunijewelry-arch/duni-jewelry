@@ -2477,7 +2477,7 @@ setTimeout(refreshMotion,300);
 .kin-t .o{color:transparent;-webkit-text-stroke:1px var(--ink)}
 .kin-t .jp{font-family:var(--f-jp);font-size:.7em}
 .kin-t img{width:.35em;display:inline-block}
-.kin.clouds{padding:0;height:clamp(96px,11.2vw,161px)}.kin.clouds video{display:block;width:100%;height:100%;object-fit:cover}.kin.clouds.lt{background:#fff;border-color:var(--line)}.kin.clouds.lt video{filter:invert(1)}.kin.dk{background:var(--ink);border-color:#2a2826}.kin.dk .kin-t{color:var(--silver)}.kin.dk .o{-webkit-text-stroke-color:var(--silver)}
+.kin.clouds{padding:0;height:clamp(96px,11.2vw,161px)}.kin.clouds img{display:block;width:100%;height:100%;object-fit:cover}.kin.clouds.lt{background:#fff;border-color:var(--line)}.kin.clouds.lt img{filter:invert(1)}.kin.dk{background:var(--ink);border-color:#2a2826}.kin.dk .kin-t{color:var(--silver)}.kin.dk .o{-webkit-text-stroke-color:var(--silver)}
 /* bands: open up from a slit + parallax */
 .band img,.band.duo a img{will-change:transform,clip-path}
 /* drop rail: curved shelf */
@@ -2513,26 +2513,15 @@ const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 const kinHTML = (dk, words)=>`<div class="kin${dk?' dk':''}" aria-hidden="true"><div class="kin-t">${Array(4).fill(words).join('')}</div></div>`;
 const W1 = `<span class="fa">HANDMADE</span><span class="fi">by hand,</span><img src="assets/star.png" alt=""><span class="jp">手作り</span><img src="assets/star.png" alt=""><span class="fm">[ silver 925 ]</span><img src="assets/star.png" alt=""><span>one of few</span><img src="assets/star.png" alt=""><span class="o">wabi-sabi</span><img src="assets/star.png" alt="">`;
 const W2 = `<span class="fa">SMALL THINGS</span><span class="fi">carry</span><span class="o">big energy</span><span class="fk">wow</span><img src="assets/star.png" alt=""><span class="jp">情熱</span><img src="assets/star.png" alt="">`;
-/* cloud strips: white strip (black clouds) above the manifesto, dark strip after vision — video plays by itself */
+/* cloud strips: white strip (black clouds) above the manifesto, dark strip after vision.
+   Animated image (not a video) so it always plays by itself — no autoplay blocking, no tap needed */
 const cloudStrip = (light)=>{
   const wrap=document.createElement('div'); wrap.className='kin clouds'+(light?' lt':' dk'); wrap.setAttribute('aria-hidden','true');
-  const v=document.createElement('video');
-  v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
-  ['muted','loop','autoplay','playsinline','webkit-playsinline'].forEach(a=>v.setAttribute(a,''));
-  v.preload='auto'; v.poster='assets/clouds-poster.jpg'; v.src='assets/clouds.mp4';
-  wrap.appendChild(v); return wrap;
+  const im=document.createElement('img'); im.src='assets/clouds.webp'; im.alt=''; im.decoding='async';
+  wrap.appendChild(im); return wrap;
 };
 const man = document.querySelector('.manifesto'); if(man) man.before(cloudStrip(true));
 const vis = document.getElementById('vision'); if(vis) vis.after(cloudStrip(false));
-const cvs = $$('.kin.clouds video');
-const manualStill = ()=> document.documentElement.classList.contains('still');
-const playClouds = ()=> cvs.forEach(v=>{ if(manualStill()){ v.pause(); return; } if(v.paused){ v.muted=true; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); } });
-const cio = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) playClouds(); }));
-cvs.forEach(v=>{ cio.observe(v); v.addEventListener('canplay', playClouds); });
-playClouds();
-/* if the browser blocked autoplay, start on the first touch / scroll anywhere on the page */
-['touchstart','pointerdown','scroll','keydown'].forEach(ev=>addEventListener(ev, playClouds, {passive:true}));
-document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) playClouds(); });
 
 /* --- word reveal for headings --- */
 $$('#v-home h2, .launch h2').forEach(h=>{
