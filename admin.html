@@ -85,6 +85,10 @@ main{padding-block:22px 120px}
 .mv{display:flex;flex-direction:column;flex:none}
 .mv button{width:34px;height:28px;color:var(--ink-2);font-size:.9rem}
 .mv button:disabled{opacity:.25}
+.idel{flex:none;width:40px;height:40px;border-radius:99px;display:grid;place-items:center;color:var(--ink-2);margin-inline-end:4px;transition:background .2s,color .2s}
+.idel svg{width:18px;height:18px}
+.idel:hover{color:var(--bad);background:rgba(0,0,0,.04)}
+.idel.armed{width:auto;padding:0 12px;font-size:.78rem;color:#fff;background:var(--bad)}
 .empty{border:1px dashed var(--line);padding:28px 18px;text-align:center;color:var(--ink-2);line-height:1.7}
 
 /* editor sheet */
@@ -361,6 +365,7 @@ function renderItems(){
         <span class="sub">${CAT[it.cat]||''} · ₪${esc(it.price)} · ${G[it.g]||''}</span>
         <span class="sub" style="margin-top:4px">${it.visible===false?'<span class="pill hidden-p">מוסתר</span> ':''}${placeOf(it)!=='shop'?`<span class="pill gal-p">${PLACE[placeOf(it)]}</span> `:''}${it.col?`<span class="pill col-p">${esc(it.col)}</span> `:''}${placeOf(it)==='shop'?stockLine(D.stock[it.id]):''}</span></span>
       </button>
+      <button type="button" class="idel" data-idel="${esc(it.id)}" aria-label="מחיקת ${esc(it.he||it.name)}" title="מחיקה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>
       ${q||itemCol!=='all'?'':`<span class="mv"><button type="button" data-mv="${esc(it.id)}" data-dir="-1" aria-label="להזיז למעלה" ${i===0?'disabled':''}>▲</button><button type="button" data-mv="${esc(it.id)}" data-dir="1" aria-label="להזיז למטה" ${i===items.length-1?'disabled':''}>▼</button></span>`}</li>`;
     }).join('')}</ul>`:`<p class="empty">${q?'לא נמצא תכשיט בשם הזה.':'עוד אין תכשיטים. לוחצים על ״תכשיט חדש״ כדי להוסיף את הראשון.'}</p>`}`;
   $('#newItem').onclick=()=>editItem(null);
@@ -381,6 +386,8 @@ function renderItems(){
       say(`הועברו ${list.length} תכשיטים`); }catch(x){ say(x.message); if(d) setData(d); } finally{ idle(); } };
   const s=$('#itemQ'); if(s){ s.oninput=()=>{ itemQ=s.value; renderItems(); const n=$('#itemQ'); n.focus(); n.setSelectionRange(n.value.length,n.value.length); }; }
   document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(D.items.find(x=>x.id===b.dataset.edit)));
+  document.querySelectorAll('[data-idel]').forEach(b=>{ let a=false, svg=b.innerHTML; b.onclick=e=>{ e.stopPropagation(); if(!a){ a=true; b.classList.add('armed'); b.textContent='ללחוץ שוב כדי למחוק'; setTimeout(()=>{ if(a){ a=false; b.classList.remove('armed'); b.innerHTML=svg; } },3500); return; }
+    busy('מוחקת…'); api('deleteItem',{id:b.dataset.idel}).then(d=>{ setData(d); say('התכשיט נמחק'); }).catch(x=>say(x.message)).finally(idle); }; });
   document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{ busy('מזיזה…'); api('moveItem',{id:b.dataset.mv,dir:Number(b.dataset.dir)}).then(setData).catch(x=>say(x.message)).finally(idle); });
 }
 
