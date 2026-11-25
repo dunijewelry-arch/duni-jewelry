@@ -2087,10 +2087,7 @@ function productHTML(p){
         </div>
       </div>
     </div>
-    ${p.story.length?`<section class="pdp-story" aria-labelledby="pstH">
-      <h2 id="pstH"><small lang="en">the story of ${p.name}</small>הסיפור של ${p.he}</h2>
-      <div>${p.story.map(t=>`<p>${t}</p>`).join('')}<div class="by"><img src="assets/star.png" alt="">עוצב ונעשה ביד ב-Duni</div></div>
-    </section>`:''}
+    
     <section class="related" aria-labelledby="relH">
       <h2 id="relH">עוד מהקולקציה<small lang="en">more pieces</small></h2>
       <div class="grid">${related.map(x=>cardHTML(x)).join('')}</div>
