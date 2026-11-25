@@ -1416,7 +1416,7 @@ body{overflow-x:clip}
     <p class="note" data-t="gender_note">החלוקה היא רק נקודת התחלה. תכשיט מתאים למי שהוא מדבר אליו.</p>
   </section>
 
-  <div class="band duo"><a href="#g-uneri"><img src="assets/pieces/uneri.webp" alt="אונרי על הגוף" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span class="b-cap"><span class="nm" lang="en">uneri · うねり</span><b>אונרי</b></span></a><a href="#g-sebone"><img src="assets/pieces/sebone.webp" alt="סבונה על הגב" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span class="b-cap"><span class="nm" lang="en">sebone · 背骨</span><b>סבונה</b></span></a></div>
+  <div class="band duo" id="duoBand" hidden></div>
 
   <div class="bar" aria-hidden="true"><span class="sp" lang="en">part 03</span><span class="t">החזון<span class="sp" lang="en">vision</span></span><a href="#vision" tabindex="-1">לקרוא</a></div>
   <section class="vision vx" id="vision" aria-labelledby="visionH">
@@ -1722,18 +1722,17 @@ const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}"
 /* ---------- on-body photos (mockup): per piece, plus editorial tiles. Later these come from a "על הגוף" column in the sheet. ---------- */
 const WORN = {}; // id -> second photo, shown when hovering a card
 P.forEach(p=>{ if(p.photos[1]) WORN[p.id]=photoURL(p.photos[1],1400); });
-const WTILES = [
-  {img:'assets/pieces/tsubasa.webp', href:'#g-tsubasa', nm:'tsubasa', he:'צובאסה'},
-  {img:'assets/pieces/uneri.webp',   href:'#g-uneri',   nm:'uneri',   he:'אונרי'},
-  {img:'assets/pieces/sebone.webp',  href:'#g-sebone',  nm:'sebone',  he:'סבונה'},
-  {img:'assets/pieces/tsuyu.webp',   href:'#p-tsuyu',   nm:'tsuyu',   he:'צויו'},
-  {img:'assets/pieces/eda.webp',     href:'#p-eda',     nm:'eda',     he:'אדה'}];
+// editorial tiles: tsubasa (custom piece, in the gallery) + Eden's own uploaded photos of the pieces (the second photo when there is one)
+const WTILES = [{img:'assets/pieces/tsubasa.webp', href:'#g-tsubasa', nm:'tsubasa', he:'צובאסה'},
+  ...P.filter(p=>p.photos.length).map(p=>({img:photoURL(p.photos[p.photos.length>1?1:0],900), href:plink(p), nm:p.name, he:p.he}))];
 const wtHTML = (t)=>`<div class="cw cw-wt"><a class="wt" href="${t.href}"><img src="${t.img}" alt="${t.he} על הגוף" loading="lazy"><span class="wt-cap"><span class="nm" lang="en">${t.nm}</span><span>${t.he} · על הגוף</span></span></a></div>`;
 function mixWorn(cards, every, start){ const out=[]; let k=start||0; cards.forEach((c,i)=>{ out.push(c); if((i+1)%every===0 && i<cards.length-1){ out.push(wtHTML(WTILES[k%WTILES.length])); k++; } }); return out.join(''); }
 const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="${plink(p)}">
   <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" ${cls==='card'?'loading="lazy"':''}>${p.photos.length>1?`<span class="cnav" data-ph="${esc(p.photos.map(x=>photoURL(x,1400)).join('|'))}"><span class="cn-b" role="button" tabindex="0" data-cn="1" aria-label="התמונה הבאה">‹</span><span class="cn-d">${p.photos.map((x,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span><span class="cn-b" role="button" tabindex="0" data-cn="-1" aria-label="התמונה הקודמת">›</span></span>`:''}</div>
   <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
   </a></div>`;
+{ const two=P.filter(p=>p.photos.length).sort((a,b)=>(b.photos.length>1)-(a.photos.length>1)).slice(0,2), db=$('#duoBand');
+  if(db && two.length===2){ db.innerHTML=two.map(p=>`<a href="${plink(p)}"><img src="${photoURL(p.photos[p.photos.length>1?1:0],1400)}" alt="${esc(CAT[p.cat][0]+' '+p.he)}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><span class="b-cap"><span class="nm" lang="en">${esc(p.name)}${p.jp?' · '+esc(p.jp):''}</span><b>${esc(p.he)}</b></span></a>`).join(''); db.hidden=false; } }
 $('#rail').innerHTML = mixWorn(LATEST.map(p=>cardHTML(p,'drop-item')), 3, 0);
 if($('#grid')) $('#grid').innerHTML = P.map(p=>cardHTML(p)).join('');
 const railStep = ()=> ($('#rail').firstElementChild?.offsetWidth||300) + 30;
@@ -2266,7 +2265,8 @@ const POLICY_ROW = `<nav class="pol-row" aria-label="מידע ומדיניות">
 const OVBAR = `<div class="ov-bar"><button class="ov-x" type="button" data-ov-close aria-label="סגירה">×</button><button class="bag ov-bag" type="button" data-open-bag>שריונים (<span class="bagN2">${bag.reduce((n,it)=>n+it.qty,0)}</span>)</button></div>`;
 
 /* ---------- gallery (added from the admin page) ---------- */
-const GALLERY = (DATA.gallery||[]).map(g=>{
+const GALLERY_BUILTIN = [{id:'tsubasa', photo:'assets/pieces/tsubasa.webp', kind:'custom', title:'צובאסה', name:'tsubasa', jp:'翼', he:'צובאסה', lead:'שרשרת כתף בעיצוב אישי'}];
+const GALLERY = [...(DATA.gallery||[]), ...GALLERY_BUILTIN.filter(b=>!(DATA.gallery||[]).some(g=>String(g.id)===b.id))].map(g=>{
   const t = v => esc(String(v==null?'':v).trim());
   return { id:String(g.id||''), img:photoURL(g.photo,900), big:photoURL(g.photo,1600), title:t(g.title), kind:g.kind==='stall'?'stall':'custom',
     piece:('col' in g), name:t(g.name), jp:t(g.jp), he:t(g.he||g.title), cat:CAT[g.cat]?g.cat:'', lead:t(g.lead), made:t(g.made),
