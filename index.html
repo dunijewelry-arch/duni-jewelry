@@ -3,7 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+/* several photos: change them on purpose (arrows / swipe), never on hover; tap the photo on the piece page to enlarge */
+.stage .worn-img{display:none!important}
+.cnav{position:absolute;left:0;right:0;bottom:8px;z-index:4;display:flex;align-items:center;justify-content:center;gap:10px;direction:ltr}
+.cn-b{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(233,230,223,.9);border:1px solid var(--line);color:var(--ink);font-size:1.1rem;line-height:1;cursor:pointer;user-select:none}
+.cn-b:hover{background:var(--ink);color:var(--paper)}
+.cn-d{display:flex;gap:5px}.cn-d i{width:5px;height:5px;border-radius:50%;background:var(--ink);opacity:.25}.cn-d i.on{opacity:.9}
+.stage>img{transition:opacity .2s}
+.pdp-main{cursor:zoom-in;touch-action:pan-y}
+.pdp-arr{position:absolute;top:50%;z-index:5;width:40px;height:40px;margin-top:-20px;border-radius:50%;background:rgba(233,230,223,.92);border:1px solid var(--line);display:grid;place-items:center;font-size:1.3rem;cursor:pointer}
+.pdp-arr.l{left:12px}.pdp-arr.r{right:12px}
+.pdp-zoomhint{position:absolute;top:12px;left:12px;z-index:5;font-size:.7rem;letter-spacing:.06em;background:rgba(233,230,223,.92);padding:3px 10px;border-radius:99px;pointer-events:none}
+#lbx{position:fixed;inset:0;z-index:300;background:rgba(20,19,17,.94);display:none;overflow:hidden;touch-action:none}
+#lbx.on{display:block}
+#lbx img{position:absolute;left:50%;top:50%;max-width:94vw;max-height:88vh;transform-origin:0 0;user-select:none;-webkit-user-drag:none;cursor:zoom-in}
+#lbx.z img{cursor:grab}
+#lbx button{position:absolute;z-index:2;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);font-size:1.4rem;display:grid;place-items:center;cursor:pointer}
+#lbx .x{top:14px;right:14px}#lbx .l{left:14px;top:50%;margin-top:-23px}#lbx .r{right:14px;top:50%;margin-top:-23px}
+#lbx .ct{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#ddd;font-size:.8rem;letter-spacing:.1em;direction:ltr}
+</style>
 <title>Duni · תכשיטי כסף בעבודת יד | Duni Jewelry</title>
 <meta name="description" content="Duni – סטודיו לתכשיטי כסף 925 בעבודת יד. טבעות, שרשראות, צמידים ועגילים בעיצוב אישי, בכמויות קטנות. שריון מראש מהקולקציה החדשה ומשלוח לכל הארץ.">
 <link rel="canonical" href="https://duni-jewelry.co.il/">
@@ -1457,7 +1476,7 @@ body{overflow-x:clip}
       <div class="oo-bl"><span class="jp" lang="ja">手作り</span><span class="dash"></span><span class="sp" lang="en">one of one</span></div>
       <img class="oo-br" src="assets/star.png" alt="">
     </div>
-    <div class="oo-steps cdk-s2"><div class="oo-st cdk-st"><div class="ph p0"><img class="skimg" src="assets/sketch-kawa.jpg" alt="סקיצה בעיפרון של טבעת קאווה" loading="lazy"></div><div class="n">01</div><div class="k sp" lang="en">pencil · paper</div><h3 class="t" data-t="s1_title">מספרים לי</h3><p class="tx" data-t="s1_text">שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</p></div><div class="oo-st cdk-st"><div class="ph p1"><img id="czWax" alt=""></div><div class="n">02</div><div class="k sp" lang="en">hand carved wax</div><h3 class="t" data-t="s2_title">מעצבים יחד</h3><p class="tx" data-t="s2_text">אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</p></div><div class="oo-st cdk-st"><div class="ph p2"><img id="customImg" alt="תכשיט בהזמנה אישית"></div><div class="n">03</div><div class="k sp" lang="en">silver 925 · cast</div><h3 class="t" data-t="s3_title">הוא שלך</h3><p class="tx" data-t="s3_text">גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</p></div></div>
+    <div class="oo-steps cdk-s2"><div class="oo-st cdk-st"><div class="ph p0"><img class="skimg" src="assets/sketch-kawa.jpg" alt="סקיצה בעיפרון של טבעת קאווה" loading="lazy"></div><div class="n">01</div><div class="k sp" lang="en">pencil · paper</div><h3 class="t" data-t="s1_title">מספרים לי</h3><p class="tx" data-t="s1_text">שולחים לי תמונה, סקיצה או רק רעיון, ומדברים עליו.</p></div><div class="oo-st cdk-st"><div class="ph p1"><img id="czWax" src="assets/pieces/kawa.webp" alt="" loading="lazy"></div><div class="n">02</div><div class="k sp" lang="en">hand carved wax</div><h3 class="t" data-t="s2_title">מעצבים יחד</h3><p class="tx" data-t="s2_text">אני מכינה סקיצה, מדייקים אותה יחד עד שזה בדיוק זה, ואז אני מתחילה לעבוד.</p></div><div class="oo-st cdk-st"><div class="ph p2"><img id="customImg" src="assets/pieces/kawa.webp" loading="lazy" alt="תכשיט בהזמנה אישית"></div><div class="n">03</div><div class="k sp" lang="en">silver 925 · cast</div><h3 class="t" data-t="s3_title">הוא שלך</h3><p class="tx" data-t="s3_text">גמור, ארוז ונשלח אלייך עם סימן ה-✦. תמונה שלו מצטרפת ל<a href="#gallery">גלריה</a>.</p></div></div>
     <div class="oo-cta"><a class="btn" href="#custom" id="customBtn"><span data-t="custom_btn">להתחיל עיצוב אישי</span> <img src="assets/star.png" alt=""></a></div>
   </section>
 
@@ -1710,8 +1729,8 @@ const WTILES = [
   {img:'assets/pieces/eda.webp',     href:'#p-eda',     nm:'eda',     he:'אדה'}];
 const wtHTML = (t)=>`<div class="cw cw-wt"><a class="wt" href="${t.href}"><img src="${t.img}" alt="${t.he} על הגוף" loading="lazy"><span class="wt-cap"><span class="nm" lang="en">${t.nm}</span><span>${t.he} · על הגוף</span></span></a></div>`;
 function mixWorn(cards, every, start){ const out=[]; let k=start||0; cards.forEach((c,i)=>{ out.push(c); if((i+1)%every===0 && i<cards.length-1){ out.push(wtHTML(WTILES[k%WTILES.length])); k++; } }); return out.join(''); }
-const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}${WORN[p.id]&&WORN[p.id]!==src(p.id)?' has-worn':''}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="${plink(p)}">
-  <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" ${cls==='card'?'loading="lazy"':''}>${WORN[p.id]&&WORN[p.id]!==src(p.id)?`<img class="worn-img" src="${WORN[p.id]}" alt="" loading="lazy">`:''}</div>
+const cardHTML = (p, cls='card') => `<div class="cw cw-${cls}" data-cat="${p.cat}" data-g="${p.g}">${wishBtnHTML(p)}<a class="${cls}" href="${plink(p)}">
+  <div class="stage">${isNew(p) && cls==='card' ?'<span class="new"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}" ${cls==='card'?'loading="lazy"':''}>${p.photos.length>1?`<span class="cnav" data-ph="${esc(p.photos.map(x=>photoURL(x,1400)).join('|'))}"><span class="cn-b" role="button" tabindex="0" data-cn="1" aria-label="התמונה הבאה">‹</span><span class="cn-d">${p.photos.map((x,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span><span class="cn-b" role="button" tabindex="0" data-cn="-1" aria-label="התמונה הקודמת">›</span></span>`:''}</div>
   <div class="meta"><span><span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span></span><span class="pr">${ils(p.price)}</span></div><div data-stock="${p.id}">${stockHTML(p)}</div>
   </a></div>`;
 $('#rail').innerHTML = mixWorn(LATEST.map(p=>cardHTML(p,'drop-item')), 3, 0);
@@ -2080,7 +2099,7 @@ function productHTML(p){
   return `<article class="pdp">
     <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#${p.g==='him'?'him':'her'}">${p.g==='him'?'גברים':'נשים'}</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
     <div class="pdp-top">
-      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img class="pdp-main" src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span>${p.photos.length>1?`<div class="pdp-th" role="group" aria-label="תמונות">${p.photos.map((x,i)=>`<button type="button" data-ph="${i}" aria-pressed="${i===0}" aria-label="תמונה ${i+1}"><img src="${photoURL(x,400)}" alt=""></button>`).join('')}</div>`:''}<div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
+      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img class="pdp-main" src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span><span class="pdp-zoomhint">לחיצה להגדלה</span>${p.photos.length>1?`<button type="button" class="pdp-arr l" data-pa="1" aria-label="התמונה הבאה">‹</button><button type="button" class="pdp-arr r" data-pa="-1" aria-label="התמונה הקודמת">›</button><div class="pdp-th" role="group" aria-label="תמונות">${p.photos.map((x,i)=>`<button type="button" data-ph="${i}" aria-pressed="${i===0}" aria-label="תמונה ${i+1}"><img src="${photoURL(x,400)}" alt=""></button>`).join('')}</div>`:''}<div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
       <div class="pdp-info">
         <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':p.g==='him'?'לגברים':'לכולם'} · כסף 925 · עבודת יד</div>
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
@@ -2119,12 +2138,53 @@ function mountProduct(p){
   refreshPdpStock();
   v.querySelector('#addBag').onclick=()=>{ if(!size){say('צריך לבחור מידה');v.querySelector('#sizes button').focus();return;} const s=stockOf(p); addRes(p,size,qty); say(s&&s.left<=0?`נכנסת לרשימת ההמתנה ל${CAT[p.cat][0]} ${p.he}`:`${CAT[p.cat][0]} ${p.he} נוספה לשריונים`); };
   const st=v.querySelector('#pdpStage'), im=st.querySelector('.pdp-main')||st.querySelector('img');
-  st.querySelectorAll('[data-ph]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const u=photoURL(p.photos[Number(b.dataset.ph)],1400); if(im.src!==u){ im.style.opacity=0; setTimeout(()=>{ im.src=u; im.onload=()=>{ im.style.opacity=1; }; },180); } st.querySelectorAll('[data-ph]').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
+  const urls = p.photos.length ? p.photos.map(x=>photoURL(x,1400)) : [im.src]; let cur=0;
+  const go = i => { cur=(i+urls.length)%urls.length; const u=urls[cur]; if(im.src!==u){ im.style.opacity=0; setTimeout(()=>{ im.src=u; im.onload=()=>{ im.style.opacity=1; }; },180); } st.querySelectorAll('[data-ph]').forEach(x=>x.setAttribute('aria-pressed', Number(x.dataset.ph)===cur)); };
+  st.querySelectorAll('[data-ph]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); go(Number(b.dataset.ph)); });
+  st.querySelectorAll('[data-pa]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); go(cur+Number(b.dataset.pa)); });
+  let sw=null; im.addEventListener('pointerdown',e=>{ sw={x:e.clientX,y:e.clientY}; });
+  im.addEventListener('pointerup',e=>{ if(!sw) return; const dx=e.clientX-sw.x, dy=e.clientY-sw.y; sw=null;
+    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ if(urls.length>1) go(cur+(dx>0?1:-1)); } else if(Math.abs(dx)<8 && Math.abs(dy)<8) openLbx(urls,cur,i=>go(i)); });
   st.addEventListener('pointermove',e=>{ if(A.still) return; const r=st.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; im.style.transform=`rotateY(${x*18}deg) rotateX(${-y*14}deg) rotate(${x*6}deg) scale(1.04)`; });
   st.addEventListener('pointerleave',()=>im.style.transform='');
   document.title = `${p.name} · Duni`;
   syncWish();
 }
+
+/* card photo arrows: change photo on purpose, the card link stays for everything else */
+addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.cn-b'); if(!b) return; e.preventDefault(); e.stopImmediatePropagation(); cardStep(b); },true);
+document.addEventListener('keydown',e=>{ const b=e.target.closest&&e.target.closest('.cn-b'); if(b&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); e.stopPropagation(); cardStep(b); } },true);
+function cardStep(b){ const nav=b.closest('.cnav'), urls=nav.dataset.ph.split('|'), im=nav.parentElement.querySelector(':scope>img:not(.worn-img):not([src*="star.png"])');
+  let i=Number(nav.dataset.i||0); i=(i+Number(b.dataset.cn)+urls.length)%urls.length; nav.dataset.i=i;
+  im.style.opacity=0; setTimeout(()=>{ im.src=urls[i]; im.onload=()=>{ im.style.opacity=1; }; },150);
+  nav.querySelectorAll('.cn-d i').forEach((d,k)=>d.classList.toggle('on',k===i)); }
+/* full-screen viewer: pinch / wheel / double-tap to zoom, drag to move, arrows or swipe for the next photo */
+const lbx=document.createElement('div'); lbx.id='lbx'; lbx.setAttribute('role','dialog'); lbx.setAttribute('aria-label','תמונה מוגדלת');
+lbx.innerHTML='<img alt=""><button class="x" type="button" aria-label="סגירה">✕</button><button class="l" type="button" aria-label="התמונה הבאה">‹</button><button class="r" type="button" aria-label="התמונה הקודמת">›</button><div class="ct"></div>';
+document.body.appendChild(lbx);
+const lbImg=lbx.querySelector('img'); let lbU=[], lbI=0, lbCb=null, zs=1, zx=0, zy=0, lbBack=null;
+function lbApply(){ const w=lbImg.offsetWidth, h=lbImg.offsetHeight; lbImg.style.transform=`translate(${-w/2*zs+zx}px,${-h/2*zs+zy}px) scale(${zs})`; lbx.classList.toggle('z',zs>1.01); }
+function lbReset(){ zs=1; zx=0; zy=0; lbApply(); }
+function lbShow(i){ lbI=(i+lbU.length)%lbU.length; lbImg.onload=lbReset; lbImg.src=lbU[lbI]; lbReset(); lbx.querySelector('.ct').textContent=lbU.length>1?`${lbI+1} / ${lbU.length}`:''; lbx.querySelectorAll('.l,.r').forEach(b=>b.hidden=lbU.length<2); if(lbCb) lbCb(lbI); }
+function openLbx(urls,i,cb){ lbU=urls; lbCb=cb||null; lbBack=document.activeElement; lbx.classList.add('on'); document.documentElement.style.overflow='hidden'; lbShow(i||0); lbx.querySelector('.x').focus(); }
+function closeLbx(){ lbx.classList.remove('on'); document.documentElement.style.overflow=''; if(lbBack&&lbBack.focus) lbBack.focus(); }
+function zoomAt(k,cx,cy){ const ns=Math.min(5,Math.max(1,zs*k)); const ox=cx-innerWidth/2, oy=cy-innerHeight/2; zx=ox-(ox-zx)*ns/zs; zy=oy-(oy-zy)*ns/zs; zs=ns; if(zs===1){zx=0;zy=0;} lbApply(); }
+lbx.querySelector('.x').onclick=closeLbx;
+lbx.querySelector('.l').onclick=()=>lbShow(lbI+1); lbx.querySelector('.r').onclick=()=>lbShow(lbI-1);
+addEventListener('keydown',e=>{ if(!lbx.classList.contains('on')) return; if(e.key==='Escape') closeLbx(); else if(e.key==='ArrowLeft') lbShow(lbI+1); else if(e.key==='ArrowRight') lbShow(lbI-1); });
+lbx.addEventListener('wheel',e=>{ e.preventDefault(); zoomAt(e.deltaY<0?1.15:1/1.15,e.clientX,e.clientY); },{passive:false});
+const pts=new Map(); let pinch=null, pan=null, tapT=0, moved=false;
+lbx.addEventListener('pointerdown',e=>{ if(e.target.closest('button')) return; lbx.setPointerCapture(e.pointerId); pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); moved=false;
+  if(pts.size===2){ const [a,b]=[...pts.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:zs}; pan=null; } else pan={x:e.clientX,y:e.clientY,zx,zy,sx:e.clientX,sy:e.clientY,onImg:e.target===lbImg}; });
+lbx.addEventListener('pointermove',e=>{ if(!pts.has(e.pointerId)) return; pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pinch&&pts.size===2){ const [a,b]=[...pts.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y); zoomAt(pinch.s*d/pinch.d/zs,(a.x+b.x)/2,(a.y+b.y)/2); moved=true; }
+  else if(pan){ const dx=e.clientX-pan.x, dy=e.clientY-pan.y; if(Math.abs(e.clientX-pan.sx)+Math.abs(e.clientY-pan.sy)>6) moved=true; if(zs>1.01){ zx=pan.zx+dx; zy=pan.zy+dy; lbApply(); } } });
+const lbUp=e=>{ if(!pts.has(e.pointerId)) return; pts.delete(e.pointerId);
+  if(pinch){ if(pts.size<2) pinch=null; pan=null; return; }
+  if(!pan) return; const dx=e.clientX-pan.sx, dy=e.clientY-pan.sy, onImg=pan.onImg; pan=null;
+  if(zs<=1.01 && Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ if(lbU.length>1) lbShow(lbI+(dx>0?1:-1)); return; }
+  if(!moved){ const now=Date.now(); if(onImg){ if(zs>1.01) lbReset(); else zoomAt(2.5,e.clientX,e.clientY); } else if(now-tapT>300) closeLbx(); tapT=now; } };
+lbx.addEventListener('pointerup',lbUp); lbx.addEventListener('pointercancel',e=>{ pts.delete(e.pointerId); pinch=null; pan=null; });
 
 function refreshPdpStock(){
   const h=decodeURIComponent(location.hash.slice(1)); const p=h.startsWith('p-')&&byName(h.slice(2)); if(!p) return;
@@ -2477,9 +2537,9 @@ document.addEventListener('click',e=>{
 addEventListener('keydown',e=>{ if(e.key==='Escape' && sheetOpen() && $('#drawer').hidden && $('#wishDrawer').hidden && !$('#sizeDlg').open && !$('#measDlg').open && !$('#cbDlg').open) closeSheet(); });
 $('#skipLink').onclick = e=>{ e.preventDefault(); $('#main').focus(); };
 function fillHome(){
-  if(HERO){ $('#heroImg').src=src(HERO.id); $('#heroImg').alt=`${CAT[HERO.cat][0]} ${HERO.he}`; $('#customImg').src=src(HERO.id); if($('#czWax')) $('#czWax').src=src(HERO.id);
+  if(HERO){ $('#heroImg').src=src(HERO.id); $('#heroImg').alt=`${CAT[HERO.cat][0]} ${HERO.he}`; 
     $('#hudName b').innerHTML=`${CAT[HERO.cat][0]} ${HERO.he}`; $('#hudName .sp').innerHTML=`${HERO.name} · ${HERO.jp}`; }
-  else { $('#heroRing').hidden=true; $('#customImg').hidden=true; }
+  else { $('#heroRing').hidden=true; }
   $('#openWhen').textContent = `${OPEN_LONG} · ${OPEN_TIME} שעון ישראל`;
   applyTexts();
   $('#shipNote').textContent = `משלוח לכל הארץ: ${SHIP} ₪, כ-2–3 שבועות עם מספר מעקב. ביום הפתיחה אשלח לך קישור אישי לרכישה.`;
