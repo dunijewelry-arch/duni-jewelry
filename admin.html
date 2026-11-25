@@ -600,9 +600,19 @@ function editItem(it){
 /* ---------- reservations ---------- */
 let resFilter='active', resQ='';
 const WA_ICON='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.7-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>';
-function waLink(phone, name){
-  let n = String(phone).replace(/\D/g,''); if(n.startsWith('0')) n = '972'+n.slice(1);
-  return `https://wa.me/${n}?text=${encodeURIComponent(`היי ${String(name).split(' ')[0]}, כאן עדן מ-Duni ✦ `)}`;
+function waNum(phone){ let n = String(phone).replace(/\D/g,''); if(n.startsWith('0')) n = '972'+n.slice(1); return n; }
+function waLink(phone, name){ return `https://wa.me/${waNum(phone)}?text=${encodeURIComponent(`היי ${String(name).split(' ')[0]}, כאן עדן מ-Duni ✦ `)}`; }
+// a ready confirmation of the reservation, she only has to press send
+function waConfirm(g, byId){
+  const r0=g[0], s=D.settings||{}, [od,ot]=String(s.open_at||'2027-02-01 00:00').split(' '), [y,m,d]=od.split('-');
+  const nm=r=>(byId[r.id]&&(byId[r.id].he||byId[r.id].name))||r.item;
+  const res=g.filter(r=>r.status==='שריון'), wait=g.filter(r=>r.status==='רשימת המתנה');
+  const line=r=>`• ${nm(r)}${r.size?` (מידה ${r.size})`:''}${Number(r.qty)>1?` ×${r.qty}`:''}`;
+  let t=`היי ${String(r0.name).split(' ')[0]}, כאן עדן מ-Duni ✦\nקיבלתי את השריון שלך, תודה!\n\n`;
+  if(res.length) t+=`שמור לך:\n${res.map(line).join('\n')}\n\n`;
+  if(wait.length) t+=`ברשימת ההמתנה:\n${wait.map(r=>line(r)+(r.place?` – מקום ${r.place} בתור`:'')).join('\n')}\n\n`;
+  t+=`המכירה נפתחת ב-${Number(d)}.${Number(m)}.${y} בשעה ${ot}. באותו יום אשלח לך כאן קישור אישי לרכישה`+(res.length?`, והתכשיטים שמורים לך עד ${s.hold_until||'18:00'}.`:'.')+`\n\nקוד השריון: ${r0.code}`;
+  return `https://wa.me/${waNum(r0.phone)}?text=${encodeURIComponent(t)}`;
 }
 const dateHe = t => { const d = new Date(typeof t==='number'?t:Date.parse(t)); return isNaN(d) ? '' : d.toLocaleString('he-IL',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}); };
 function renderRes(){
@@ -620,7 +630,7 @@ function renderRes(){
     <input class="search" id="resQ" type="search" placeholder="חיפוש לפי שם, טלפון או קוד" value="${esc(resQ)}">
     ${order.length ? order.map(code=>{ const g=groups[code], r0=g[0]; return `<article class="res-card">
       <div class="who"><b>${esc(r0.name)}</b><span class="code">${esc(code)}</span><span class="muted small">${dateHe(r0.date)}</span></div>
-      <div class="contact"><span class="num">${esc(r0.phone)}</span><a class="wa" href="${waLink(r0.phone,r0.name)}" target="_blank" rel="noopener">${WA_ICON}וואטסאפ</a>${r0.email?`<span class="muted small" dir="ltr">${esc(r0.email)}</span>`:''}</div>
+      <div class="contact"><span class="num">${esc(r0.phone)}</span><a class="wa" href="${waConfirm(g,byId)}" target="_blank" rel="noopener" title="נפתחת הודעת אישור מוכנה, רק ללחוץ שליחה">${WA_ICON}לשלוח אישור בוואטסאפ</a><a class="link small" href="${waLink(r0.phone,r0.name)}" target="_blank" rel="noopener">הודעה ריקה</a>${r0.email?`<span class="muted small" dir="ltr">${esc(r0.email)}</span>`:''}</div>
       <ul class="res-lines">${g.map(r=>`<li><span>${esc((byId[r.id]&&(byId[r.id].he||byId[r.id].name))||r.item)}${r.size?` · ${esc(r.size)}`:''} · ×${esc(r.qty)}${r.status==='רשימת המתנה'&&r.place?` <span class="muted small">(מקום ${esc(r.place)} בתור)</span>`:''}</span>
         <select data-row="${esc(r.row)}" aria-label="סטטוס">${STATUSES.map(s=>`<option ${s===r.status?'selected':''}>${s}</option>`).join('')}</select></li>`).join('')}</ul>
     </article>`; }).join('') : `<p class="empty">${R.length?'אין שריונים שמתאימים לסינון.':'עוד אין שריונים. כשמישהי תשריין באתר, השריון יופיע כאן ויגיע אלייך גם למייל.'}</p>`}`;
