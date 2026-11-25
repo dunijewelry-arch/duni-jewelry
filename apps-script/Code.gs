@@ -30,7 +30,7 @@ const ITEM_COLS = [
 ];
 // where a piece shows: in the shop, or in the gallery as a custom piece / a stall piece
 const PLACES = ['shop', 'custom', 'stall'];
-const VERSION = 2;
+const VERSION = 3; // 3: a piece can have several photos (ids joined with |)
 const GAL_COLS = [['id', 'id'], ['photo', 'תמונה'], ['title', 'כותרת'], ['kind', 'סוג'], ['added', 'נוסף בתאריך']];
 // coupon codes, checked here on the server. ship = the customer gets the shipping fee back
 const COUPONS = { isuf: { ship: true, note: 'קופון ISUF: החזר דמי משלוח' } };
@@ -309,12 +309,12 @@ function saveItem_(it) {
     cat: CATS.indexOf(it.cat) >= 0 ? it.cat : 'rings', g: GENDERS.indexOf(it.g) >= 0 ? it.g : 'her',
     price: String(Math.max(0, Math.round(Number(it.price) || 0))), qty: String(Math.max(0, Math.floor(Number(it.qty) || 0))),
     sizes: cleanText_(it.sizes, 120), lead: cleanText_(it.lead, 400), story: cleanText_(it.story, 4000), made: cleanText_(it.made, 200),
-    photo: cleanText_(it.photo, 300), visible: it.visible === false ? 'לא' : 'כן', added: old ? old.added : stamp_(),
+    photo: cleanText_(it.photo, 1500), visible: it.visible === false ? 'לא' : 'כן', added: old ? old.added : stamp_(),
     col: cleanText_(it.col, 60), place: PLACES.indexOf(it.place) >= 0 ? it.place : 'shop',
   };
   const row = ITEM_COLS.map(c => o[c[0]]);
   if (old) {
-    if (old.photo && old.photo !== o.photo) trashPhoto_(old.photo);
+    if (old.photo && old.photo !== o.photo) { const keep = String(o.photo).split('|'); String(old.photo).split('|').forEach(p => { if (keep.indexOf(p) < 0) trashPhoto_(p); }); }
     sh.getRange(old._row, 1, 1, row.length).setValues([row]);
   } else {
     sh.getRange(sh.getLastRow() + 1, 1, 1, row.length).setNumberFormat('@').setValues([row]);
@@ -349,7 +349,7 @@ function galleryToItem_(id, it) {
 function deleteRowById_(name, id, trash) {
   const cols = name === SH.items ? ITEM_COLS : GAL_COLS;
   const r = rows_(name, cols).find(x => x.id === id); if (!r) return;
-  if (trash && r.photo) trashPhoto_(r.photo);
+  if (trash && r.photo) String(r.photo).split('|').forEach(trashPhoto_);
   sheet_(name).deleteRow(r._row);
 }
 function saveSettings_(s) {

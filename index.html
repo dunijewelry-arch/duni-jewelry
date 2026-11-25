@@ -1237,6 +1237,15 @@ body{overflow-x:clip}
 
 /* side chapter tabs removed */
 .stabs{display:none!important}
+
+/* several photos per piece */
+.has-worn .stage::after{display:none!important}
+.pdp-main{transition:opacity .25s,transform .5s}
+.pdp-th{position:absolute;left:12px;bottom:12px;z-index:5;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+.pdp-th button{width:54px;height:54px;padding:3px;background:rgba(233,230,223,.92);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;transition:border-color .2s}
+.pdp-th button img{width:100%;height:100%;object-fit:contain;position:static!important;transform:none!important}
+.pdp-th button[aria-pressed="true"]{border-color:var(--ink)}
+@media(max-width:760px){.pdp-th button{width:46px;height:46px}}
 </style>
 </head>
 <body>
@@ -1608,7 +1617,7 @@ function loadData(){
 }
 // a photo is a Drive file id (uploaded from the admin page) or a path in this site
 function photoURL(v, w){
-  v = String(v||'');
+  v = String(v||'').split('|')[0];
   if(/^[A-Za-z0-9_-]{20,}$/.test(v)) return `https://lh3.googleusercontent.com/d/${v}=w1600`; // full size: a resized copy loses the see-through background
   if(w<=500 && v.startsWith('assets/pieces/') && !v.includes('/sm/')) return v.replace('assets/pieces/','assets/pieces/sm/');
   return v;
@@ -1618,7 +1627,7 @@ function normItem(p){
   const story = Array.isArray(p.story) ? p.story : String(p.story||'').split(/\n\s*\n/);
   return { id:String(p.id), key:String(p.name||p.id).trim().toLowerCase().replace(/\s+/g,'-'), name:t(p.name), jp:t(p.jp), he:t(p.he||p.name), mean:t(p.mean),
     cat:p.cat, g:['her','him','both'].includes(p.g)?p.g:'her', price:Number(p.price)||0, sizes:String(p.sizes||'').trim(),
-    lead:t(p.lead), story:story.map(x=>t(x)).filter(Boolean), made:t(p.made), photo:String(p.photo||'') };
+    lead:t(p.lead), story:story.map(x=>t(x)).filter(Boolean), made:t(p.made), photo:String(p.photo||''), photos:String(p.photo||'').split('|').map(x=>x.trim()).filter(Boolean) };
 }
 loadData().then(boot);
 
@@ -1688,7 +1697,8 @@ const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.
 const wishBtnHTML = p => `<button class="wish" type="button" data-wish="${p.id}" aria-pressed="false" aria-label="שמירת ${CAT[p.cat][0]} ${p.he} בפריטים שאהבתי">${HEART}</button>`;
 
 /* ---------- on-body photos (mockup): per piece, plus editorial tiles. Later these come from a "על הגוף" column in the sheet. ---------- */
-const WORN = {}; // id -> on-body photo, e.g. { mado:'assets/worn/mado.webp' }
+const WORN = {}; // id -> second photo, shown when hovering a card
+P.forEach(p=>{ if(p.photos[1]) WORN[p.id]=photoURL(p.photos[1],1400); });
 const WTILES = [
   {img:'assets/pieces/tsubasa.webp', href:'#g-tsubasa', nm:'tsubasa', he:'צובאסה'},
   {img:'assets/pieces/uneri.webp',   href:'#g-uneri',   nm:'uneri',   he:'אונרי'},
@@ -2067,7 +2077,7 @@ function productHTML(p){
   return `<article class="pdp">
     <nav class="crumbs" aria-label="מיקום בעמוד"><a href="#home">בית</a><span aria-hidden="true">/</span><a href="#${p.g==='him'?'him':'her'}">${p.g==='him'?'גברים':'נשים'}</a><span aria-hidden="true">/</span><span aria-current="page">${CAT[p.cat][0]} ${p.he}</span></nav>
     <div class="pdp-top">
-      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span>${WORN[p.id]&&WORN[p.id]!==src(p.id)?`<img class="worn-big" src="${WORN[p.id]}" alt="${CAT[p.cat][0]} ${p.he} על הגוף"><div class="pv" role="group" aria-label="תמונה"><button type="button" data-pv="0" aria-pressed="true">התכשיט</button><button type="button" data-pv="1" aria-pressed="false">על הגוף</button></div>`:''}<div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
+      <div class="pdp-stage" id="pdpStage">${isNew(p)?'<span class="tag"><img src="assets/star.png" alt="">חדש</span>':''}<img class="pdp-main" src="${src(p.id)}" alt="${CAT[p.cat][0]} ${p.he}: ${p.lead}"><span class="jp jp-big" lang="ja" aria-hidden="true">${p.jp}</span>${p.photos.length>1?`<div class="pdp-th" role="group" aria-label="תמונות">${p.photos.map((x,i)=>`<button type="button" data-ph="${i}" aria-pressed="${i===0}" aria-label="תמונה ${i+1}"><img src="${photoURL(x,400)}" alt=""></button>`).join('')}</div>`:''}<div class="spec" aria-hidden="true"><div class="h"><span>spec</span><span>${p.name}</span></div><dl><dt>שם</dt><dd>${p.jp} · ${p.name}</dd><dt>חומר</dt><dd>כסף 925</dd><dt>טכניקה</dt><dd>עבודת יד</dd><dt>סוג</dt><dd>${CAT[p.cat][0]}</dd></dl></div></div>
       <div class="pdp-info">
         <div class="eyebrow">${CAT[p.cat][0]} · ${p.g==='her'?'לנשים':p.g==='him'?'לגברים':'לכולם'} · כסף 925 · עבודת יד</div>
         <h1 lang="en">${p.name}<span class="jp" lang="ja">${p.jp}</span></h1>
@@ -2105,8 +2115,8 @@ function mountProduct(p){
   v.querySelector('#qPlus').onclick=()=>{ if(qty<20){qty++;qOut.textContent=qty;} };
   refreshPdpStock();
   v.querySelector('#addBag').onclick=()=>{ if(!size){say('צריך לבחור מידה');v.querySelector('#sizes button').focus();return;} const s=stockOf(p); addRes(p,size,qty); say(s&&s.left<=0?`נכנסת לרשימת ההמתנה ל${CAT[p.cat][0]} ${p.he}`:`${CAT[p.cat][0]} ${p.he} נוספה לשריונים`); };
-  const st=v.querySelector('#pdpStage'), im=st.querySelector('img');
-  st.querySelectorAll('[data-pv]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); st.classList.toggle('show-worn', b.dataset.pv==='1'); st.querySelectorAll('[data-pv]').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
+  const st=v.querySelector('#pdpStage'), im=st.querySelector('.pdp-main')||st.querySelector('img');
+  st.querySelectorAll('[data-ph]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const u=photoURL(p.photos[Number(b.dataset.ph)],1400); if(im.src!==u){ im.style.opacity=0; setTimeout(()=>{ im.src=u; im.onload=()=>{ im.style.opacity=1; }; },180); } st.querySelectorAll('[data-ph]').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
   st.addEventListener('pointermove',e=>{ if(A.still) return; const r=st.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; im.style.transform=`rotateY(${x*18}deg) rotateX(${-y*14}deg) rotate(${x*6}deg) scale(1.04)`; });
   st.addEventListener('pointerleave',()=>im.style.transform='');
   document.title = `${p.name} · Duni`;

@@ -117,6 +117,16 @@ main{padding-block:22px 120px}
 .photo .ph-add b{font-size:2rem;font-weight:300;color:var(--ink)}
 .photo input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .photo-tools{display:flex;justify-content:center;gap:16px;align-items:center}
+.phs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.phs .ph{position:relative;width:74px;height:74px;background:var(--paper-2);border:1px solid var(--line);display:grid;place-items:center}
+.phs .ph img{width:86%;height:86%;object-fit:contain}
+.phs .ph.main{border-color:var(--ink)}
+.phs .ph-x{position:absolute;top:-8px;left:-8px;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:.9rem;line-height:1}
+.phs .ph-m{position:absolute;bottom:0;left:0;right:0;font-size:.62rem;background:rgba(233,230,223,.9);padding:2px 0;text-align:center}
+.phs .ph-m.on{background:var(--ink);color:var(--paper)}
+.phs .ph.add{border-style:dashed;cursor:pointer;align-content:center;gap:0;font-size:.75rem;color:var(--ink-2)}
+.phs .ph.add b{font-size:1.4rem;font-weight:300;color:var(--ink)}
+.phs .ph.add input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .cchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
 .cchip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 13px;font-size:.88rem}
 .cchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -282,7 +292,7 @@ async function prepImage(file, max){
   return c2.toDataURL('image/png');
 }
 function photoURL(v,w){
-  v=String(v||'');
+  v=String(v||'').split('|')[0];
   if(/^[A-Za-z0-9_-]{20,}$/.test(v)) return `https://lh3.googleusercontent.com/d/${v}=w${w||400}`;
   if(v.startsWith('assets/')) return './'+v.replace('assets/pieces/','assets/pieces/sm/');
   return v;
@@ -327,8 +337,8 @@ function colList(){
   return out;
 }
 function saveColList(list){ return api('saveTexts',{texts:{collections:JSON.stringify([...new Set(list.map(c=>String(c).trim()).filter(Boolean))])}}); }
-const needUpdate = () => D.version!==2;
-const UPDATE_NOTE = `<div class="upd">כדי שהקולקציות וההעברה לגלריה יישמרו, צריך לעדכן פעם אחת את הקוד בגיליון (Apps Script). עד אז השינויים האלה לא נשמרים.</div>`;
+const needUpdate = () => !(D.version>=3);
+const UPDATE_NOTE = `<div class="upd">כדי שכמה תמונות לתכשיט (וגם הקולקציות וההעברה לגלריה) יישמרו, צריך לעדכן פעם אחת את הקוד בגיליון (Apps Script).</div>`;
 
 /* ---------- items ---------- */
 let itemQ='', itemCol='all';
@@ -474,7 +484,8 @@ function editItem(it){
   sh.innerHTML = `
     <div class="sheet-bar"><button class="x" type="button" id="shX" aria-label="סגירה">×</button><h3 id="sheetH">${isNew?'תכשיט חדש':esc(f.he||f.name)}</h3><button class="btn sm" type="button" id="shSave">שמירה</button></div>
     <form class="sheet-body" id="itemForm" novalidate>
-      <div class="photo" id="photoBox">${f.photo?`<img src="${esc(photoURL(f.photo,800))}" alt="">`:'<span class="ph-add"><b>+</b>הוספת תמונה</span>'}<input type="file" accept="image/*" id="photoIn" aria-label="בחירת תמונה"></div>
+      <div class="photo" id="photoBox">${f.photo?`<img src="${esc(photoURL(f.photo,800))}" alt="">`:'<span class="ph-add"><b>+</b>הוספת תמונות</span>'}<input type="file" accept="image/*" multiple id="photoIn" aria-label="בחירת תמונות"></div>
+      <div class="phs" id="phStrip"></div>
       <p class="hint" style="margin:0;text-align:center">התמונה הכי יפה באתר היא בלי רקע. באייפון: לוחצים לחיצה ארוכה על התכשיט בתמונה, ״שיתוף״, ואז ״שמירת תמונה״. את התמונה הזו מעלים לכאן.</p>
       <div class="two">
         <label class="field"><span>שם באנגלית</span><input id="fName" value="${esc(f.name)}" dir="ltr" placeholder="nami"></label>
@@ -532,12 +543,34 @@ function editItem(it){
   drawSizes();
   $('#fCat').onchange=()=>{ if($('#fCat').value!=='rings' && /^[\d,\s]+$/.test(sizes)) sizes=''; drawSizes(); };
   let g=f.g; document.querySelectorAll('#fG button').forEach(b=>b.onclick=()=>{ g=b.dataset.g; dirty=true; document.querySelectorAll('#fG button').forEach(x=>x.setAttribute('aria-pressed',x===b)); });
-  $('#photoIn').onchange=async e=>{
-    const file=e.target.files[0]; if(!file) return;
-    try{ busy('מכינה את התמונה…'); newPhoto = await prepImage(file,1400); dirty=true;
-      $('#photoBox').querySelector('img,.ph-add').outerHTML = `<img src="${newPhoto}" alt="">`; }
+  // several photos: the first one is the main photo on the site
+  let phs = String(f.photo||'').split('|').filter(Boolean).map(v=>({v}));
+  const phSrc = p => p.data || photoURL(p.v,400);
+  const drawPh = ()=>{
+    const box=$('#photoBox'), main=phs[0];
+    box.querySelector('img,.ph-add').outerHTML = main ? `<img src="${main.data||photoURL(main.v,800)}" alt="">` : '<span class="ph-add"><b>+</b>הוספת תמונות</span>';
+    $('#phStrip').innerHTML = phs.length ? phs.map((p,i)=>`<div class="ph${i===0?' main':''}"><img src="${phSrc(p)}" alt=""><button type="button" class="ph-x" data-phx="${i}" aria-label="להסיר את התמונה">×</button>${i?`<button type="button" class="ph-m" data-phm="${i}">לראשית</button>`:'<span class="ph-m on">ראשית</span>'}</div>`).join('') + `<label class="ph add"><b>+</b><span>עוד</span><input type="file" accept="image/*" multiple id="photoMore" aria-label="הוספת תמונות"></label>` : '';
+    document.querySelectorAll('[data-phx]').forEach(b=>b.onclick=()=>{ phs.splice(Number(b.dataset.phx),1); dirty=true; drawPh(); });
+    document.querySelectorAll('[data-phm]').forEach(b=>b.onclick=()=>{ const [p]=phs.splice(Number(b.dataset.phm),1); phs.unshift(p); dirty=true; drawPh(); });
+    const more=$('#photoMore'); if(more) more.onchange=addPhotos;
+  };
+  const addPhotos = async e=>{
+    const files=[...e.target.files]; if(!files.length) return;
+    try{ for(let i=0;i<files.length;i++){ busy(files.length>1?`מכינה תמונה ${i+1} מתוך ${files.length}…`:'מכינה את התמונה…'); phs.push({data: await prepImage(files[i],1400)}); }
+      dirty=true; drawPh(); }
     catch(x){ say(x.message); } finally{ idle(); e.target.value=''; }
   };
+  $('#photoIn').onchange=addPhotos; drawPh();
+  // a new piece gets a random name right away (Japanese nature words, like the rest of the collection); it can be changed
+  if(isNew){
+    const NAMES=[['kumo','雲','ענן','קומו'],['hoshi','星','כוכב','הושי'],['tsuki','月','ירח','צוקי'],['nami','波','גל','נאמי'],['kaze','風','רוח','קאזה'],['yuki','雪','שלג','יוקי'],['sora','空','שמיים','סורה'],['hana','花','פרח','האנה'],['mizu','水','מים','מיזו'],['ishi','石','אבן','אישי'],['mori','森','יער','מורי'],['hi','火','אש','הי'],['ame','雨','גשם','אמה'],['kiri','霧','ערפל','קירי'],['shima','島','אי','שימה'],['iwa','岩','סלע','איווה'],['kage','影','צל','קאגה'],['hikari','光','אור','היקארי'],['tane','種','זרע','טאנה'],['ne','根','שורש','נה'],['ha','葉','עלה','הא'],['suna','砂','חול','סונה'],['take','竹','במבוק','טאקה'],['kai','貝','צדף','קאי'],['taki','滝','מפל','טאקי'],['umi','海','ים','אומי'],['mine','峰','פסגה','מינה'],['tsubu','粒','גרגר','צובו'],['kona','粉','אבקה','קונה'],['nagi','凪','שקט בים','נאגי'],['shizuku','雫','טיפה','שיזוקו'],['hotaru','蛍','גחלילית','הוטארו'],['kemuri','煙','עשן','קמורי'],['koke','苔','טחב','קוקה'],['uzu','渦','מערבולת','אוזו'],['tama','玉','חרוז','טאמה']];
+    const used=new Set(D.items.map(i=>String(i.name||'').toLowerCase().trim()).concat(D.items.map(i=>String(i.id||'').toLowerCase())));
+    const free=NAMES.filter(n=>!used.has(n[0])); let pick=free.length?free[Math.floor(Math.random()*free.length)]:null;
+    if(!pick){ const n=NAMES[Math.floor(Math.random()*NAMES.length)]; let k=2; while(used.has(n[0]+' '+k)) k++; pick=[n[0]+' '+k,n[1],n[2],n[3]]; }
+    pick[0]=pick[0].replace(/-/g,' ');
+    const setIf=(id,v)=>{ const el=$(id); if(el && !el.value) el.value=v; };
+    setIf('#fName',pick[0]); setIf('#fJp',pick[1]); setIf('#fMean',pick[2]); setIf('#fHe',pick[3]);
+  }
   const close=()=>{ sh.hidden=true; sh.innerHTML=''; document.body.style.overflow=''; };
   const x=$('#shX'); let armed=false;
   x.onclick=()=>{ if(dirty && !armed){ armed=true; x.classList.add('armed'); x.textContent='לסגור בלי לשמור?'; setTimeout(()=>{ if(armed){ armed=false; x.classList.remove('armed'); x.textContent='×'; } },3500); return; } close(); };
@@ -552,9 +585,12 @@ function editItem(it){
     if(item.name && !/^[A-Za-z0-9 \-']+$/.test(item.name)){ err.textContent='השם באנגלית יכול להכיל רק אותיות באנגלית, מספרים ורווחים.'; $('#fName').focus(); return; }
     if(item.place==='shop' && !(Number(item.price)>0)){ err.textContent='צריך לכתוב מחיר.'; $('#fPrice').focus(); return; }
     if(!(Number(item.qty)>=0) || item.qty===''){ err.textContent='צריך לכתוב כמות.'; $('#fQty').focus(); return; }
-    if(!item.photo && !newPhoto){ err.textContent='צריך להוסיף תמונה.'; return; }
+    if(!phs.length){ err.textContent='צריך להוסיף תמונה.'; return; }
+    if(phs.length>1 && needUpdate()){ err.textContent='כדי לשמור כמה תמונות לתכשיט צריך קודם לעדכן את הקוד בגיליון (Apps Script). בינתיים אפשר לשמור תמונה אחת.'; return; }
     try{
-      if(newPhoto){ busy('מעלה את התמונה…'); const u = await api('upload',{data:newPhoto, name:item.name||item.he}); item.photo=u.photo; }
+      const ids=[]; const fresh=phs.filter(p=>p.data).length; let k=0;
+      for(const p of phs){ if(p.data){ k++; busy(fresh>1?`מעלה תמונה ${k} מתוך ${fresh}…`:'מעלה את התמונה…'); const u=await api('upload',{data:p.data, name:item.name||item.he}); p.v=u.photo; delete p.data; } ids.push(p.v); }
+      item.photo=ids.join('|');
       busy('שומרת…'); const d = await api('saveItem',{item}); close(); setData(d); say(isNew?'התכשיט נוסף לאתר':'נשמר');
     }catch(x){ err.textContent=x.message; } finally{ idle(); }
   };
