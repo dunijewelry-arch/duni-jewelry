@@ -200,6 +200,10 @@ dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
 .meas .step b{color:var(--ink);font-weight:500}
 .meas-stage{display:grid;place-items:center;min-height:var(--stage,340px);background:var(--paper-2);border-radius:14px;overflow:hidden;touch-action:manipulation}
 .coin-c{border:2px solid var(--ink);border-radius:50%;background:rgba(255,255,255,.35)}
+.card-c{border:2px solid var(--ink);background:rgba(255,255,255,.35);margin-inline-start:2px}
+.rul-c{display:flex;align-items:flex-start;gap:6px;color:var(--ink);font-size:.75rem;padding-inline-start:10px}
+.rul-c svg{display:block;overflow:visible;background:rgba(255,255,255,.5)}
+.coin-c[hidden],.card-c[hidden],.rul-c[hidden]{display:none}
 .coin-pick,.chips{display:flex;flex-wrap:wrap;gap:8px}
 .coin-pick button,.chips button{border:1px solid var(--ink);border-radius:99px;padding:8px 16px;font-size:.9rem}
 .coin-pick button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
@@ -1776,27 +1780,49 @@ let PPM = matchMedia('(pointer:coarse)').matches ? 6 : 96/25.4, measD = 16.6, me
 const coinMM = () => coin==='other' ? (coinOther>5 && coinOther<50 ? coinOther : 23) : COINS[coin][1];
 try{ const v=parseFloat(localStorage.getItem('duni-ppm2')); if(v>1.5 && v<12) PPM=v; }catch(e){}
 const SIZE_LIST = RING_SIZES.map(r=>r[0]);
+let calMode='coin';
 function measCalib(){
   const b=$('#measBody');
+  const tabs=[['coin','מטבע'],['ruler','סרגל'],['card','כרטיס']];
+  const help={
+    coin:'בוחרים מטבע ומניחים אותו על העיגול. מזיזים עד שהקו של העיגול מתחבא בדיוק מתחת לשפה של המטבע: לא בולט מסביב, ולא נראה בתוך המטבע.',
+    ruler:'מצמידים סרגל אמיתי לסרגל שעל המסך, כשה-0 של שניהם באותו מקום. מזיזים עד שהסימונים של הסרגל על המסך עומדים בדיוק מול הסימונים של הסרגל האמיתי. בודקים בסימון הרחוק ביותר, שם הכי רואים הבדלים.',
+    card:'מניחים כרטיס בגודל רגיל (כרטיס אשראי, רב-קו, תעודה, כרטיס מועדון) על המלבן, צמוד לפינה השמאלית. מזיזים עד שהמלבן בדיוק ברוחב הכרטיס. זו הדרך הכי מדויקת.'
+  };
   b.innerHTML=`<p class="step"><b>שלב 1 מתוך 2</b> · כיול המסך</p>
-    <p>בוחרים מטבע ומניחים אותו על העיגול. מזיזים את הפס עד שהקו של העיגול מתחבא בדיוק מתחת לשפה של המטבע: לא בולט מסביב, ולא נראה בתוך המטבע. ככה האתר יודע כמה גדול מילימטר על המסך שלך.</p>
-    <div class="coin-pick" role="group" aria-label="איזה מטבע">${COINS.map((c,i)=>`<button type="button" data-coin="${i}" aria-pressed="${i===coin}">${c[0]}</button>`).join('')}<button type="button" data-coin="other" aria-pressed="${coin==='other'}">מטבע אחר</button></div>
-    <label id="coinOtherL" ${coin==='other'?'':'hidden'} style="font-size:.9rem">קוטר המטבע במ״מ <input type="text" inputmode="decimal" id="coinOther" value="${coinOther||''}" dir="ltr" style="width:6em;margin-inline-start:8px;border:1px solid var(--line);padding:8px 10px;border-radius:8px;background:#fff8;font:inherit"></label>
-    <div class="meas-stage" id="calStage"><div class="coin-c" id="coinC" aria-hidden="true"></div></div>
-    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="11" step="0.005" aria-label="גודל המטבע על המסך"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
-    <p style="font-size:.85rem;color:var(--ink-2)">אין מטבע? אפשר עם סרגל: הקו הזה צריך להיות 5 ס״מ בדיוק.<span class="ruler" id="ruler" aria-hidden="true"></span></p>
-    <div class="acts"><button type="button" class="btn" id="calOk">המטבע מתאים, להמשך</button></div>`;
+    <p style="font-size:.9rem">כל מסך בגודל אחר, ולכן צריך פעם אחת להראות לאתר כמה גדול מילימטר אצלך. מה יש לך ביד?</p>
+    <div class="chips" role="group" aria-label="איך לכייל">${tabs.map(t=>`<button type="button" data-cm="${t[0]}" aria-pressed="${calMode===t[0]}">${t[1]}</button>`).join('')}</div>
+    <p id="calHelp">${help[calMode]}</p>
+    <div class="coin-pick" id="coinPick" role="group" aria-label="איזה מטבע" ${calMode==='coin'?'':'hidden'}>${COINS.map((c,i)=>`<button type="button" data-coin="${i}" aria-pressed="${i===coin}">${c[0]}</button>`).join('')}<button type="button" data-coin="other" aria-pressed="${coin==='other'}">מטבע אחר</button></div>
+    <label id="coinOtherL" ${calMode==='coin'&&coin==='other'?'':'hidden'} style="font-size:.9rem">קוטר המטבע במ״מ <input type="text" inputmode="decimal" id="coinOther" value="${coinOther||''}" dir="ltr" style="width:6em;margin-inline-start:8px;border:1px solid var(--line);padding:8px 10px;border-radius:8px;background:#fff8;font:inherit"></label>
+    <div class="meas-stage" id="calStage" dir="ltr"><div class="coin-c" id="coinC" aria-hidden="true"></div><div class="card-c" id="cardC" aria-hidden="true"></div><div class="rul-c" id="rulC" aria-hidden="true"></div></div>
+    <div class="meas-ctl"><button type="button" id="calMinus" aria-label="להקטין">−</button><input type="range" id="calR" min="2" max="11" step="0.002" aria-label="כיול גודל"><button type="button" id="calPlus" aria-label="להגדיל">+</button></div>
+    <p style="font-size:.8rem;color:var(--ink-2)">הכיול נשמר במכשיר, אז בפעם הבאה לא צריך לחזור על זה.</p>
+    <div class="acts"><button type="button" class="btn" id="calOk">מתאים, להמשך</button></div>`;
   const r=$('#calR'); r.value=PPM;
-  const draw=()=>{ PPM=+r.value; const px=coinMM()*PPM;
-    $('#coinC').style.cssText=`width:${px}px;height:${px}px`;
-    $('#ruler').style.width=(50*PPM)+'px'; $('#calStage').style.setProperty('--stage',(26*PPM+60)+'px'); };
+  const stage=$('#calStage');
+  const draw=()=>{ PPM=+r.value;
+    const cC=$('#coinC'), kC=$('#cardC'), rC=$('#rulC');
+    cC.hidden = calMode!=='coin'; kC.hidden = calMode!=='card'; rC.hidden = calMode!=='ruler';
+    if(calMode==='coin'){ const px=coinMM()*PPM; cC.style.cssText=`width:${px}px;height:${px}px`; stage.style.setProperty('--stage',(26*PPM+60)+'px'); stage.style.placeItems='center'; }
+    if(calMode==='card'){ // ID-1 card: 85.6 x 53.98 mm, corners 3.18 mm
+      const land = stage.clientWidth >= 85.6*PPM+12, w=(land?85.6:53.98)*PPM, h=(land?53.98:85.6)*PPM;
+      kC.style.cssText=`width:${w}px;height:${h}px;border-radius:${3.18*PPM}px`; stage.style.setProperty('--stage',(h+40)+'px'); stage.style.placeItems='center start'; }
+    if(calMode==='ruler'){
+      const avail=Math.max(120,stage.clientWidth-24); const cm=Math.max(3,Math.min(15,Math.floor(avail/(PPM*10))));
+      const W=cm*10*PPM+2, H=64; let t='';
+      for(let i=0;i<=cm*10;i++){ const x=(1+i*PPM).toFixed(2), h=i%10===0?34:i%5===0?24:14; t+=`<line x1="${x}" y1="0" x2="${x}" y2="${h}"/>`; if(i%10===0) t+=`<text x="${x}" y="52" text-anchor="middle">${i/10}</text>`; }
+      rC.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" stroke="currentColor" stroke-width="1" font-size="13" fill="currentColor">${t}</svg><span>ס״מ</span>`;
+      stage.style.setProperty('--stage','120px'); stage.style.placeItems='center start'; }
+  };
+  b.querySelectorAll('[data-cm]').forEach(x=>x.onclick=()=>{ calMode=x.dataset.cm; b.querySelectorAll('[data-cm]').forEach(y=>y.setAttribute('aria-pressed',y===x)); $('#calHelp').textContent=help[calMode]; $('#coinPick').hidden=calMode!=='coin'; $('#coinOtherL').hidden=!(calMode==='coin'&&coin==='other'); draw(); });
   b.querySelectorAll('[data-coin]').forEach(x=>x.onclick=()=>{ coin = x.dataset.coin==='other' ? 'other' : +x.dataset.coin; b.querySelectorAll('[data-coin]').forEach(y=>y.setAttribute('aria-pressed',y===x)); $('#coinOtherL').hidden = coin!=='other'; if(coin==='other') $('#coinOther').focus(); draw(); });
   $('#coinOther').oninput=e=>{ coinOther=parseFloat(String(e.target.value).replace(',','.'))||0; draw(); };
   r.oninput=draw;
-  $('#calMinus').onclick=()=>{ r.value=+r.value-0.02; draw(); };
-  $('#calPlus').onclick=()=>{ r.value=+r.value+0.02; draw(); };
+  $('#calMinus').onclick=()=>{ r.value=+r.value-0.01; draw(); };
+  $('#calPlus').onclick=()=>{ r.value=+r.value+0.01; draw(); };
   $('#calOk').onclick=()=>{ try{ localStorage.setItem('duni-ppm2',String(PPM)); }catch(e){} measRing(); };
-  draw();
+  draw(); requestAnimationFrame(draw);
 }
 function measRing(){
   const b=$('#measBody');
