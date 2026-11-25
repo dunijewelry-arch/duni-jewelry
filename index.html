@@ -193,6 +193,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* size guide dialog */
 dialog.size-dlg{border:0;padding:0;background:var(--paper);color:var(--ink);width:min(1040px,calc(100vw - 24px));max-height:calc(100svh - 24px);overflow:auto}
 dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
+#measDlg{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;inset:0;border-radius:0}
+#measDlg .meas{max-width:none;padding-inline:10px}
+#measDlg .meas-stage{border-radius:8px}
 /* measuring a ring on the screen */
 .meas{padding:18px 20px 28px;display:grid;gap:14px;max-width:560px;margin:0 auto}
 .meas p{margin:0;line-height:1.6}
