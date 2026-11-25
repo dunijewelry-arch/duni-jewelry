@@ -244,7 +244,7 @@ dialog.size-dlg::backdrop{background:rgba(23,22,21,.55)}
 .stabs-t .ic i{display:block;width:3px;height:12px;background:currentColor}
 .stabs-t[aria-expanded="true"]{background:var(--ink);color:var(--paper)}
 @media (min-width:1100px){.stabs-t{display:none}.stabs ul{display:flex!important}
-  .coll,.gender{padding-left:56px}.drop-head{padding-left:56px}.rail{padding-inline-end:56px}}
+  }
 @media (max-width:1099px){.stabs ul{margin-top:3px}.stabs ul[hidden]{display:none}
   .stabs{transition:opacity .4s,transform .4s}
   .stabs.hero{opacity:0;pointer-events:none;transform:translate(-100%,-50%)}}
@@ -1219,6 +1219,9 @@ body{overflow-x:clip}
 :root.scrolled .hdr .mark{filter:none}
 :root.scrolled.menu-open .hdr .mark{filter:invert(1)}
 :root.scrolled.menu-open .hdr{mix-blend-mode:difference;color:#e9e6df;background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* side chapter tabs removed */
+.stabs{display:none!important}
 </style>
 </head>
 <body>
