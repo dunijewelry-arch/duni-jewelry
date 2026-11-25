@@ -684,8 +684,11 @@ html.ov-open{overflow:hidden}
 .hero .logo-wrap{z-index:3}
 .hero .hero-ring,#orbits,#burstCopy{display:none!important}
 #spin{position:absolute;inset:0;z-index:auto;pointer-events:none}
-.spin-it{position:absolute;left:0;top:0;display:block;pointer-events:auto;cursor:grab;will-change:transform,opacity;-webkit-tap-highlight-color:transparent}
-.spin-it img{width:100%;height:auto;display:block;pointer-events:none;filter:drop-shadow(0 16px 18px rgba(40,34,26,.22));user-select:none;-webkit-user-drag:none}
+.spin-it{position:absolute;left:0;top:0;display:block;mix-blend-mode:darken;pointer-events:auto;cursor:grab;will-change:transform,opacity;-webkit-tap-highlight-color:transparent}
+.spin-it img{width:100%;height:auto;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;
+  /* photos come with a light studio background: brighten it to white, then keep only what is darker than the page so only the piece shows; soft oval edge hides any leftover frame */
+  filter:brightness(1.2) contrast(1.1) saturate(.8);
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%)}
 .spin-it:focus-visible{outline-offset:2px}
 .hero.dragging .spin-it{cursor:grabbing}
 .spin-cap{position:absolute;left:50%;transform:translateX(-50%);z-index:5;text-align:center;text-decoration:none;white-space:nowrap;transition:opacity .6s;line-height:1.5}
@@ -2379,7 +2382,7 @@ function spinFrame(t){
   });
   spinCap.style.top=(cy+ry+size*.62+6)+'px'; spinCap.style.opacity=intro;
   spinHint.style.top=(cy+ry+size*.62+68)+'px'; spinHint.style.opacity=intro*.9;
-  if(bi!==sFront){ sFront=bi; const p=SPIN[bi]; spinCap.href=plink(p);
+  if(bi!==sFront && SPIN[bi]){ sFront=bi; const p=SPIN[bi]; spinCap.href=plink(p);
     spinCap.innerHTML=`<span class="nm" lang="en">${p.name}</span><span class="jp" lang="ja">${p.jp}</span><span class="heb">${CAT[p.cat][0]} ${p.he}</span><span class="pr">${ils(p.price)}</span>`; }
 }
 requestAnimationFrame(spinFrame);
